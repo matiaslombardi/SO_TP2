@@ -1,8 +1,4 @@
-
-#include "memoryManagement.h"
-#include <stdio.h>
-
-typedef unsigned long size_t;
+#include <memoryManagement.h>
 
 /* Estas funciones van al .h */
 //void * mmMalloc(size_t size); //Cambiar int por nuestro equivalente a size_t
@@ -12,8 +8,8 @@ typedef uint64_t align; // para alineamiento al limite mayor
 
 union header{
     struct memNode{
-        union header *ptr; 
-        size_t size;
+        union header *ptr;
+        uint64_t size;
     } memNode;
     align toAlign; 
 };
@@ -25,11 +21,11 @@ static Header *freep = NULL;
 static Header heap[HEAPSIZE / sizeof(Header)];
 
 /* Estas funciones no van al .h */
-static Header * morecore(size_t nu);
+static Header * morecore(uint64_t nu);
 
-void * mmMalloc(size_t numBytesToAlloc){
+void * mmMalloc(uint64_t numBytesToAlloc){
     Header *current,*previous;
-    size_t unitsToAlloc;//nunits
+    uint64_t unitsToAlloc;//nunits
 
     unitsToAlloc = (numBytesToAlloc + sizeof(Header) - 1)/sizeof(Header) + 1;
     if ((previous = freep) == NULL){
@@ -57,7 +53,7 @@ void * mmMalloc(size_t numBytesToAlloc){
     }
 }
 
-static Header * morecore(size_t unitsToAlloc) {
+static Header * morecore(uint64_t unitsToAlloc) {
     static Header *up;
 	
 	if ( up ) {
