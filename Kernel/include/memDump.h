@@ -1,7 +1,3 @@
-//
-// Created by matias on 25/4/21.
-//
-
 #ifndef SO_TP2_MEMDUMP_H
 #define SO_TP2_MEMDUMP_H
 

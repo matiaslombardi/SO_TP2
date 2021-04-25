@@ -1,6 +1,6 @@
 #include <scheduler.h>
 
-#define STACK_SIZE 0x1000
+#define STACK_SIZE 0x8000
 #define REGISTER_AMOUNT 20
 #define GENERAL_REGISTER_AMOUNT 15
 #define START_STACK_SEGMENT 0x0
@@ -19,8 +19,11 @@ void initScheduler(){
     processes = newQueue();
 }
 
-uint64_t * createProcess(uint64_t * entryPoint){
-    uint64_t * base = mmMalloc(STACK_SIZE * 8);
+unsigned int createProcess(uint64_t * entryPoint){
+    uint64_t * base;
+    if((base = mmMalloc(STACK_SIZE)) == NULL ){
+        return 0;
+    }
     base[STACK_SIZE - 1] = START_STACK_SEGMENT;
     base[STACK_SIZE - 2] = base + STACK_SIZE; //bp
     base[STACK_SIZE - 3] = START_RFLAGS;
@@ -30,10 +33,13 @@ uint64_t * createProcess(uint64_t * entryPoint){
         base[STACK_SIZE - i - 6] = GENERAL_REGISTER_AMOUNT - i; //De esta manera rax tendra un 1, si no es al reves
     }
 
-    PCB * pcb = mmMalloc(sizeof(PCB));
-    fillPCB(pcb, pidCounter++, base);
+    PCB * pcb;
+    if((pcb= mmMalloc(sizeof(PCB))) == NULL) {
+        return 0;
+    }
+    fillPCB(pcb, pidCounter, base);
     push(processes, pcb);
-    return base + STACK_SIZE - REGISTER_AMOUNT;
+    return pidCounter++;
 }
 
 static void fillPCB(PCB * pcb, unsigned int pid, uint64_t * base) { //Falta foregroun y priority;
@@ -54,14 +60,29 @@ uint64_t * switchProcesses(uint64_t * rsp){
 }
 
 void switchStates(unsigned int processID){
-    PCB *aux = findNode(processes, processID);
-    if (aux != NULL){
+    PCB *aux;
+    if ((aux = findPCB(processes, processID) ) != NULL){
         aux->state = aux->state == BLOCKED? READY:BLOCKED;
     }
 }
-/* TODO
-void endProcess(){
 
-}*/
+void endProcess(unsigned int processID){
+    PCB *deleted;
+    if((deleted = deleteNode(proccesses, processID))!= NULL){
+        mmFree(deleted->rbp - STACK_SIZE);
+        mmFree(deleted);
+    }
+}
+
+void printProcesses(){
+    toBegin(processes);
+    while (hasNext(processes)){
+        next(processes);
+    }
+}
+
+void changePriorities(unsigned int processID, unsigned int newPriority){
+
+}
 
 

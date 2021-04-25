@@ -11,6 +11,7 @@ typedef struct Node {
 typedef struct Queue {
     Node * first;
     Node * last;
+    Node * iter;
 } Queue;
 
 
@@ -18,6 +19,7 @@ typedef struct Queue {
  * Prototipo de Funciones auxiliares
  */
 static void freeQueueRec(Node * first);
+static Node * deleteNodeRec(Node * first, unsigned int pid, PCB * pcb);
 
 /**
  * Funciones principales
@@ -87,7 +89,7 @@ int isEmpty(QueueADT queue) {
 }
 
 
-PCB * findNode(QueueADT queue, unsigned int pid) {
+PCB * findPCB(QueueADT queue, unsigned int pid) {
     Node * aux = queue->first;
     while(aux != NULL) {
         if(aux->pcb->pid == pid) {
@@ -96,6 +98,41 @@ PCB * findNode(QueueADT queue, unsigned int pid) {
         aux = aux->next;
     }
     return NULL;
+}
+
+PCB * deleteNode(QueueADT queue, unsigned int pid) {
+    PCB * pcb = NULL;
+    queue->first = deleteNodeRec(queue->first, pid, pcb);
+    return pcb;
+}
+
+static Node * deleteNodeRec(Node * first, unsigned int pid, PCB * pcb) {
+    if(first) == NULL) {
+        return first;
+    }
+
+    if(first->pcb->pid == pid) {
+        Node * aux = first->next;
+        pcb = first->pcb;
+        mmFree(first);
+        return aux;
+    }
+    first->next = deleteNodeRec(first->next, pid, pcb);
+    return first;
+}
+
+void toBegin(QueueADT queue) {
+    queue->iter = queue->first;
+}
+
+int hasNext(QueueADT queue) {
+    return queue->iter != NULL;
+}
+
+PCB * next(QueueADT queue) {
+    PCB * pcb = queue->iter->pcb;
+    queue->iter = queue->iter->next;
+    return pcb;
 }
 
 void printQueue(QueueADT queue) {

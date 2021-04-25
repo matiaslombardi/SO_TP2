@@ -1,6 +1,3 @@
-//
-// Created by matias on 24/4/21.
-//
 
 #ifndef SO_TP2_SCHEDULER_H
 #define SO_TP2_SCHEDULER_H
@@ -15,9 +12,15 @@
 #include <memDump.h>
 
 void initScheduler();
+
 uint64_t *  createProcess(uint64_t * entryPoint); //antes retornaba void
-uint64_t * switchProcesses(uint64_t * rsp);
+
+unsigned int switchProcesses(uint64_t * rsp);
+
 void switchStates(unsigned int pid);
 
+void endProcess(unsigned int processID);
+
+void printProcesses();
 
 #endif //SO_TP2_SCHEDULER_H

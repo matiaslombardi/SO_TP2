@@ -23,7 +23,15 @@ PCB * pop(QueueADT queue);
 
 int isEmpty(QueueADT queue);
 
-PCB * findNode(QueueADT queue, unsigned int pid);
+PCB * findPCB(QueueADT queue, unsigned int pid);
+
+PCB * deleteNode(QueueADT queue, unsigned int pid);
+
+void toBegin(QueueADT queue);
+
+int hasNext(QueueADT queue);
+
+PCB * next(QueueADT queue);
 
 void printQueue(QueueADT queue);
 
