@@ -117,7 +117,7 @@ void throwInvOpCode() {
 }
 
 void about() {
-    printcln("Shernell 1.0 by Arce Julian, Lombardi Matias & Domingues Paula.", 0xcfd7e6);
+    printcln("Shernell 2.0 by Arce Julian, Lombardi Matias & Domingues Paula.", 0xcfd7e6);
 }
 
 int checkArgs(int args, int expected) {

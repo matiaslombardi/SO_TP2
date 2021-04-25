@@ -4,7 +4,7 @@
 #include <timerDriver.h>
 #include <library.h>
 #include <time.h>
-
+#include <syscallDispatcher.h>
 
 #define READ_SYSCALL 0
 #define WRITE_SYSCALL 1
@@ -27,7 +27,7 @@ int drawHandler(int *matrix, int row, int col, int rows, int columns);
 
 void getTime(date myDate);
 
-void memDumpHandler(char *dir, char *dump);
+//void memDumpHandler(char *dir, char *dump);
 
 void infoRegHandler(uint64_t firstP[]);
 

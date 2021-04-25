@@ -9,6 +9,7 @@
 char * v = (char*)0xB8000 + 79 * 2;
 
 int main() {
+    println("-----AAAAA-----");
 	initShell();
 	return 0;
 }

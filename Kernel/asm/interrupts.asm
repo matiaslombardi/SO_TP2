@@ -23,6 +23,8 @@ GLOBAL saveInitRegs
 EXTERN syscallDispatcher
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
+EXTERN timer_handler
+EXTERN switchProcesses
 
 SECTION .text
 ;-------------------------------------------------------------
@@ -117,6 +119,7 @@ SECTION .text
 
 	mov rdi, %1 ; pasaje de parametro
 	mov rsi, rsp ; pasaje del "vector" de registros
+
 	call irqDispatcher
 
 	; signal pic EOI (End of Interrupt)
@@ -190,7 +193,19 @@ _syscallHandler:
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:
-	irqHandlerMaster 0
+    pushState
+
+    mov rdi, rsp ; pasaje del "vector" de registros
+    call switchProcesses
+    mov rsp, rax
+
+    call timer_handler
+    ; signal pic EOI (End of Interrupt)
+    mov al, 20h
+    out 20h, al
+
+    popState
+    iretq
 
 ;Keyboard
 _irq01Handler:

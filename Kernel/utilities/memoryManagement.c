@@ -1,9 +1,5 @@
 #include <memoryManagement.h>
 
-/* Estas funciones van al .h */
-//void * mmMalloc(size_t size); //Cambiar int por nuestro equivalente a size_t
-//void mmFree(void * ptr);
-
 typedef uint64_t align; // para alineamiento al limite mayor 
 
 union header{
@@ -18,10 +14,16 @@ typedef union header Header;
 
 static Header base;
 static Header *freep = NULL;
-static Header heap[HEAPSIZE / sizeof(Header)];
+//static Header heap[HEAPSIZE / sizeof(Header)];
+static Header * heap = 0x600000;
+
 
 /* Estas funciones no van al .h */
 static Header * morecore(uint64_t nu);
+
+void printHeapDir() {
+    printInt(heap);
+}
 
 void * mmMalloc(uint64_t numBytesToAlloc){
     Header *current,*previous;
@@ -34,7 +36,7 @@ void * mmMalloc(uint64_t numBytesToAlloc){
     }
     for (current = previous->memNode.ptr ; ;current = current->memNode.ptr){
         if (current->memNode.size >= unitsToAlloc){ //si es lo suficientemente grande
-            if (current->memNode.size == unitsToAlloc){ //si es exactamente el tamanio a allocar
+            if (current->memNode.size == unitsToAlloc){ //si es exactamente el tamaño a allocar
                 previous->memNode.ptr = current->memNode.ptr;
             }else{
                 current->memNode.size -= unitsToAlloc;

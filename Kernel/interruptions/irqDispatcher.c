@@ -2,30 +2,31 @@
 #include <stdint.h>
 #include <keyboardDriver.h>
 #include <videoDriver.h>
+#include <scheduler.h>
 
 #include <lib.h>
 
-static void int_20();
+static uint64_t * int_20(uint64_t *rsp);
 
-static void int_21(uint64_t *rsp);
+static uint64_t * int_21(uint64_t *rsp);
 
 
-void irqDispatcher(uint64_t irq, uint64_t *rsp) {
+uint64_t * irqDispatcher(uint64_t irq, uint64_t *rsp) {
     switch (irq) {
         case 0:
-            int_20();
-            break;
+            return int_20(rsp);
         case 1:
-            int_21(rsp);
-            break;
+            return int_21(rsp);
     }
-    return;
+    return rsp;
 }
 
-void int_20() {
+uint64_t * int_20(uint64_t *rsp) {
     timer_handler();
+    return rsp;
 }
 
-void int_21(uint64_t *rsp) {
+uint64_t * int_21(uint64_t *rsp) {
     keyboard_management(rsp);
+    return rsp;
 }

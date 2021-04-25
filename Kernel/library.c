@@ -4,6 +4,7 @@
 #include <registers.h>
 #include <naiveConsole.h>
 #include <font.h>
+#include <string.h>
 
 #define BUFFER64_BITS 20
 
@@ -71,11 +72,28 @@ void printRegisters(uint64_t *rsp) {
     }
 }
 
-int strlen(char *string) {
+void printInt(uint64_t num) {
+    uint64_t aux = num;
+    int size = 0;
+    if(aux == 0) {
+        size = 1;
+    } else {
+        while(aux != 0) {
+            aux /= 10;
+            size++;
+        }
+    }
+    char buff[size + 1];
+    itoa(num, buff, size);
+    buff[size] = 0;
+    println(buff);
+}
+
+/*int strlen(char *string) {
     int length = 0;
     while (*string != 0) {
         length++;
         string++;
     }
     return length;
-}
+}*/

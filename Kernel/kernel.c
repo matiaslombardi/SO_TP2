@@ -11,6 +11,12 @@
 #include <library.h>
 #include <registers.h>
 
+#include <scheduler.h>
+
+#include <memDump.h>
+#include <memoryManagement.h>
+
+
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -86,11 +92,21 @@ void *initializeKernelBinary() {
 }
 
 int main() {
+    _cli();
     load_idt();
+
     saveInitRegs((uint64_t) sampleCodeModuleAddress);
 
-    ncPrint("Calling the sample code module returned: ");
-    ncPrintHex(((EntryPoint) sampleCodeModuleAddress)());
+    initScheduler();
+    createProcess(sampleCodeModuleAddress);
+
+    _sti();
+    _hlt();
+
+    println("PROBLEMS");
+
+    //ncPrint("Calling the sample code module returned: ");
+    //ncPrintHex(((EntryPoint) sampleCodeModuleAddress)());
 
     return 0;
 }

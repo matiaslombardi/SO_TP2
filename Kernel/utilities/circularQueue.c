@@ -4,7 +4,7 @@
  * Definición de estructuras
  */
 typedef struct Node {
-    PCB pcb;
+    PCB * pcb;
     struct Node * next;
 } Node;
 
@@ -46,13 +46,14 @@ void freeQueueRec(Node * first) {
     mmFree(first);
 }
 
-void push(QueueADT queue, PCB pcb){
+void push(QueueADT queue, PCB *pcb){
     Node* aux;
     if( (aux = mmMalloc(sizeof(Node))) == NULL) {
+        return;
         //Handler_error
     }
     aux->pcb = pcb;
-    //aux->next = NULL;
+    aux->next = NULL;
 
     if(isEmpty(queue)) {
         queue->first = aux;
@@ -64,42 +65,18 @@ void push(QueueADT queue, PCB pcb){
     queue->last = aux;
 }
 
-/*PCB pop(QueueADT queue) {
+PCB* pop(QueueADT queue) {
     if(queue->first == NULL) {
-        //handler_error
+        return NULL;
     }
-    Node* curr = queue->first;
-    Node* prev = curr;
-    while(curr != NULL && curr->pcb.state != READY) {
-        prev = curr;
-        curr = curr->next;
-    }
-    if(curr == NULL){
-        //handler_error
-    }
-    PCB toReturn = curr->pcb;
-    if(prev == queue->first){
-        queue->first = queue->first->next;
-    }
-    else{
-        prev->next = prev->next->next;
-    }
-    push(queue, toReturn);
-    return toReturn;
-}*/
-
-PCB pop(QueueADT queue) {
-    if(queue->first == NULL) {
-        //handler_error
-    }
-    while(queue->first != NULL && queue->first->pcb.state != READY) {
+    while(queue->first != NULL && queue->first->pcb->state != READY) {
         push(queue, queue->first->pcb);
         queue->first = queue->first->next;
     }
     if(queue->first == NULL) {
-        //handler_error
+        return NULL;
     }
-    PCB toReturn = queue->first->pcb;
+    PCB * toReturn = queue->first->pcb;
     push(queue, toReturn);
     queue->first = queue->first->next;
     return toReturn;
@@ -109,10 +86,33 @@ int isEmpty(QueueADT queue) {
     return queue->first == NULL;
 }
 
-/*void printQueue(QueueADT queue) {
+
+PCB * findNode(QueueADT queue, unsigned int pid) {
+    Node * aux = queue->first;
+    while(aux != NULL) {
+        if(aux->pcb->pid == pid) {
+            return aux->pcb;
+        }
+        aux = aux->next;
+    }
+    return NULL;
+}
+
+void printQueue(QueueADT queue) {
     Node * curr = queue->first;
     while(curr != NULL) {
-        printf("Pid: %d - State: %s\n", (curr->pcb).pid, ((curr->pcb).state == 0) ? ("Ready") : ((curr->pcb).state == 1 ? "Blocked": "Killed"));
+        print("Pid:");
+        printInt((curr->pcb)->pid);
+        print("- State: ");
+        printInt(curr->pcb->state);
+        println("");
+        printMem(1, curr->pcb->rsp);
+        printMem(1, curr->pcb->rsp + 4); //Sumar 1 es sumar 8 bytes
+        printMem(1, curr->pcb->rsp + 8);
+        printMem(1, curr->pcb->rsp + 12);
+        printMem(1, curr->pcb->rsp + 16);
+        printMem(1, curr->pcb->rbp);
+
         curr = curr->next;
     }
-}*/
+}

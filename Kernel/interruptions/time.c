@@ -1,6 +1,8 @@
 #include <time.h>
 #include <stdint.h>
 
+#include <library.h>
+
 static unsigned long ticks = 0;
 
 typedef struct function {
