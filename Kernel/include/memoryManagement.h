@@ -5,7 +5,7 @@
     libreria de syscalls de nuestro tp :) */
 #include <stdint.h> //En el tp usamos stdint.h
 
-#define HEAPSIZE 0x800 /*8MB, debe ser multiplo de 8*/
+#define HEAPSIZE 0x800000 /*8MB, debe ser multiplo de 8*/
 #define NULL (void *)0
 
 void * mmMalloc(uint64_t size); //Cambiar int por nuestro equivalente a size_t
