@@ -188,10 +188,10 @@ void printTime(int secondsWhite, int secondsBlack) {
     }
     aux[5] = ':';
     aux[18] = ':';
-    itoa(minWhite, aux + 3, 2);
-    itoa(secondsWhite, aux + 6, 2);
-    itoa(minBlack, aux + CHAR_HEIGHT, 2);
-    itoa(secondsBlack, aux + 19, 2);
+    itoa(minWhite, aux + 3, 3);
+    itoa(secondsWhite, aux + 6, 3);
+    itoa(minBlack, aux + CHAR_HEIGHT, 3);
+    itoa(secondsBlack, aux + 19, 3);
     printcFrom(aux, cursor, LOG_MAX_HEIGHT, color_time);
     cursor += CHAR_HEIGHT;
     char difference[CHAR_HEIGHT] = {0};
@@ -200,8 +200,8 @@ void printTime(int secondsWhite, int secondsBlack) {
     }
     difference[9] = '+';
     difference[12] = ':';
-    itoa(timeDiff / 60, difference + 10, 2);
-    itoa(timeDiff % 60, difference + 13, 2);
+    itoa(timeDiff / 60, difference + 10, 3);
+    itoa(timeDiff % 60, difference + 13, 3);
     printcFrom(difference, cursor, LOG_MAX_HEIGHT, color_diff);
 }
 

@@ -15,9 +15,13 @@ int hasProgram(char *input);
 
 int tokenizeArguments(char *toToken, char tokens[10][25]);
 
-char *initGreet = "user@TPArqui:~$ ";
+char *initGreet = "user@TP2_SO:~$ ";
 
 void initShell() {
+    char pidString[20] = {0};
+    itoaTruncate(getPid(), pidString, 20);
+    print("SHELL Pid: ");
+    println(pidString);
     char c;
     while (1) {
         printc(initGreet, 0x22ab00);

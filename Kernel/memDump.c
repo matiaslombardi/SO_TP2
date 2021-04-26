@@ -7,7 +7,10 @@
 #define BUFFER64_BITS 20
 
 void memDump(char *dir, char *dump) {
-    memDumpHandler(dir, dump);
+    for (int i = 0;
+         i < MEM_BYTES; i++ ) {
+        dump[i] = dir[i];
+    }
 }
 
 void printMem(int args, char * dir) {

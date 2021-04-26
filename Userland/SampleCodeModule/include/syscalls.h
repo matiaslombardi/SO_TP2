@@ -26,12 +26,18 @@ int getWidth();
 
 void getProcessesList();
 
-void generateIDGreet();
+unsigned int createProcess(uint64_t * entryPoint, int foreground);
 
 void killProcess(unsigned int pid);
 
 void changeProcessPriority(unsigned int pid, int priority);
 
 void changeProcessState(unsigned int pid);
+
+unsigned int getPid();
+
+unsigned int getElapsedTicks();
+
+void exit_();
 
 #endif

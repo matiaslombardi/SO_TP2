@@ -20,6 +20,7 @@ void initScheduler(){
 }
 
 unsigned int createProcess(uint64_t * entryPoint){
+    println("Recibi el pedido de crear proceso");
     uint64_t * base;
     if((base = mmMalloc(STACK_SIZE)) == NULL ){
         return 0;
@@ -39,6 +40,7 @@ unsigned int createProcess(uint64_t * entryPoint){
     }
     fillPCB(pcb, pidCounter, base);
     push(processes, pcb);
+    println("proceso creado");
     return pidCounter++;
 }
 
@@ -55,6 +57,7 @@ uint64_t * switchProcesses(uint64_t * rsp){
     if(currentProcess != NULL) {
         currentProcess->rsp = rsp;
     }
+    //printProcesses();
     currentProcess = pop(processes);
     return currentProcess->rsp;
 }
@@ -76,13 +79,21 @@ void endProcess(unsigned int pid){
 
 void printProcesses(){
     toBegin(processes);
+    char toPrint[20];
     while (hasNext(processes)){
-        next(processes);
+        PCB* aux = next(processes);
+        itoaTruncate(aux->pid, toPrint, 20);
+        print("PID: "); println(toPrint);
     }
 }
 
 void changePriorities(unsigned int pid, unsigned int newPriority){
-
+    PCB* aux;
+    if( (aux = findPCB(processes, pid) ) != NULL){
+        aux->priority = newPriority;
+    }
 }
 
-
+unsigned int getPid(){
+    return currentProcess->pid;
+}

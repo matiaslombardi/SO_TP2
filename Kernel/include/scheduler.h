@@ -25,4 +25,6 @@ void printProcesses();
 
 void changePriorities(unsigned int pid, unsigned int newPriority);
 
+unsigned int getPid();
+
 #endif //SO_TP2_SCHEDULER_H

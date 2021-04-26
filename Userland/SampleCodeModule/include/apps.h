@@ -35,6 +35,8 @@ void about();
 
 void ps();
 
+void greet();
+
 void loop();
 
 void kill(int args, char argv[][25]);

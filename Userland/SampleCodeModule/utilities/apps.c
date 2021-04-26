@@ -93,7 +93,7 @@ void time(int args, char argv[][25]) {
 void showApps(int args, char argv[][25]) {
     if (!checkArgs(args, 0)) return;
 
-    int color = 0xf03fcd;
+    int color = 0xffd1dc;//0xf03fcd;
 
     for (int i = 0; i < PROGRAMS; i++) {
         printc(commands[i].name, color);
@@ -137,21 +137,41 @@ void ps(){
     getProcessesList();
 }
 
+void greet(){
+    unsigned int pid = getPid();
+    unsigned int start = 0;
+    unsigned int second = 5;
+    char pidString[20] = {0};
+    itoaTruncate(pid, pidString, 20);
+    while(1){
+        unsigned int ticks = getElapsedTicks();
+        if( ((start - ticks) % (second * 18)) == 0){
+            print(pidString);
+            println(" says hello");
+        }
+    }
+}
+
 void loop(){
-    generateIDGreet();
+    createProcess((uint64_t *)&greet, 0);
 }
 
 void kill(int args, char argv[][25]){
     if (!checkArgs(args, 1)) return;
-    killProcess(0);
+    int pid = string10ToInt(argv[1]);
+    killProcess(pid);
 }
 
 void nice(int args, char argv[][25]){
     if (!checkArgs(args, 2)) return;
-    changeProcessPriority(0,0);
+    int pid = string10ToInt(argv[1]);
+    int priority = string10ToInt(argv[1]);
+    changeProcessPriority(pid, priority);
 }
 
 void block(int args, char argv[][25]){
     if (!checkArgs(args, 1)) return;
-    changeProcessState(0);
+    int pid = string10ToInt(argv[1]);
+    changeProcessState(pid);
 }
+

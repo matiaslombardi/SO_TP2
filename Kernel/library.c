@@ -73,19 +73,9 @@ void printRegisters(uint64_t *rsp) {
 }
 
 void printInt(uint64_t num) {
-    uint64_t aux = num;
-    int size = 0;
-    if(aux == 0) {
-        size = 1;
-    } else {
-        while(aux != 0) {
-            aux /= 10;
-            size++;
-        }
-    }
-    char buff[size + 1];
-    itoa(num, buff, size);
-    buff[size] = 0;
+    uint64_t len = numlen(num);
+    char buff[len + 1];
+    itoa(num, buff, len + 1);
     println(buff);
 }
 
