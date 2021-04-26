@@ -51,3 +51,10 @@ void putCharFrom(char c, int row, int col) {
     *buffer = c;
     printFrom(buffer, row, col);
 }
+
+void printInt(uint64_t num) {
+    uint64_t len = numlen(num);
+    char buff[len + 1];
+    itoa(num, buff, len + 1);
+    println(buff);
+}

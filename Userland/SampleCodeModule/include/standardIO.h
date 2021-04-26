@@ -1,6 +1,8 @@
 #ifndef STDIO_H
 #define STDIO_H
 
+#include <stdint.h>
+
 void println(char *toPrint); //print line
 
 void print(char *toPrint); //print with format
@@ -20,5 +22,7 @@ void removeChar();
 void putChar(char c);
 
 void putCharFrom(char c, int row, int col);
+
+void printInt(uint64_t num);
 
 #endif

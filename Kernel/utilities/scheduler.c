@@ -79,11 +79,28 @@ void endProcess(unsigned int pid){
 
 void printProcesses(){
     toBegin(processes);
-    char toPrint[20];
+    char toPrint[20] = {0};
+    println("PID    State    Prior    RSP                      RBP                      FG    Name");//Falta imprimir state
     while (hasNext(processes)){
         PCB* aux = next(processes);
+        //PID
         itoaTruncate(aux->pid, toPrint, 20);
-        print("PID: "); println(toPrint);
+        print(toPrint); print("    "); for(int i = 0; i < 3 - numlen(aux->pid); i++) print(" ");
+        //State
+        print(aux->state == READY ? "Ready" : "Block"); print("    ");
+        //Priority
+        itoaTruncate(aux->priority, toPrint, 20);
+        print(toPrint); print("        ");
+        //RSP
+        turnToBaseN(aux->rsp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
+        print("0x");print(toPrint); print("    ");
+        //RBP
+        print("0x");turnToBaseN(aux->rbp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
+        print(toPrint); print("    ");
+        //FG
+        print(aux->foreground == 0 ? "BG" : "FG");print("    ");
+        //Name
+        println(""); //Este es para el nombre del programa.
     }
 }
 
