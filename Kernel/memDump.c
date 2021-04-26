@@ -1,6 +1,3 @@
-//
-// Created by matias on 25/4/21.
-//
 #include <memDump.h>
 
 #define MEM_BYTES 32

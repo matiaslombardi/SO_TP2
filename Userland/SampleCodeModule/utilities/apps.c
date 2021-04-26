@@ -165,7 +165,7 @@ void kill(int args, char argv[][25]){
 void nice(int args, char argv[][25]){
     if (!checkArgs(args, 2)) return;
     int pid = string10ToInt(argv[1]);
-    int priority = string10ToInt(argv[1]);
+    int priority = string10ToInt(argv[2]);
     changeProcessPriority(pid, priority);
 }
 

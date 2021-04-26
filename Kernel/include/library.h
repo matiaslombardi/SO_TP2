@@ -2,6 +2,7 @@
 #define LIB_STRING_H
 
 #include <stdint.h>
+#include <memoryManagement.h>
 
 int printStringFrom(char *string, int length, int row, int col, int colour);
 

@@ -8,7 +8,7 @@
 #define DRAW_SYSCALL 2
 #define CLEAR_SYSCALL 3
 #define ELAPSED_TICKS_SYSCALL 4
-#define EXIT_SYSCALL 4
+#define EXIT_SYSCALL 5
 #define INFO_REG 8
 #define MEM_DUMP 9
 #define TIME_SYSCALL 10

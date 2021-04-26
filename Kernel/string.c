@@ -1,6 +1,3 @@
-//
-// Created by matias on 25/4/21.
-//
 #include <string.h>
 
 void itoa(int value, char *buffer, int length) {

@@ -1,4 +1,3 @@
-
 #include <circularQueue.h>
 
 /**
@@ -134,23 +133,4 @@ PCB * next(QueueADT queue) {
     PCB * pcb = queue->iter->pcb;
     queue->iter = queue->iter->next;
     return pcb;
-}
-
-void printQueue(QueueADT queue) {
-    Node * curr = queue->first;
-    while(curr != NULL) {
-        print("Pid:");
-        printInt((curr->pcb)->pid);
-        print("- State: ");
-        printInt(curr->pcb->state);
-        println("");
-        printMem(1, curr->pcb->rsp);
-        printMem(1, curr->pcb->rsp + 4); //Sumar 1 es sumar 8 bytes
-        printMem(1, curr->pcb->rsp + 8);
-        printMem(1, curr->pcb->rsp + 12);
-        printMem(1, curr->pcb->rsp + 16);
-        printMem(1, curr->pcb->rbp);
-
-        curr = curr->next;
-    }
 }

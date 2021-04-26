@@ -1,7 +1,3 @@
-//
-// Created by pau on 24/4/21.
-//
-
 #ifndef CIRCULARQUEUE_H
 #define CIRCULARQUEUE_H
 

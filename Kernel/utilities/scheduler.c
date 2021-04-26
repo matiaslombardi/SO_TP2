@@ -20,7 +20,6 @@ void initScheduler(){
 }
 
 unsigned int createProcess(uint64_t * entryPoint){
-    println("Recibi el pedido de crear proceso");
     uint64_t * base;
     if((base = mmMalloc(STACK_SIZE)) == NULL ){
         return 0;
@@ -40,7 +39,6 @@ unsigned int createProcess(uint64_t * entryPoint){
     }
     fillPCB(pcb, pidCounter, base);
     push(processes, pcb);
-    println("proceso creado");
     return pidCounter++;
 }
 
@@ -57,7 +55,6 @@ uint64_t * switchProcesses(uint64_t * rsp){
     if(currentProcess != NULL) {
         currentProcess->rsp = rsp;
     }
-    //printProcesses();
     currentProcess = pop(processes);
     return currentProcess->rsp;
 }
@@ -81,16 +78,17 @@ void printProcesses(){
     toBegin(processes);
     char toPrint[20] = {0};
     println("PID    State    Prior    RSP                      RBP                      FG    Name");//Falta imprimir state
-    while (hasNext(processes)){
-        PCB* aux = next(processes);
+    while (hasNext(processes)) {
+        PCB *aux = next(processes);
         //PID
-        itoaTruncate(aux->pid, toPrint, 20);
-        print(toPrint); print("    "); for(int i = 0; i < 3 - numlen(aux->pid); i++) print(" ");
+        printInt(aux->pid);
+        print("    ");
+        for (int i = 0; i < 3 - numlen(aux->pid); i++) print(" ");
         //State
-        print(aux->state == READY ? "Ready" : "Block"); print("    ");
+        print(aux->state == READY ? "Ready" : "Block");
+        print("    ");
         //Priority
-        itoaTruncate(aux->priority, toPrint, 20);
-        print(toPrint); print("        ");
+        printInt(aux->priority); print("        ");
         //RSP
         turnToBaseN(aux->rsp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
         print("0x");print(toPrint); print("    ");

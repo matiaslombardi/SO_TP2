@@ -73,10 +73,11 @@ void printRegisters(uint64_t *rsp) {
 }
 
 void printInt(uint64_t num) {
-    uint64_t len = numlen(num);
-    char buff[len + 1];
+    int len = numlen(num);
+    char * buff = mmMalloc(len + 1);
     itoa(num, buff, len + 1);
-    println(buff);
+    print(buff);
+    mmFree(buff);
 }
 
 /*int strlen(char *string) {
