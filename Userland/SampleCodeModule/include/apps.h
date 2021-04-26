@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define PROGRAMS 9
+#define PROGRAMS 14
 
 typedef struct {
     char name[12];
@@ -33,5 +33,14 @@ void throwInvOpCode();
 
 void about();
 
+void ps();
+
+void loop();
+
+void kill(int args, char argv[][25]);
+
+void nice(int args, char argv[][25]);
+
+void block(int args, char argv[][25]);
 
 #endif

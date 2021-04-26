@@ -19,11 +19,11 @@ programs commands[] = {{"about",       about,          "      Information about 
                        {"printmem",    printMem,       "   Prints on screen the first 32 bytes from a given position."},
                        {"chess",       chess,          "      Starts a PVP chess match. Try chess help for aditional info."},
                        {"clear",       clear,          "      Clears the current screen."},
-                       //{"ps",          ps,             "      Displays a list of all the running processes with relevant data."},
-                       //{"loop",        loop,           "      Prints a process ID given a determined number of seconds."},
-                       //{"kill",        kill,           "      Kills a process given its ID."},
-                       //{"nice",        nice,           "      Changes the given process priority."},
-                       //{"block",       block,          "      Changes the process state given its ID."},
+                       {"ps",          ps,             "         Displays a list of all the running processes with relevant data."},
+                       {"loop",        loop,           "       Prints a process ID given a determined number of seconds."},
+                       {"kill",        kill,           "       Kills a process given its ID."},
+                       {"nice",        nice,           "       Changes the given process priority."},
+                       {"block",       block,          "      Changes the process state given its ID."},
                        {"exceptionZ",  throwDivZero,   " Throws a divide by zero exception"},
                        {"exceptionOP", throwInvOpCode, "Throws an invalid Operation Code Exception"}
 };
@@ -132,23 +132,26 @@ int checkArgs(int args, int expected) {
     }
     return 1;
 }
-/*
-void ps(){
 
+void ps(){
+    getProcessesList();
 }
 
 void loop(){
-
+    generateIDGreet();
 }
 
-void kill(){
-
+void kill(int args, char argv[][25]){
+    if (!checkArgs(args, 1)) return;
+    killProcess(0);
 }
 
-void nice(){
-
+void nice(int args, char argv[][25]){
+    if (!checkArgs(args, 2)) return;
+    changeProcessPriority(0,0);
 }
 
-void block(){
-
-}*/
+void block(int args, char argv[][25]){
+    if (!checkArgs(args, 1)) return;
+    changeProcessState(0);
+}

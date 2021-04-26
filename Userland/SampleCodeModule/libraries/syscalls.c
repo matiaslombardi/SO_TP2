@@ -13,6 +13,11 @@
 #define SET_ALARM 11
 #define SCREEN_HEIGHT 12
 #define SCREEN_WIDTH 13
+#define PS_SYSCALL 14
+#define LOOP_SYSCALL 15
+#define KILL_SYSCALL 16
+#define NICE_SYSCALL 17
+#define BLOCK_SYSCALL 18
 
 int read(char *buffer, int length) {
     return _syscall(READ_SYSCALL, length, buffer);
@@ -54,3 +59,25 @@ int getHeight() {
 int getWidth() {
     return _syscall(SCREEN_WIDTH);
 }
+
+void getProcessesList(){
+    return _syscall(PS_SYSCALL);
+}
+
+void generateIDGreet(){
+    return _syscall(LOOP_SYSCALL);
+}
+
+void killProcess(unsigned int pid){
+    return _syscall(KILL_SYSCALL, pid);
+
+}
+
+void changeProcessPriority(unsigned int pid, int priority){
+    return _syscall(NICE_SYSCALL, pid, priority);
+}
+
+void changeProcessState(unsigned int pid){
+    return _syscall(BLOCK_SYSCALL, pid);
+
+} /*killProcess y changeProcessState podrian llamar a la misma syscall con un parametro que identifique si quiere matar o cambiar de estado*/

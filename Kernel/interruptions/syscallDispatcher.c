@@ -5,6 +5,7 @@
 #include <library.h>
 #include <time.h>
 #include <syscallDispatcher.h>
+#include <scheduler.h>
 
 #define READ_SYSCALL 0
 #define WRITE_SYSCALL 1
@@ -16,6 +17,11 @@
 #define SET_ALARM 11
 #define SCREEN_HEIGHT 12
 #define SCREEN_WIDTH 13
+#define PS_SYSCALL 14
+#define LOOP_SYSCALL 15
+#define KILL_SYSCALL 16
+#define NICE_SYSCALL 17
+#define BLOCK_SYSCALL 18
 
 #define MEM_BYTES 32
 
@@ -36,6 +42,16 @@ void clearScreenHandler();
 int screenHeightHandler();
 
 int screenWidthHandler();
+
+void psHandler();
+
+void loopHandler();
+
+void killHandler(unsigned int pid);
+
+void niceHandler(unsigned int pid, int priority);
+
+void blockHandler(unsigned int pid);
 
 
 int syscallDispatcher(uint64_t call, uint64_t firstP, uint64_t secondP, uint64_t thirdP, uint64_t fourthP,
@@ -66,6 +82,21 @@ int syscallDispatcher(uint64_t call, uint64_t firstP, uint64_t secondP, uint64_t
             return screenHeightHandler();
         case SCREEN_WIDTH:
             return screenWidthHandler();
+        case PS_SYSCALL:
+            psHandler();
+            return 0;
+        case LOOP_SYSCALL:
+            loopHandler();
+            return 0;
+        case KILL_SYSCALL:
+            killHandler((unsigned int) firstP);
+            return 0;
+        case NICE_SYSCALL:
+            niceHandler((unsigned int) firstP, (int) secondP);
+            return 0;
+        case BLOCK_SYSCALL:
+            blockHandler((unsigned int) firstP);
+            return 0;
         default:
             return -1;
     }
@@ -109,4 +140,24 @@ int screenHeightHandler() {
 
 int screenWidthHandler() {
     return screenWidth();
+}
+
+void psHandler(){
+    printProcesses();
+}
+
+void loopHandler(){
+    //ID con saludo
+}
+
+void killHandler(unsigned int pid){
+    endProcess(pid);
+}
+
+void niceHandler(unsigned int pid, int priority){
+    changePriorities(pid,priority);
+}
+
+void blockHandler(unsigned int pid){
+    switchStates(pid);
 }

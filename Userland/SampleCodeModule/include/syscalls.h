@@ -24,4 +24,14 @@ int getHeight();
 
 int getWidth();
 
+void getProcessesList();
+
+void generateIDGreet();
+
+void killProcess(unsigned int pid);
+
+void changeProcessPriority(unsigned int pid, int priority);
+
+void changeProcessState(unsigned int pid);
+
 #endif

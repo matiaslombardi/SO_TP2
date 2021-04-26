@@ -107,7 +107,7 @@ PCB * deleteNode(QueueADT queue, unsigned int pid) {
 }
 
 static Node * deleteNodeRec(Node * first, unsigned int pid, PCB * pcb) {
-    if(first) == NULL) {
+    if(first == NULL) {
         return first;
     }
 

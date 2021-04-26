@@ -59,16 +59,16 @@ uint64_t * switchProcesses(uint64_t * rsp){
     return currentProcess->rsp;
 }
 
-void switchStates(unsigned int processID){
+void switchStates(unsigned int pid){
     PCB *aux;
-    if ((aux = findPCB(processes, processID) ) != NULL){
+    if ((aux = findPCB(processes, pid) ) != NULL){
         aux->state = aux->state == BLOCKED? READY:BLOCKED;
     }
 }
 
-void endProcess(unsigned int processID){
+void endProcess(unsigned int pid){
     PCB *deleted;
-    if((deleted = deleteNode(proccesses, processID))!= NULL){
+    if((deleted = deleteNode(processes, pid))!= NULL){
         mmFree(deleted->rbp - STACK_SIZE);
         mmFree(deleted);
     }
@@ -81,7 +81,7 @@ void printProcesses(){
     }
 }
 
-void changePriorities(unsigned int processID, unsigned int newPriority){
+void changePriorities(unsigned int pid, unsigned int newPriority){
 
 }
 

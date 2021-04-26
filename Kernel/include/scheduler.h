@@ -13,14 +13,16 @@
 
 void initScheduler();
 
-uint64_t *  createProcess(uint64_t * entryPoint); //antes retornaba void
+unsigned int  createProcess(uint64_t * entryPoint); //antes retornaba void
 
-unsigned int switchProcesses(uint64_t * rsp);
+uint64_t * switchProcesses(uint64_t * rsp);
 
 void switchStates(unsigned int pid);
 
-void endProcess(unsigned int processID);
+void endProcess(unsigned int pid);
 
 void printProcesses();
+
+void changePriorities(unsigned int pid, unsigned int newPriority);
 
 #endif //SO_TP2_SCHEDULER_H
