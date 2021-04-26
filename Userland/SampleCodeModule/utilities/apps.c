@@ -139,15 +139,26 @@ void ps(){
 
 void greet(){
     unsigned int pid = getPid();
-    unsigned int start = 0;
+    unsigned int start = getElapsedTicks();
     unsigned int second = 5;
     char pidString[20] = {0};
     itoaTruncate(pid, pidString, 20);
-    while(1){
+    /*while(1){
         unsigned int ticks = getElapsedTicks();
         if( ((start - ticks) % (second * 18)) == 0){
             print(pidString);
             println(" says hello");
+        }
+    }*/
+    while(1) {
+        unsigned int ticks = getElapsedTicks();
+        if((ticks - start) / 18 >= second) {
+            print(pidString);
+            print(" says hello - Seconds: ");
+            char buff[20] = {0}; //Cuando printInt funcione, cambiarlo (para eso tienen que estar las syscalls del mm
+            itoaTruncate((ticks - start) / 18, buff, 20);
+            println(buff);
+            start = ticks;
         }
     }
 }
