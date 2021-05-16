@@ -1,138 +1,44 @@
-#include <stdint.h>
-#include <videoDriver.h>
-#include <keyboardDriver.h>
-#include <timerDriver.h>
-#include <library.h>
-#include <time.h>
-#include <scheduler.h>
-#include <memDump.h>
+#include <syscallDispatcher.h>
 
-#define READ_SYSCALL 0
-#define WRITE_SYSCALL 1
-#define DRAW_SYSCALL 2
-#define CLEAR_SYSCALL 3
-#define ELAPSED_TICKS_SYSCALL 4
-#define EXIT_SYSCALL 5
-#define INFO_REG 8
-#define MEM_DUMP 9
-#define TIME_SYSCALL 10
-#define SET_ALARM 11
-#define SCREEN_HEIGHT 12
-#define SCREEN_WIDTH 13
-#define PS_SYSCALL 14
-#define CREATE_PROCESS_SYSCALL 15
-#define CHANGE_STATE_SYSCALL 16
-#define CHANGE_PRIORITY_SYSCALL 17
-#define GET_PID_SYSCALL 18
-#define MEM_BYTES 32
-
-int readHandler(int length, char *toRead);
-
-int writeHandler(int length, char *toWrite, int row, int col, int color);
-
-int drawHandler(int *matrix, int row, int col, int rows, int columns);
-
-void getTime(date myDate);
-
-void memDumpHandler(char *dir, char *dump);
-
-void infoRegHandler(uint64_t firstP[]);
-
-void clearScreenHandler();
-
-int screenHeightHandler();
-
-int screenWidthHandler();
-
-void psHandler();
-
-unsigned int createProcessHandler(uint64_t * entryPoint, int foreground);
-
-void changeStateHandler(unsigned int pid, int state);
-
-void changePriorityHandler(unsigned int pid, int priority);
-
-unsigned int getPidHandler();
-
-unsigned int getElapsedTicksHandler();
+f syscalls[]={readHandler, writeHandler, drawHandler, clearScreenHandler, getElapsedTicksHandler, getPidHandler, infoRegHandler, memDumpHandler, getTime, addFunc, screenHeightHandler, screenWidthHandler,
+              psHandler, createProcessHandler, changeStateHandler, changePriorityHandler, getPidHandler};
 
 int syscallDispatcher(uint64_t call, uint64_t firstP, uint64_t secondP, uint64_t thirdP, uint64_t fourthP,
                       uint64_t fifthP) {
-    switch (call) {
-        case READ_SYSCALL:
-            return readHandler((int) firstP, (char *) secondP); // 0 read
-        case WRITE_SYSCALL:
-            return writeHandler((int) firstP, (char *) secondP, (int) thirdP, (int) fourthP, (int) fifthP); // 1 write
-        case DRAW_SYSCALL:
-            return drawHandler((int *) firstP, (int) secondP, (int) thirdP, (int) fourthP, (int) fifthP);
-        case TIME_SYSCALL:
-            getTime((date) firstP);
-            return 0;
-        case INFO_REG:
-            infoRegHandler((uint64_t *) firstP);
-            return 0;
-        case MEM_DUMP:
-            memDumpHandler((char *) firstP, (char *) secondP);
-            return 0;
-        case CLEAR_SYSCALL:
-            clearScreenHandler();
-            return 0;
-        case SET_ALARM:
-            addFunc((void *) firstP, secondP);
-            return 0;
-        case SCREEN_HEIGHT:
-            return screenHeightHandler();
-        case SCREEN_WIDTH:
-            return screenWidthHandler();
-        case PS_SYSCALL:
-            psHandler();
-            return 0;
-        case CREATE_PROCESS_SYSCALL:
-            return createProcessHandler((uint64_t *) firstP, (int) secondP);
-        case CHANGE_STATE_SYSCALL:
-            changeStateHandler((unsigned int) firstP, (int) secondP);
-            return 0;
-        case CHANGE_PRIORITY_SYSCALL:
-            changePriorityHandler((unsigned int) firstP, (int) secondP);
-            return 0;
-        case GET_PID_SYSCALL:
-            return getPidHandler();
-        case ELAPSED_TICKS_SYSCALL:
-            return getElapsedTicksHandler();
-        case EXIT_SYSCALL:
-            return 0;
-        default:
-            return -1;
-    }
-    return -1;
+    return syscalls[call](firstP,secondP,thirdP,fourthP,fifthP);
+
 }
 
-int readHandler(int length, char *toRead) {
-    return readBuffer(length, toRead);
+int readHandler(uint64_t length, uint64_t toRead) {
+    return readBuffer((int)length,(char*) toRead);
 }
 
-int writeHandler(int length, char *toWrite, int row, int col, int color) {
-    return printStringFrom(toWrite, length, row, col, color);
+int writeHandler(uint64_t length,uint64_t toWrite, uint64_t row, uint64_t col, uint64_t color) {
+    return printStringFrom((char*)toWrite, (int)length, (int)row, (int)col, (int)color);
 }
 
-int drawHandler(int *matrix, int row, int col, int rows, int columns) {
-    return drawMatrix(matrix, row, col, rows, columns);
+int drawHandler(uint64_t matrix, uint64_t row, uint64_t col, uint64_t rows, uint64_t columns) {
+    return drawMatrix((int*)matrix, (int)row, (int)col, (int)rows, (int)columns);
 }
 
-void getTime(date myDate) {
-    getLocalDate(myDate);
+int getTime(uint64_t myDate) {
+    getLocalDate((date)myDate);
+    return 0;
 }
 
-void memDumpHandler(char *dir, char *dump) {
-    memDump(dir, dump);
+int memDumpHandler(uint64_t dir, uint64_t dump) {
+    memDump((char*)dir, (char*)dump);
+    return 0;
 }
 
-void infoRegHandler(uint64_t firstP[]) {
-    fillWithRegs(firstP);
+int infoRegHandler(uint64_t firstP) {
+    fillWithRegs((uint64_t*)firstP);
+    return 0;
 }
 
-void clearScreenHandler() {
+int clearScreenHandler() {
     clearScreen();
+    return 0;
 }
 
 int screenHeightHandler() {
@@ -143,30 +49,32 @@ int screenWidthHandler() {
     return screenWidth();
 }
 
-void psHandler(){
+int psHandler(){
     printProcesses();
+    return 0;
 }
 
-unsigned int createProcessHandler(uint64_t * entryPoint, int foreground){
-    return createProcess(entryPoint); //Falta agregar foreground en scheduler
+int createProcessHandler(uint64_t entryPoint, uint64_t foreground){
+    return createProcess((uint64_t*)entryPoint); //Falta agregar foreground en scheduler
 }
 
-void changeStateHandler(unsigned int pid, int state){
+int changeStateHandler(uint64_t pid, uint64_t state){
     if (state == 0){ // state 0 = kill.
-        endProcess(pid);
+        endProcess((unsigned int)pid);
     } else{
-        switchStates(pid);
+        switchStates((unsigned int)pid);
     }
 }
 
-void changePriorityHandler(unsigned int pid, int priority){
-    changePriorities(pid,priority);
+int changePriorityHandler(uint64_t pid, uint64_t priority){
+    changePriorities((unsigned int)pid, (unsigned int)priority);
+    return 0;
 }
 
-unsigned int getPidHandler(){
+int getPidHandler(){
     return getPid();
 }
 
-unsigned int getElapsedTicksHandler(){
+int getElapsedTicksHandler(){
     return ticks_elapsed();
 }

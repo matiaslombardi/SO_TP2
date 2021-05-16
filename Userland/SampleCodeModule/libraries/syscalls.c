@@ -9,17 +9,17 @@
 #define CLEAR_SYSCALL 3
 #define ELAPSED_TICKS_SYSCALL 4
 #define EXIT_SYSCALL 5
-#define INFO_REG 8
-#define MEM_DUMP 9
-#define TIME_SYSCALL 10
-#define SET_ALARM 11
-#define SCREEN_HEIGHT 12
-#define SCREEN_WIDTH 13
-#define PS_SYSCALL 14
-#define CREATE_PROCESS_SYSCALL 15
-#define CHANGE_STATE_SYSCALL 16
-#define CHANGE_PRIORITY_SYSCALL 17
-#define GET_PID_SYSCALL 18
+#define INFO_REG 6
+#define MEM_DUMP 7
+#define TIME_SYSCALL 8
+#define SET_ALARM 9
+#define SCREEN_HEIGHT 10
+#define SCREEN_WIDTH 11
+#define PS_SYSCALL 12
+#define CREATE_PROCESS_SYSCALL 13
+#define CHANGE_STATE_SYSCALL 14
+#define CHANGE_PRIORITY_SYSCALL 15
+#define GET_PID_SYSCALL 16
 
 
 int read(char *buffer, int length) {

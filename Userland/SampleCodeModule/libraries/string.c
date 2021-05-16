@@ -24,16 +24,16 @@ void itoaTruncate(int value, char * buffer, int length) {
 void dateToString(date myDate, char *buffer, char separator, int length) {
 
     itoa(myDate->day, buffer, 3);
-    buffer[2] = separator;
     itoa(myDate->month, buffer + 3, 3);
-    buffer[5] = separator;
     itoa(myDate->year, buffer + 6, 3);
-    buffer[8] = ' ';
     itoa(myDate->hour, buffer + 9, 3);
-    buffer[11] = ':';
     itoa(myDate->minutes, buffer + 12, 3);
-    buffer[14] = ':';
     itoa(myDate->seconds, buffer + 15, 3);
+    buffer[2] = separator;
+    buffer[5] = separator;
+    buffer[8] = ' ';
+    buffer[11] = ':';
+    buffer[14] = ':';
     buffer[18] = 0;
 }
 
