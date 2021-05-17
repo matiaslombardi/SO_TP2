@@ -54,7 +54,7 @@ void putCharFrom(char c, int row, int col) {
 
 void printInt(uint64_t num) {
     uint64_t len = numlen(num);
-    char buff[len + 1];
-    itoa(num, buff, len + 1);
-    println(buff);
+    char buff[64];
+    itoaTruncate(num, buff, 64);
+    print(buff);
 }

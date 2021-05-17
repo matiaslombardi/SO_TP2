@@ -39,14 +39,12 @@ void test_mm() {
             mm_rqs[rq].size = GetUniform(MAX_MEMORY - total - 1) + 1;
             mm_rqs[rq].address = mmMalloc(mm_rqs[rq].size); // TODO: Port this call as required
             if (mm_rqs[rq].address == NULL) {
-                char t[15] = {0};
-                itoaTruncate(total, t, 10);
                 print("hasta ahora pedi: ");
-                println(t);
-                char b[15] = {0};
-                itoaTruncate(mm_rqs[rq].size, b, 10);
+                printInt(total);
+                println("");
                 print("quise asignar: ");
-                println(b);
+                printInt(mm_rqs[rq].size);
+                println("");
                 break;
             } else {
                 total += mm_rqs[rq].size;
@@ -57,10 +55,9 @@ void test_mm() {
 //            itoaTruncate(mm_rqs[rq].size, b, 10);
 //            println(b);
         }
-        char b[15] = {0};
-        itoaTruncate(total, b, 10);
         print("asig: ");
-        println(b);
+        printInt(total);
+        println("");
 
         // Set
         uint32_t i;
@@ -87,10 +84,9 @@ void test_mm() {
             }
         }
 
-        char k[10] = {0};
-        itoaTruncate(t, k, 10);
         print("lib: ");
-        println(k);
+        printInt(t);
+        println("");
     }
 }
 
