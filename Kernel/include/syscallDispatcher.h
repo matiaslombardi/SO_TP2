@@ -9,7 +9,9 @@
 #include <memoryManagement.h>
 
 #define MEM_BYTES 32
+#define SYSCALLS_QUANTITY 18
 
+typedef uint64_t (*syscall_t)(uint64_t rax, uint64_t rbx, uint64_t rcx, uint64_t rdx, uint64_t rsi);
 //typedef uint64_t (*f)(uint64_t, ...);
 //extern f syscalls[18];
 

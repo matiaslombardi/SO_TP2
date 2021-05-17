@@ -1,14 +1,17 @@
 #include <syscallDispatcher.h>
-
-uint64_t* (*syscalls[])(uint64_t, ...) = {readHandler, writeHandler, drawHandler, clearScreenHandler, getElapsedTicksHandler, getPidHandler, infoRegHandler, memDumpHandler, getTime, addFunc, screenHeightHandler, screenWidthHandler,
-              psHandler, createProcessHandler, changeStateHandler, changePriorityHandler, getPidHandler, getMemHandler, freeMemHandler, getMemInfoHandler};
-
+//
+//uint64_t* (*syscalls[])(uint64_t, ...) = {readHandler, writeHandler, drawHandler, clearScreenHandler, getElapsedTicksHandler, getPidHandler, infoRegHandler, memDumpHandler, getTime, addFunc, screenHeightHandler, screenWidthHandler,
+//              psHandler, createProcessHandler, changeStateHandler, changePriorityHandler, getPidHandler, getMemHandler, freeMemHandler, getMemInfoHandler};
+//
 //f syscalls[]= {readHandler, writeHandler, drawHandler, clearScreenHandler, getElapsedTicksHandler, getPidHandler, infoRegHandler, memDumpHandler, getTime, addFunc, screenHeightHandler, screenWidthHandler,
 //             psHandler, createProcessHandler, changeStateHandler, changePriorityHandler, getPidHandler, getMemHandler, freeMemHandler, getMemInfoHandler};
 
+static syscall_t syscallsArray[SYSCALLS_QUANTITY] = {readHandler, writeHandler, drawHandler, clearScreenHandler, getElapsedTicksHandler, getPidHandler, infoRegHandler, memDumpHandler, getTime, addFunc, screenHeightHandler, screenWidthHandler,
+             psHandler, createProcessHandler, changeStateHandler, changePriorityHandler, getPidHandler, getMemHandler, freeMemHandler, getMemInfoHandler};
+
 uint64_t syscallDispatcher(uint64_t call, uint64_t firstP, uint64_t secondP, uint64_t thirdP,
                            uint64_t fourthP, uint64_t fifthP) {
-    return (*syscalls[call])(firstP, secondP, thirdP, fourthP, fifthP);
+    return syscallsArray[call](firstP, secondP, thirdP, fourthP, fifthP);
 }
 
 uint64_t readHandler(uint64_t length, uint64_t toRead) {

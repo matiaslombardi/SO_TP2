@@ -150,14 +150,26 @@ void greet(){
             println(" says hello");
         }
     }*/
+//    while(1) {
+//        unsigned int ticks = getElapsedTicks();
+//        if((ticks - start) / 18 >= second) {
+//            print(pidString);
+//            print(" says hello - Seconds: ");
+//            char buff[20] = {0}; //Cuando printInt funcione, cambiarlo (para eso tienen que estar las syscalls del mm
+//            itoaTruncate((ticks - start) / 18, buff, 20);
+//            println(buff);
+//            start = ticks;
+//        }
+//    }
     while(1) {
         unsigned int ticks = getElapsedTicks();
-        if((ticks - start) / 18 >= second) {
+        if((ticks - start) >= 1) {
             print(pidString);
-            print(" says hello - Seconds: ");
-            char buff[20] = {0}; //Cuando printInt funcione, cambiarlo (para eso tienen que estar las syscalls del mm
-            itoaTruncate((ticks - start) / 18, buff, 20);
-            println(buff);
+//            print(" says hello - Seconds: ");
+//            char buff[20] = {0}; //Cuando printInt funcione, cambiarlo (para eso tienen que estar las syscalls del mm
+//            itoaTruncate((ticks - start) / 18, buff, 20);
+//            print(buff);
+            print(" ");
             start = ticks;
         }
     }

@@ -6,6 +6,8 @@
 #define START_STACK_SEGMENT 0x0
 #define START_RFLAGS 0x202
 #define START_CODE_SEGMENT 0x8
+#define MAX_PRIORITY 5
+#define MIN_PRIORITY 1
 
 QueueADT processes;
 unsigned int pidCounter = 1;
@@ -42,12 +44,13 @@ unsigned int createProcess(uint64_t * entryPoint){
     return pidCounter++;
 }
 
-static void fillPCB(PCB * pcb, unsigned int pid, uint64_t * base) { //Falta foregroun y priority;
+static void fillPCB(PCB * pcb, unsigned int pid, uint64_t * base) { //Falta foreground y priority;
     pcb->pid = pid;
     pcb->state = READY;
     pcb->rsp = base + STACK_SIZE - REGISTER_AMOUNT;
     pcb->rbp = base + STACK_SIZE;
-    pcb->priority = 0;
+    pcb->priority = 1;
+    pcb->tickets = 1;
     pcb->foreground = 0;
 }
 
@@ -55,7 +58,13 @@ uint64_t * switchProcesses(uint64_t * rsp){
     if(currentProcess != NULL) {
         currentProcess->rsp = rsp;
     }
+    if(currentProcess->tickets > 0){
+        currentProcess->tickets--;
+        return currentProcess->rsp;
+    }
+    currentProcess->tickets = currentProcess->priority;
     currentProcess = pop(processes);
+    currentProcess->tickets--;
     return currentProcess->rsp;
 }
 
@@ -104,8 +113,12 @@ void printProcesses(){
 
 void changePriorities(unsigned int pid, unsigned int newPriority){
     PCB* aux;
+    if(newPriority < MIN_PRIORITY || newPriority > MAX_PRIORITY) {
+        return;
+    }
     if( (aux = findPCB(processes, pid) ) != NULL){
         aux->priority = newPriority;
+        aux->tickets = newPriority;
     }
 }
 

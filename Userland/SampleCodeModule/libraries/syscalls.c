@@ -84,7 +84,7 @@ unsigned int createProcess(uint64_t * entryPoint, int foreground) {
 }
 
 void killProcess(unsigned int pid){
-    _syscall(CHANGE_STATE_SYSCALL, pid,0);
+    _syscall(CHANGE_STATE_SYSCALL, pid, 0);
 }
 
 void changeProcessPriority(unsigned int pid, int priority){
@@ -92,7 +92,7 @@ void changeProcessPriority(unsigned int pid, int priority){
 }
 
 void changeProcessState(unsigned int pid){
-    _syscall(CHANGE_STATE_SYSCALL, pid,1);
+    _syscall(CHANGE_STATE_SYSCALL, pid, 1);
 }
 
 unsigned int getPid(){

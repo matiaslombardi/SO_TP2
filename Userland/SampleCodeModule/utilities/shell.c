@@ -36,7 +36,8 @@ void initShell() {
 //    getMemInfo(buffer);
 //    println(buffer);
 
-    test_mm();
+//    test_mm();
+//    test_prio();
 
     char c;
     while (1) {

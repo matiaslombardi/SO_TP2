@@ -13,6 +13,7 @@ typedef struct PCB {
     uint64_t * rsp;
     uint64_t * rbp;
     unsigned int priority;
+    unsigned int tickets;
     unsigned int foreground;
 
 }PCB;

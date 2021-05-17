@@ -4,7 +4,7 @@
 #include "test_util.h"
 
 #define MAX_BLOCKS 128
-#define MAX_MEMORY 6800000 //Should be around 80% of memory managed by the MM
+#define MAX_MEMORY 90000000 //Should be around 80% of memory managed by the MM
 #define NULL (void *) 0
 
 typedef struct MM_rq {
@@ -38,18 +38,28 @@ void test_mm() {
 //        print(" disponible ");
             mm_rqs[rq].size = GetUniform(MAX_MEMORY - total - 1) + 1;
             mm_rqs[rq].address = mmMalloc(mm_rqs[rq].size); // TODO: Port this call as required
-//            if (mm_rqs[rq].address == NULL) {
-//                print("null");
-//            }
+            if (mm_rqs[rq].address == NULL) {
+                char t[15] = {0};
+                itoaTruncate(total, t, 10);
+                print("hasta ahora pedi: ");
+                println(t);
+                char b[15] = {0};
+                itoaTruncate(mm_rqs[rq].size, b, 10);
+                print("quise asignar: ");
+                println(b);
+                break;
+            } else {
+                total += mm_rqs[rq].size;
+            }
 //TODO: check if NULL
-            total += mm_rqs[rq].size;
             rq++;
-            char b[15] = {0};
-            itoaTruncate(mm_rqs[rq].size, b, 10);
-            println(b);
+//            char b[15] = {0};
+//            itoaTruncate(mm_rqs[rq].size, b, 10);
+//            println(b);
         }
         char b[15] = {0};
         itoaTruncate(total, b, 10);
+        print("asig: ");
         println(b);
 
         // Set
@@ -73,14 +83,14 @@ void test_mm() {
 //                println(b);
                 t += mm_rqs[i].size;
 
-            mmFree(mm_rqs[i].address);  // TODO: Port this call as required
+                mmFree(mm_rqs[i].address);  // TODO: Port this call as required
             }
         }
 
-        char k[10] ={0};
-          itoaTruncate(t, k, 10);
+        char k[10] = {0};
+        itoaTruncate(t, k, 10);
         print("lib: ");
-          println(k);
+        println(k);
     }
 }
 
