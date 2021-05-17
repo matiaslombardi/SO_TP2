@@ -38,6 +38,12 @@ unsigned int getPid();
 
 unsigned int getElapsedTicks();
 
-void exit_();
+void _exit();
+
+void * getMem(uint64_t size);
+
+void freeMem(void * ptr);
+
+void getMemInfo(char *info);
 
 #endif

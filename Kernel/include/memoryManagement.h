@@ -13,5 +13,6 @@
 void printHeapDir();
 void * mmMalloc(uint64_t size); //Cambiar int por nuestro equivalente a size_t
 void mmFree(void * ptr);
+void fillMemInfo(char * buffer);
 
 #endif

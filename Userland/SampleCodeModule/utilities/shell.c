@@ -3,6 +3,7 @@
 #include <standardIO.h>
 #include <syscalls.h>
 #include <stdint.h>
+#include <memoryManagement.h>
 #include <apps.h>
 
 #define CHUNK 200
@@ -18,6 +19,25 @@ int tokenizeArguments(char *toToken, char tokens[10][25]);
 char *initGreet = "user@TP2_SO:~$ ";
 
 void initShell() {
+//    char buffer[100] = {0};
+//    getMemInfo(buffer);
+//    println(buffer);
+//
+//    loop();
+//
+//    getMemInfo(buffer);
+//    println(buffer);
+//
+//    char * s = mmMalloc(1);
+//    getMemInfo(buffer);
+//    println(buffer);
+//
+//    mmFree(s);
+//    getMemInfo(buffer);
+//    println(buffer);
+
+    test_mm();
+
     char c;
     while (1) {
         printc(initGreet, 0x22ab00);

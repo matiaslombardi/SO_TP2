@@ -4,7 +4,7 @@
 #include <types.h>
 #include <stdint.h>
 
-int _syscall(uint64_t syscall, ...);
+uint64_t _syscall(uint64_t syscall, ...);
 
 void invalidOpCode();
 

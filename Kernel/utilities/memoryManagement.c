@@ -1,4 +1,6 @@
 #include <memoryManagement.h>
+#include <string.h>
+#include <library.h>
 
 typedef uint64_t align; // para alineamiento al limite mayor 
 
@@ -94,4 +96,17 @@ void mmFree(void * ptr) {
         p->memNode.ptr = header;
     }
     freep = p;
+}
+
+void fillMemInfo(char * buffer) {
+    uint64_t memory = 0;
+    Header * current = heap;
+
+    do {
+        memory += current->memNode.size;
+        current = current->memNode.ptr;
+    } while(current != heap);
+
+    memory *= sizeof(Header);
+    itoaTruncate(memory, buffer, 64);
 }

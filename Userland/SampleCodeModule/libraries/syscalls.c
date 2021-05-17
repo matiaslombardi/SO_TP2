@@ -1,3 +1,4 @@
+#include <syscalls.h>
 #include <types.h>
 #include <lib64.h>
 #include <string.h>
@@ -20,6 +21,9 @@
 #define CHANGE_STATE_SYSCALL 14
 #define CHANGE_PRIORITY_SYSCALL 15
 #define GET_PID_SYSCALL 16
+#define GET_MEM_SYSCALL 17
+#define FREE_SYSCALL 18
+#define GET_MEM_INFO_SYSCALL 19
 
 
 int read(char *buffer, int length) {
@@ -39,8 +43,12 @@ void clearScreen() {
     _syscall(CLEAR_SYSCALL);
 }
 
-void getTime(date myDate) {
-    _syscall(TIME_SYSCALL, myDate);
+unsigned int getElapsedTicks(){
+    return _syscall(ELAPSED_TICKS_SYSCALL);
+}
+
+void _exit(){
+    _syscall(EXIT_SYSCALL);
 }
 
 void getRegisters(uint64_t *registers) {
@@ -49,6 +57,10 @@ void getRegisters(uint64_t *registers) {
 
 void memoryDump(char *dir, char *dump) {
     _syscall(MEM_DUMP, dir, dump);
+}
+
+void getTime(date myDate) {
+    _syscall(TIME_SYSCALL, myDate);
 }
 
 void setAlarm(void (*func)(void), int flag) {
@@ -64,7 +76,7 @@ int getWidth() {
 }
 
 void getProcessesList(){
-    return _syscall(PS_SYSCALL);
+    _syscall(PS_SYSCALL);
 }
 
 unsigned int createProcess(uint64_t * entryPoint, int foreground) {
@@ -87,10 +99,14 @@ unsigned int getPid(){
     return _syscall(GET_PID_SYSCALL);
 }
 
-unsigned int getElapsedTicks(){
-    return _syscall(ELAPSED_TICKS_SYSCALL);
+void * getMem(uint64_t size){
+    return (void *) _syscall(GET_MEM_SYSCALL, size);
 }
 
-void exit_(){
-    _syscall(EXIT_SYSCALL);
+void freeMem(void * ptr){
+    _syscall(FREE_SYSCALL, ptr);
+}
+
+void getMemInfo(char *info){
+    _syscall(GET_MEM_INFO_SYSCALL, info);
 }

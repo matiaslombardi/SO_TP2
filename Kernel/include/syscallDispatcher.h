@@ -6,37 +6,45 @@
 #include <time.h>
 #include <scheduler.h>
 #include <memDump.h>
+#include <memoryManagement.h>
 
 #define MEM_BYTES 32
 
-typedef int (*f)(uint64_t, ...);
+//typedef uint64_t (*f)(uint64_t, ...);
+//extern f syscalls[18];
 
-int readHandler(uint64_t length, uint64_t toRead);
+uint64_t readHandler(uint64_t length, uint64_t toRead);
 
-int writeHandler(uint64_t length, uint64_t toWrite, uint64_t row, uint64_t col, uint64_t color);
+uint64_t writeHandler(uint64_t length, uint64_t toWrite, uint64_t row, uint64_t col, uint64_t color);
 
-int drawHandler(uint64_t matrix, uint64_t row, uint64_t col, uint64_t rows, uint64_t columns);
+uint64_t drawHandler(uint64_t matrix, uint64_t row, uint64_t col, uint64_t rows, uint64_t columns);
 
-int getTime(uint64_t myDate);
+uint64_t getTime(uint64_t myDate);
 
-int memDumpHandler(uint64_t dir, uint64_t dump);
+uint64_t memDumpHandler(uint64_t dir, uint64_t dump);
 
-int infoRegHandler(uint64_t firstP);
+uint64_t infoRegHandler(uint64_t firstP);
 
-int clearScreenHandler();
+uint64_t clearScreenHandler();
 
-int screenHeightHandler();
+uint64_t screenHeightHandler();
 
-int screenWidthHandler();
+uint64_t screenWidthHandler();
 
-int psHandler();
+uint64_t psHandler();
 
-int createProcessHandler(uint64_t entryPoint, uint64_t foreground);
+uint64_t createProcessHandler(uint64_t entryPoint, uint64_t foreground);
 
-int changeStateHandler(uint64_t pid, uint64_t state);
+uint64_t changeStateHandler(uint64_t pid, uint64_t state);
 
-int changePriorityHandler(uint64_t pid, uint64_t priority);
+uint64_t changePriorityHandler(uint64_t pid, uint64_t priority);
 
-int getPidHandler();
+uint64_t getPidHandler();
 
-int getElapsedTicksHandler();
+uint64_t getElapsedTicksHandler();
+
+uint64_t getMemHandler(uint64_t size);
+
+uint64_t freeMemHandler(uint64_t ptr);
+
+uint64_t getMemInfoHandler();

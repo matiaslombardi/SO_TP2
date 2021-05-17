@@ -2,6 +2,7 @@
 #define SO_TP2_MEMDUMP_H
 
 #include <string.h>
+#include <library.h>
 
 void memDump(char *dir, char *dump);
 
