@@ -38,7 +38,7 @@ void initShell() {
 
     test_mm();
 //    test_prio();
-
+//
     char c;
     while (1) {
         printc(initGreet, 0x22ab00);

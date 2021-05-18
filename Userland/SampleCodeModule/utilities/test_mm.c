@@ -4,7 +4,7 @@
 #include "test_util.h"
 
 #define MAX_BLOCKS 128
-#define MAX_MEMORY 90000000 //Should be around 80% of memory managed by the MM
+#define MAX_MEMORY (1024 * 1024 * 128 * 0.7) //Should be around 80% of memory managed by the MM
 #define NULL (void *) 0
 
 typedef struct MM_rq {

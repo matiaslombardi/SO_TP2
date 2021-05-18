@@ -11,6 +11,7 @@
 #define NULL ((void *)0)
 
 void printHeapDir();
+void mmInit(void *initAddress);
 void * mmMalloc(uint64_t size); //Cambiar int por nuestro equivalente a size_t
 void mmFree(void * ptr);
 void fillMemInfo(char * buffer);
