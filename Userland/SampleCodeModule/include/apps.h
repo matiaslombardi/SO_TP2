@@ -45,4 +45,6 @@ void nice(int args, char argv[][25]);
 
 void block(int args, char argv[][25]);
 
+void mem(int args, char argv[][25]);
+
 #endif

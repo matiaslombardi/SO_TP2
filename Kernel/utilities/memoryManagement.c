@@ -14,15 +14,10 @@ union header {
 
 typedef union header Header;
 
-//static Header base;
 static Header *firstFree = NULL;
 //static Header heap[HEAPSIZE / sizeof(Header)];
 static Header *heap;
 static uint64_t totalHeap;
-
-
-/* Estas funciones no van al .h */
-//static Header *morecore(uint64_t nu);
 
 void printHeapDir() {
     printInt(heap);
@@ -42,12 +37,7 @@ void *mmMalloc(uint64_t numBytesToAlloc) {
     }
     Header *current = firstFree;
     Header *previous = current;
-    uint64_t unitsToAlloc =
-            (numBytesToAlloc + sizeof(Header) - 1) / sizeof(Header) + 1; //equivalente a N unidades tamaño del Header
-//    if ((previous = freep) == NULL){
-//        base.memNode.next = freep = previous = &base; //crea una lista circular
-//        base.memNode.size = 0;
-//    }
+    uint64_t unitsToAlloc = (numBytesToAlloc + sizeof(Header) - 1) / sizeof(Header) + 1; //equivalente a N unidades tamaño del Header
 
     for (current = firstFree; current != NULL; current = current->memNode.next) {
         if (current->memNode.size >= unitsToAlloc) { //si es lo suficientemente grande
@@ -62,31 +52,12 @@ void *mmMalloc(uint64_t numBytesToAlloc) {
                 current += current->memNode.size;
                 current->memNode.size = unitsToAlloc;
             }
-//            firstFree = previous;
-
             return (void *) (current + 1);
         }
-//        if (current == firstFree) { //dio vuelta la lista libre
-//            return NULL;
-//        }
         previous = current;
     }
     return NULL;
 }
-
-//static Header *morecore(uint64_t unitsToAlloc) {
-//    static Header *up;
-//
-//    if (up) {
-//        return 0;
-//    }
-//    up = heap;
-//
-//    up->memNode.size = HEAPSIZE / sizeof(Header);
-//    mmFree(up + 1);
-//    return freep;
-//}
-
 
 void mmFree(void *ptr) {
     Header *toFree;
@@ -111,7 +82,6 @@ void mmFree(void *ptr) {
         toFree->memNode.next = current;
     }
 
-
     if (current == firstFree) {
         firstFree = toFree;
     } else {
@@ -123,93 +93,46 @@ void mmFree(void *ptr) {
         }
     }
 }
-//    for (current = firstFree;
-//         current != NULL && !(current < toFree && current->memNode.next > toFree); current = current->memNode.next) {
-//        if (current->memNode.next == NULL && (toFree > current || toFree < current->memNode.next)) {
-//            break;
-//        }
-//        if (toFree < current) {
-//            break;
-//        }
-//    }
-
-//    if (current != NULL) {
-//        if (toFree + toFree->memNode.size == current) { //Une al nbr superior
-//            toFree->memNode.size += current->memNode.size;
-//            toFree->memNode.next = current->memNode.next;
-//        } else if(toFree < current->memNode.next){
-//            toFree->memNode.next = current;
-//        }
-//
-//        if (current + current->memNode.size == toFree) { //Une al nbr inferior
-//            current->memNode.size += toFree->memNode.size;
-//            current->memNode.next = toFree->memNode.next;
-//        } else if(toFree > current->memNode.next) {
-//            current->memNode.next = toFree;
-//        }
-//
-//        firstFree = toFree < firstFree ? toFree:firstFree;
-//    } else {
-//        toFree->memNode.next = NULL;
-//        firstFree = toFree;
-//    }
-
-
-//    firstFree = current < toFree ? current : toFree;
-
-/*
-void mmFree(void *ap)
-{
-    Header *curr, *prev, *aux;
-    aux = (Header *)(ap);
-    aux--;
-
-    if (aux == NULL || aux < (Header *)heap || aux >= (Header *)heap + totalHeap)
-    {
-        return;
-    }
-
-    curr = firstFree;
-    while (curr != NULL && curr < aux)
-    { // Buscamos el anterior libre.
-        prev = curr;
-        curr = curr->memNode.next;
-    }
-    if (curr != NULL && (aux + aux->memNode.size == curr))
-    { // Vemos de unir con el siguiente ptr.
-        aux->memNode.size += curr->memNode.size;
-        aux->memNode.next = curr->memNode.next;
-    }
-    else // Si no me puedo unir hago simplemente un cambio de puntero.
-        aux->memNode.next = curr;
-
-    if (curr == firstFree)
-    { // Con esto veo si estoy antes que el primero libre.
-        firstFree = aux;
-    }
-    else
-    {
-        if (prev + prev->memNode.size == aux)
-        { // Uno los bloques si tengo uno libre atrás.
-            prev->memNode.size += aux->memNode.size;
-            prev->memNode.next = aux->memNode.next;
-        }
-        else
-        {
-            prev->memNode.next = aux; // Si no hago que el de atrás me apunte.
-        }
-    }
-}*/
 
 void fillMemInfo(char *buffer) {
-    uint64_t memory = 0;
-    Header *current = heap;
+    uint64_t freeMemory = 0;
+    int freeBlocks = 0;
+    Header *current = firstFree;
 
-    do {
-        memory += current->memNode.size;
+    while(current != NULL) {
+        freeMemory += current->memNode.size;
         current = current->memNode.next;
-    } while (current != heap);
+        freeBlocks++;
+    }
 
-    memory *= sizeof(Header);
-    itoaTruncate(memory, buffer, 64);
+    freeMemory *= sizeof(Header);
+    uint64_t total = totalHeap;
+    uint64_t usedMemory = totalHeap - freeMemory;
+
+    char aux[64] = {0};
+
+    strcat(buffer, "Total memory: ");
+    itoaTruncate(total, aux, 64);
+    strcat(buffer, aux);
+
+    strcat(buffer, "\nUsed memory:  ");
+    itoaTruncate(usedMemory, aux, 64);
+    strcat(buffer, aux);
+
+    strcat(buffer, "\nFree memory:  ");
+    itoaTruncate(freeMemory, aux, 64);
+    strcat(buffer, aux);
+
+    strcat(buffer, " in ");
+    itoaTruncate(freeBlocks, aux, 64);
+    strcat(buffer, aux);
+    strcat(buffer, " blocks\n");
 }
+
+/*
+
+ Total memory: xxxxxxxxxxxxxxxx
+ Free memory:  xxxxxxxxxxxxxxxx
+ Used memory:  xxxxxxxxxxxxxxxx in xxxxxxxxxxxxxxxx blocks.
+
+ * */

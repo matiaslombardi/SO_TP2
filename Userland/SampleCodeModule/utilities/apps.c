@@ -24,6 +24,7 @@ programs commands[] = {{"about",       about,          "      Information about 
                        {"kill",        kill,           "       Kills a process given its ID."},
                        {"nice",        nice,           "       Changes the given process priority."},
                        {"block",       block,          "      Changes the process state given its ID."},
+                       {"mem",         mem,            "        Displays the current state of the memory."},
                        {"exceptionZ",  throwDivZero,   " Throws a divide by zero exception"},
                        {"exceptionOP", throwInvOpCode, "Throws an invalid Operation Code Exception"}
 };
@@ -196,5 +197,12 @@ void block(int args, char argv[][25]){
     if (!checkArgs(args, 1)) return;
     int pid = string10ToInt(argv[1]);
     changeProcessState(pid);
+}
+
+void mem(int args, char argv[][25]) {
+    if (!checkArgs(args, 0)) return;
+    char buffer[256] = {0};
+    getMemInfo(buffer);
+    println(buffer);
 }
 

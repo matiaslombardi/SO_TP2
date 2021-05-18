@@ -35,5 +35,7 @@ uint64_t string10ToInt(char *num);
 
 void toMayus(char *string);
 
+void strcat(char * dest, char * src);
+
 
 #endif //SO_TP2_STRING_H

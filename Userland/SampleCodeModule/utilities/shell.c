@@ -33,12 +33,17 @@ void initShell() {
 //    println(buffer);
 //
 //    mmFree(s);
+
+//
+//    char * g = mmMalloc(256);
+//    *buffer = 0;
 //    getMemInfo(buffer);
 //    println(buffer);
 
-    test_mm();
+//    test_mm();
 //    test_prio();
-//
+//    test_processes();
+
     char c;
     while (1) {
         printc(initGreet, 0x22ab00);

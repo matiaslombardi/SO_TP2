@@ -2,6 +2,7 @@
 #include <string.h>
 #include <memoryManagement.h>
 #include "test_util.h"
+#include <apps.h>
 
 #define MAX_BLOCKS 128
 #define MAX_MEMORY (1024 * 1024 * 128 * 0.7) //Should be around 80% of memory managed by the MM
@@ -29,7 +30,8 @@ void test_mm() {
     uint32_t total;
 
     while (1) {
-//      print("Hola");
+//        printcln("Antes de asginar:", 0x04FF00);
+//        mem(0, NULL);
         rq = 0;
         total = 0;
 
@@ -58,6 +60,7 @@ void test_mm() {
         print("asig: ");
         printInt(total);
         println("");
+//        mem(0, NULL);
 
         // Set
         uint32_t i;
@@ -87,6 +90,7 @@ void test_mm() {
         print("lib: ");
         printInt(t);
         println("");
+//        mem(0, NULL);
     }
 }
 
