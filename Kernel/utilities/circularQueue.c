@@ -19,7 +19,7 @@ typedef struct Queue {
  * Prototipo de Funciones auxiliares
  */
 static void freeQueueRec(Node * first);
-static Node * deleteNodeRec(Node * first, unsigned int pid, PCB * pcb);
+static Node * deleteNodeRec(Node * first, unsigned int pid, PCB ** pcb);
 
 /**
  * Funciones principales
@@ -106,18 +106,18 @@ PCB * findPCB(QueueADT queue, unsigned int pid) {
 
 PCB * deleteNode(QueueADT queue, unsigned int pid) {
     PCB * pcb = NULL;
-    queue->first = deleteNodeRec(queue->first, pid, pcb);
+    queue->first = deleteNodeRec(queue->first, pid, &pcb);
     return pcb;
 }
 
-static Node * deleteNodeRec(Node * first, unsigned int pid, PCB * pcb) {
+static Node * deleteNodeRec(Node * first, unsigned int pid, PCB ** pcb) {
     if(first == NULL) {
         return first;
     }
 
     if(first->pcb->pid == pid) {
+        *pcb = first->pcb;
         Node * aux = first->next;
-        pcb = first->pcb;
         mmFree(first);
         return aux;
     }
