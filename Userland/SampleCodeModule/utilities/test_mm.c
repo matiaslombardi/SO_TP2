@@ -30,8 +30,8 @@ void test_mm() {
     uint32_t total;
 
     while (1) {
-//        printcln("Antes de asginar:", 0x04FF00);
-//        mem(0, NULL);
+        printcln("Antes de asginar:", 0x04FF00);
+        mem(0, NULL);
         rq = 0;
         total = 0;
 

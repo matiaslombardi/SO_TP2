@@ -73,14 +73,18 @@ PCB* pop(QueueADT queue) {
     }
     while(queue->first != NULL && queue->first->pcb->state != READY) {
         push(queue, queue->first->pcb);
+        Node * aux = queue->first;
         queue->first = queue->first->next;
+        mmFree(aux);
     }
     if(queue->first == NULL) {
         return NULL;
     }
     PCB * toReturn = queue->first->pcb;
     push(queue, toReturn);
+    Node * aux = queue->first;
     queue->first = queue->first->next;
+    mmFree(aux);
     return toReturn;
 }
 
