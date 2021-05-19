@@ -26,7 +26,7 @@ int getWidth();
 
 void getProcessesList();
 
-unsigned int createProcess(uint64_t * entryPoint, int foreground);
+unsigned int createProcess(uint64_t * entryPoint, int foreground, uint64_t first, uint64_t second, uint64_t third);
 
 void killProcess(unsigned int pid);
 
@@ -38,12 +38,20 @@ unsigned int getPid();
 
 unsigned int getElapsedTicks();
 
-void _exit();
+void _exit(uint64_t value);
 
 void * getMem(uint64_t size);
 
 void freeMem(void * ptr);
 
 void getMemInfo(char *info);
+
+int semOpen(char * semId, uint64_t initialValue);
+
+int semClose(char * semId);
+
+int semPost(char * semId);
+
+int semWait(char * semId);
 
 #endif

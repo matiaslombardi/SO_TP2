@@ -24,6 +24,10 @@
 #define GET_MEM_SYSCALL 17
 #define FREE_SYSCALL 18
 #define GET_MEM_INFO_SYSCALL 19
+#define SEM_OPEN_SYSCALL 20
+#define SEM_CLOSE_SYSCALL 21
+#define SEM_POST_SYSCALL 22
+#define SEM_WAIT_SYSCALL 23
 
 
 int read(char *buffer, int length) {
@@ -47,7 +51,7 @@ unsigned int getElapsedTicks(){
     return _syscall(ELAPSED_TICKS_SYSCALL);
 }
 
-void _exit(){
+void _exit(uint64_t value){
     _syscall(EXIT_SYSCALL);
 }
 
@@ -79,8 +83,8 @@ void getProcessesList(){
     _syscall(PS_SYSCALL);
 }
 
-unsigned int createProcess(uint64_t * entryPoint, int foreground) {
-    return _syscall(CREATE_PROCESS_SYSCALL, entryPoint, foreground);
+unsigned int createProcess(uint64_t * entryPoint, int foreground, uint64_t first, uint64_t second, uint64_t third) {
+    return _syscall(CREATE_PROCESS_SYSCALL, entryPoint, foreground, first, second, third);
 }
 
 void killProcess(unsigned int pid){
@@ -109,4 +113,20 @@ void freeMem(void * ptr){
 
 void getMemInfo(char *info){
     _syscall(GET_MEM_INFO_SYSCALL, info);
+}
+
+int semOpen(char * semId, uint64_t initialValue) {
+    return _syscall(SEM_OPEN_SYSCALL, semId, initialValue);
+}
+
+int semClose(char * semId) {
+    return _syscall(SEM_CLOSE_SYSCALL, semId);
+}
+
+int semPost(char * semId) {
+    return _syscall(SEM_POST_SYSCALL, semId);
+}
+
+int semWait(char * semId) {
+    return _syscall(SEM_WAIT_SYSCALL, semId);
 }

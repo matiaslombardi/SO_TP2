@@ -144,13 +144,6 @@ void greet(){
     unsigned int second = 5;
     char pidString[20] = {0};
     itoaTruncate(pid, pidString, 20);
-    /*while(1){
-        unsigned int ticks = getElapsedTicks();
-        if( ((start - ticks) % (second * 18)) == 0){
-            print(pidString);
-            println(" says hello");
-        }
-    }*/
 //    while(1) {
 //        unsigned int ticks = getElapsedTicks();
 //        if((ticks - start) / 18 >= second) {
@@ -166,18 +159,17 @@ void greet(){
         unsigned int ticks = getElapsedTicks();
         if((ticks - start) >= 1) {
             print(pidString);
-//            print(" says hello - Seconds: ");
-//            char buff[20] = {0}; //Cuando printInt funcione, cambiarlo (para eso tienen que estar las syscalls del mm
-//            itoaTruncate((ticks - start) / 18, buff, 20);
-//            print(buff);
             print(" ");
             start = ticks;
         }
+        println("a");
+        _exit(1);
+
     }
 }
 
 void loop(){
-    createProcess((uint64_t *)&greet, 0);
+    createProcess((uint64_t *)&greet, 0, 0, 0, 0);
 }
 
 void kill(int args, char argv[][25]){

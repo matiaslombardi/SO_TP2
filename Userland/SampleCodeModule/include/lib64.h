@@ -8,4 +8,6 @@ uint64_t _syscall(uint64_t syscall, ...);
 
 void invalidOpCode();
 
+void yield();
+
 #endif

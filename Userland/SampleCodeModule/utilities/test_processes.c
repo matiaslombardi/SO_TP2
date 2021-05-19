@@ -1,3 +1,4 @@
+/*
 //#include <stdio.h>
 #include "test_util.h"
 #include <stdint.h>
@@ -11,7 +12,7 @@ void endless() {
 }
 
 uint64_t my_create_process(uint64_t *entryPoint) {
-    return createProcess(entryPoint, 0);
+    return createProcess(entryPoint, 0, 0, 0, 0);
 }
 
 uint64_t my_kill(uint64_t pid) {
@@ -109,3 +110,4 @@ void test_processes() {
 //    test_processes();
 //    return 0;
 //}
+*/

@@ -4,6 +4,7 @@ GLOBAL picMasterMask
 GLOBAL picSlaveMask
 GLOBAL haltcpu
 GLOBAL _hlt
+GLOBAL _forceInt
 
 GLOBAL _syscallHandler
 
@@ -155,6 +156,9 @@ SECTION .text
 	iretq
 %endmacro
 
+_forceInt:
+    int 20h
+    ret
 
 _hlt:
 	sti

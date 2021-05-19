@@ -43,6 +43,9 @@ void initShell() {
 //    test_mm();
 //    test_prio();
 //    test_processes();
+//    test_no_sync();
+    test_sync();
+
 
     char c;
     while (1) {

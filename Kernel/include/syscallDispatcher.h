@@ -7,6 +7,7 @@
 #include <scheduler.h>
 #include <memDump.h>
 #include <memoryManagement.h>
+#include <semaphore.h>
 
 #define MEM_BYTES 32
 
@@ -26,10 +27,7 @@ uint64_t clearScreenHandler(uint64_t firstP, uint64_t secondP, uint64_t thirdP,
 uint64_t getElapsedTicksHandler(uint64_t firstP, uint64_t secondP, uint64_t thirdP,
                                 uint64_t fourthP, uint64_t fifthP);
 
-/*
- * exit
- */
-
+uint64_t exitHandler(uint64_t firstP, uint64_t secondP, uint64_t thirdP, uint64_t fourthP,uint64_t fifthP);
 
 uint64_t infoRegHandler(uint64_t firstP, uint64_t secondP, uint64_t thirdP,
                         uint64_t fourthP, uint64_t fifthP);
@@ -72,3 +70,15 @@ uint64_t freeMemHandler(uint64_t ptr, uint64_t secondP, uint64_t thirdP,
 
 uint64_t getMemInfoHandler(uint64_t toWrite, uint64_t secondP, uint64_t thirdP,
                            uint64_t fourthP, uint64_t fifthP);
+
+uint64_t semOpenHandler(uint64_t semId, uint64_t initialValue, uint64_t thirdP,
+                 uint64_t fourthP, uint64_t fifthP);
+
+uint64_t semCloseHandler(uint64_t semId, uint64_t secondP, uint64_t thirdP,
+                  uint64_t fourthP, uint64_t fifthP);
+
+uint64_t semPostHandler(uint64_t semId, uint64_t secondP, uint64_t thirdP,
+                 uint64_t fourthP, uint64_t fifthP);
+
+uint64_t semWaitHandler(uint64_t semId, uint64_t secondP, uint64_t thirdP,
+                    uint64_t fourthP, uint64_t fifthP);

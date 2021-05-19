@@ -101,7 +101,7 @@ int main() {
 
 
     initScheduler();
-    createProcess(sampleCodeModuleAddress);
+    createProcess(sampleCodeModuleAddress, 1, 0, 0, 0);
 
     _sti();
     _hlt();

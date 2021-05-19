@@ -11,32 +11,40 @@
 
 QueueADT processes;
 unsigned int pidCounter = 1;
-PCB* currentProcess = NULL;
+PCB *currentProcess = NULL;
 
 
-static void fillPCB(PCB * pcb, unsigned int pid, uint64_t * base); //Falta foregroun y priority;
+static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base); //Falta foregroun y priority;
 
 
-void initScheduler(){
+void initScheduler() {
     processes = newQueue();
 }
 
-unsigned int createProcess(uint64_t * entryPoint){
-    uint64_t * base;
-    if((base = mmMalloc(STACK_SIZE)) == NULL ){
+unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t first, uint64_t second,
+                           uint64_t third) {
+    uint64_t *base;
+    if ((base = mmMalloc(STACK_SIZE)) == NULL) {
         return 0;
     }
     base[STACK_SIZE - 1] = START_STACK_SEGMENT;
-    base[STACK_SIZE - 2] = base + STACK_SIZE; //bp
+    base[STACK_SIZE - 2] = base + STACK_SIZE; //rbp
     base[STACK_SIZE - 3] = START_RFLAGS;
     base[STACK_SIZE - 4] = START_CODE_SEGMENT;
     base[STACK_SIZE - 5] = entryPoint;      //rip
-    for(int i = 0; i < GENERAL_REGISTER_AMOUNT; i++) {
+    for (int i = 0; i < GENERAL_REGISTER_AMOUNT; i++) {
         base[STACK_SIZE - i - 6] = GENERAL_REGISTER_AMOUNT - i; //De esta manera rax tendra un 1, si no es al reves
     }
 
-    PCB * pcb;
-    if((pcb= mmMalloc(sizeof(PCB))) == NULL) {
+
+    base[STACK_SIZE - 11] = first; //rdi;
+    base[STACK_SIZE - 12] = second; //rsi;
+    base[STACK_SIZE - 9] = third; //rdx;
+
+//    printInt(*(base + STACK_SIZE - 17)); println("");
+
+    PCB *pcb;
+    if ((pcb = mmMalloc(sizeof(PCB))) == NULL) {
         return 0;
     }
     fillPCB(pcb, pidCounter, base);
@@ -44,7 +52,7 @@ unsigned int createProcess(uint64_t * entryPoint){
     return pidCounter++;
 }
 
-static void fillPCB(PCB * pcb, unsigned int pid, uint64_t * base) { //Falta foreground y priority;
+static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base) { //Falta foreground y priority;
     pcb->pid = pid;
     pcb->state = READY;
     pcb->rsp = base + STACK_SIZE - REGISTER_AMOUNT;
@@ -54,36 +62,56 @@ static void fillPCB(PCB * pcb, unsigned int pid, uint64_t * base) { //Falta fore
     pcb->foreground = 0;
 }
 
-uint64_t * switchProcesses(uint64_t * rsp){
-    if(currentProcess != NULL) {
+uint64_t *switchProcesses(uint64_t *rsp) {
+    if (currentProcess != NULL) {
         currentProcess->rsp = rsp;
+
+        if (currentProcess->tickets > 0) {
+            currentProcess->tickets--;
+            return currentProcess->rsp;
+        }
+
+        currentProcess->tickets = currentProcess->priority;
     }
-    if(currentProcess->tickets > 0){
-        currentProcess->tickets--;
-        return currentProcess->rsp;
-    }
-    currentProcess->tickets = currentProcess->priority;
+
     currentProcess = pop(processes);
     currentProcess->tickets--;
     return currentProcess->rsp;
 }
 
-void switchStates(unsigned int pid){
+void switchStates(unsigned int pid) {
     PCB *aux;
-    if ((aux = findPCB(processes, pid) ) != NULL){
-        aux->state = aux->state == BLOCKED? READY:BLOCKED;
+    if ((aux = findPCB(processes, pid)) != NULL) {
+        aux->state = aux->state == BLOCKED ? READY : BLOCKED;
     }
 }
 
-void endProcess(unsigned int pid){
+void sleep(unsigned int pid) {
+    PCB *aux;
+    if ((aux = findPCB(processes, pid)) != NULL) {
+        aux->state = BLOCKED;
+    }
+    _forceInt();
+}
+
+void wakeup(unsigned int pid) {
+    PCB *aux;
+    if ((aux = findPCB(processes, pid)) != NULL) {
+        aux->state = READY;
+    }
+    _forceInt();
+}
+
+void endProcess(unsigned int pid) {
     PCB *deleted;
-    if((deleted = deleteNode(processes, pid))!= NULL){
+
+    if ((deleted = deleteNode(processes, pid)) != NULL) {
         mmFree(deleted->rbp - STACK_SIZE);
         mmFree(deleted);
     }
 }
 
-void printProcesses(){
+void printProcesses() {
     toBegin(processes);
     char toPrint[20] = {0};
     println("PID    State    Prior    RSP                      RBP                      FG    Name");//Falta imprimir state
@@ -94,34 +122,54 @@ void printProcesses(){
         print("    ");
         for (int i = 0; i < 3 - numlen(aux->pid); i++) print(" ");
         //State
-        print(aux->state == READY ? "Ready" : "Block");
+        print(aux->state == READY ? "Ready" : aux->state == BLOCKED ? "Block" : "Kill ");
         print("    ");
         //Priority
-        printInt(aux->priority); print("        ");
+        printInt(aux->priority);
+        print("        ");
         //RSP
         turnToBaseN(aux->rsp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
-        print("0x");print(toPrint); print("    ");
+        print("0x");
+        print(toPrint);
+        print("    ");
         //RBP
-        print("0x");turnToBaseN(aux->rbp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
-        print(toPrint); print("    ");
+        print("0x");
+        turnToBaseN(aux->rbp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
+        print(toPrint);
+        print("    ");
         //FG
-        print(aux->foreground == 0 ? "BG" : "FG");print("    ");
+        print(aux->foreground == 0 ? "BG" : "FG");
+        print("    ");
         //Name
         println(""); //Este es para el nombre del programa.
     }
 }
 
-void changePriorities(unsigned int pid, unsigned int newPriority){
-    PCB* aux;
-    if(newPriority < MIN_PRIORITY || newPriority > MAX_PRIORITY) {
+void changePriorities(unsigned int pid, unsigned int newPriority) {
+    PCB *aux;
+    if (newPriority < MIN_PRIORITY || newPriority > MAX_PRIORITY) {
         return;
     }
-    if( (aux = findPCB(processes, pid) ) != NULL){
+    if ((aux = findPCB(processes, pid)) != NULL) {
         aux->priority = newPriority;
         aux->tickets = newPriority;
     }
 }
 
-unsigned int getPid(){
+unsigned int getPid() {
     return currentProcess->pid;
+}
+
+void exit() {
+    sleep(currentProcess->pid);
+
+//    PCB *deleted;
+//
+//    if ((deleted = deleteNode(processes, currentProcess->pid)) != NULL) {
+//        mmFree(deleted->rbp - STACK_SIZE);
+//        mmFree(deleted);
+//    }
+//    currentProcess = NULL;
+//    printProcesses();
+    _forceInt();
 }

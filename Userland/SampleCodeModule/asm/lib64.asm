@@ -5,6 +5,8 @@ GLOBAL sysWrite
 GLOBAL _syscall
 GLOBAL invalidOpCode
 
+GLOBAL yield
+
 ;------------------------------------------------------------
 ;                       USERLAND
 ;------------------------------------------------------------
@@ -19,4 +21,8 @@ _syscall:
 
 invalidOpCode:
     UD2
+    ret
+
+yield:
+    int 20h;
     ret
