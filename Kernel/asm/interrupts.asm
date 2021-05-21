@@ -5,6 +5,8 @@ GLOBAL picSlaveMask
 GLOBAL haltcpu
 GLOBAL _hlt
 GLOBAL _forceInt
+GLOBAL _xchg
+GLOBAL _xadd
 
 GLOBAL _syscallHandler
 
@@ -173,6 +175,16 @@ _cli:
 _sti:
 	sti
 	ret
+
+_xchg:
+    mov rax, rsi
+    xchg [rdi], eax
+    ret
+
+_xadd:
+    mov rax, rdi
+    lock xadd [rdi], eax
+    ret
 
 picMasterMask:
 	push rbp

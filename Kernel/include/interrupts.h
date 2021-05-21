@@ -36,6 +36,10 @@ void _hlt(void);
 
 void _forceInt(void);
 
+int _xchg(int * lock, int value);
+
+int _xadd(int * lock, int value);
+
 void picMasterMask(uint8_t mask);
 
 void picSlaveMask(uint8_t mask);

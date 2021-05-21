@@ -50,6 +50,9 @@ void inc(uint64_t sem, int64_t value, uint64_t N) {
     for (i = 0; i < N; i++) {
         if (sem) my_sem_wait(SEM_ID);
         slowInc(&global, value);
+        printc("parcial: ", 0x00FF00);
+        printInt(global);
+        print(" ");
         if (sem) my_sem_post(SEM_ID);
     }
 
@@ -69,8 +72,8 @@ void test_sync() {
     print("CREATING PROCESSES...(WITH SEM)\n");
 
     for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-        my_create_process((uint64_t * ) & inc, 1, 1, 50);
-        my_create_process((uint64_t * ) & inc, 1, -1, 50);
+        my_create_process((uint64_t * ) & inc, 1, 1, 1000);
+        my_create_process((uint64_t * ) & inc, 1, 1, 1000);
     }
 }
 
