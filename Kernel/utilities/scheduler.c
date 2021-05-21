@@ -161,7 +161,7 @@ unsigned int getPid() {
 }
 
 void exit() {
-    sleep(currentProcess->pid);
+//    sleep(currentProcess->pid);
 
 //    PCB *deleted;
 //
@@ -169,7 +169,8 @@ void exit() {
 //        mmFree(deleted->rbp - STACK_SIZE);
 //        mmFree(deleted);
 //    }
-//    currentProcess = NULL;
+    endProcess(getPid());
+    currentProcess = NULL;
 //    printProcesses();
     _forceInt();
 }

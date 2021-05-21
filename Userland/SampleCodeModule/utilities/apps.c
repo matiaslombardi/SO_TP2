@@ -162,9 +162,6 @@ void greet(){
             print(" ");
             start = ticks;
         }
-        println("a");
-        _exit(1);
-
     }
 }
 
