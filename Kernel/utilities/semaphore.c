@@ -27,12 +27,10 @@ int semOpen(char *semId, uint64_t initialValue) {
     acquire(&lock);
 
     int firstFree = -1;
-//    int found = 0;
     int i;
-    for (i = 0; i < TOTAL_SEMS && firstFree == -1; i++) {
+    for (i = 0; i < TOTAL_SEMS; i++) {
         if (strlen(semaphores[i].semId) != 0) {
             if (strcmp(semaphores[i].semId, semId) == 0) {
-//                found = 1;
                 semaphores[i].attached++;
                 release(&lock);
                 return 1;
@@ -44,7 +42,7 @@ int semOpen(char *semId, uint64_t initialValue) {
 
     if (firstFree != -1) {
         strcpy(semaphores[firstFree].semId, semId);
-        semaphores[i].blockedProcesses = newQueue();
+        semaphores[firstFree].blockedProcesses = newQueue();
         semaphores[firstFree].value = initialValue;
         semaphores[firstFree].attached = 1;
 
