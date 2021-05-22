@@ -11,7 +11,7 @@
 //}
 //
 //uint64_t my_create_process(uint64_t *entryPoint) {
-//    return createProcess(entryPoint, 0);
+//    return createProcess(entryPoint, 0, 0, 0, 0);
 //}
 //
 //uint64_t my_nice(uint64_t pid, uint64_t newPrio) {

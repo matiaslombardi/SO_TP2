@@ -72,8 +72,8 @@ void test_sync() {
     print("CREATING PROCESSES...(WITH SEM)\n");
 
     for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-        my_create_process((uint64_t * ) & inc, 1, 1, 1000);
-        my_create_process((uint64_t * ) & inc, 1, 1, 1000);
+        my_create_process((uint64_t * ) & inc, 1, 1, 20);
+        my_create_process((uint64_t * ) & inc, 1, 1, 20);
     }
 }
 

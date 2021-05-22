@@ -8,47 +8,47 @@ typedef struct Node {
     struct Node * next;
 } Node;
 
-typedef struct Queue {
+typedef struct CircularQueue {
     Node * first;
     Node * last;
     Node * iter;
     int iterSetted;
-} Queue;
+} CircularQueue;
 
 
 /**
  * Prototipo de Funciones auxiliares
  */
-static void freeQueueRec(Node * first);
+static void freeCircularQueueRec(Node * first);
 
 /**
  * Funciones principales
  */
-QueueADT newQueue() {
-    QueueADT queue;
-    if((queue = mmMalloc(sizeof(Queue))) == NULL) {
+CircularQueueADT newCircularQueue() {
+    CircularQueueADT queue;
+    if((queue = mmMalloc(sizeof(CircularQueue))) == NULL) {
         //Handler error
     }
     return queue;
 }
 
-void freeQueue(QueueADT queue) {
+void freeCircularQueue(CircularQueueADT queue) {
     if(queue == NULL) {
         return;
     }
-    freeQueueRec(queue->first);
+    freeCircularQueueRec(queue->first);
     mmFree(queue);
 }
 
-void freeQueueRec(Node * first) {
+static void freeCircularQueueRec(Node * first) {
     if(first == NULL) {
         return;
     }
-    freeQueueRec(first->next);
+    freeCircularQueueRec(first->next);
     mmFree(first);
 }
 
-void push(QueueADT queue, PCB *pcb){
+void circularEnqueue(CircularQueueADT queue, PCB *pcb){
     Node* aux;
     if( (aux = mmMalloc(sizeof(Node))) == NULL) {
         return;
@@ -69,8 +69,8 @@ void push(QueueADT queue, PCB *pcb){
     queue->last->next = queue->first;
 }
 
-PCB* pop(QueueADT queue) {
-    if(queue->first == NULL) {
+PCB* circularDequeue(CircularQueueADT queue) {
+    if(isEmptyCircular(queue)) {
         return NULL;
     }
     while(queue->first->pcb->state != READY) {
@@ -84,12 +84,12 @@ PCB* pop(QueueADT queue) {
     return toReturn;
 }
 
-int isEmpty(QueueADT queue) {
+int isEmptyCircular(CircularQueueADT queue) {
     return queue->first == NULL;
 }
 
 
-PCB * findPCB(QueueADT queue, unsigned int pid) {
+PCB * findPCB(CircularQueueADT queue, unsigned int pid) {
     Node * aux = queue->first;
     do {
         if(aux->pcb->pid == pid) {
@@ -100,7 +100,7 @@ PCB * findPCB(QueueADT queue, unsigned int pid) {
     return NULL;
 }
 
-PCB * deleteNode(QueueADT queue, unsigned int pid) {
+PCB * deleteNode(CircularQueueADT queue, unsigned int pid) {
     if(isEmpty(queue)) {
         return NULL;
     }
@@ -129,12 +129,12 @@ PCB * deleteNode(QueueADT queue, unsigned int pid) {
     return NULL;
 }
 
-void toBegin(QueueADT queue) {
+void circularToBegin(CircularQueueADT queue) {
     queue->iterSetted = 0;
     queue->iter = queue->first;
 }
 
-int hasNext(QueueADT queue) {
+int circularHasNext(CircularQueueADT queue) {
     if(!queue->iterSetted) {
         queue->iterSetted = 1;
         return 1;
@@ -142,7 +142,7 @@ int hasNext(QueueADT queue) {
     return queue->iter != queue->first;
 }
 
-PCB * next(QueueADT queue) {
+PCB * circularNext(CircularQueueADT queue) {
     PCB * pcb = queue->iter->pcb;
     queue->iter = queue->iter->next;
     return pcb;

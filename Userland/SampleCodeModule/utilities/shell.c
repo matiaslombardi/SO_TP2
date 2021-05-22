@@ -44,7 +44,7 @@ void initShell() {
 //    test_prio();
 //    test_processes();
 //    test_no_sync();
-//    test_sync();
+    test_sync();
 
 
     char c;

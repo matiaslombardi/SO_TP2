@@ -9,7 +9,7 @@
 #define MAX_PRIORITY 5
 #define MIN_PRIORITY 1
 
-QueueADT processes;
+CircularQueueADT processes;
 unsigned int pidCounter = 1;
 PCB *currentProcess = NULL;
 
@@ -18,7 +18,7 @@ static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base); //Falta foregro
 
 
 void initScheduler() {
-    processes = newQueue();
+    processes = newCircularQueue();
 }
 
 unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t first, uint64_t second,
@@ -48,7 +48,7 @@ unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t first,
         return 0;
     }
     fillPCB(pcb, pidCounter, base);
-    push(processes, pcb);
+    circularEnqueue(processes, pcb);
     return pidCounter++;
 }
 
@@ -74,7 +74,7 @@ uint64_t *switchProcesses(uint64_t *rsp) {
         currentProcess->tickets = currentProcess->priority;
     }
 
-    currentProcess = pop(processes);
+    currentProcess = circularDequeue(processes);
     currentProcess->tickets--;
     return currentProcess->rsp;
 }
@@ -112,11 +112,11 @@ void endProcess(unsigned int pid) {
 }
 
 void printProcesses() {
-    toBegin(processes);
+    circularToBegin(processes);
     char toPrint[20] = {0};
     println("PID    State    Prior    RSP                      RBP                      FG    Name");//Falta imprimir state
-    while (hasNext(processes)) {
-        PCB *aux = next(processes);
+    while (circularHasNext(processes)) {
+        PCB *aux = circularNext(processes);
         //PID
         printInt(aux->pid);
         print("    ");
@@ -161,16 +161,7 @@ unsigned int getPid() {
 }
 
 void exit() {
-//    sleep(currentProcess->pid);
-
-//    PCB *deleted;
-//
-//    if ((deleted = deleteNode(processes, currentProcess->pid)) != NULL) {
-//        mmFree(deleted->rbp - STACK_SIZE);
-//        mmFree(deleted);
-//    }
     endProcess(getPid());
     currentProcess = NULL;
-//    printProcesses();
     _forceInt();
 }

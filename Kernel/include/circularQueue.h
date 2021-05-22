@@ -7,28 +7,28 @@
 #include <library.h>
 #include <memDump.h>
 
-typedef struct Queue * QueueADT;
+typedef struct CircularQueue * CircularQueueADT;
 
-QueueADT newQueue();
+CircularQueueADT newCircularQueue();
 
-void freeQueue(QueueADT queue);
+void freeCircularQueue(CircularQueueADT queue);
 
-void push(QueueADT queue, PCB * pcb);
+void circularEnqueue(CircularQueueADT queue, PCB * pcb);
 
-PCB * pop(QueueADT queue);
+PCB * circularDequeue(CircularQueueADT queue);
 
-int isEmpty(QueueADT queue);
+int isEmptyCircular(CircularQueueADT queue);
 
-PCB * findPCB(QueueADT queue, unsigned int pid);
+PCB * findPCB(CircularQueueADT queue, unsigned int pid);
 
-PCB * deleteNode(QueueADT queue, unsigned int pid);
+PCB * deleteNode(CircularQueueADT queue, unsigned int pid);
 
-void toBegin(QueueADT queue);
+void circularToBegin(CircularQueueADT queue);
 
-int hasNext(QueueADT queue);
+int circularHasNext(CircularQueueADT queue);
 
-PCB * next(QueueADT queue);
+PCB * circularNext(CircularQueueADT queue);
 
-void printQueue(QueueADT queue);
+void printCircularQueue(CircularQueueADT queue);
 
 #endif

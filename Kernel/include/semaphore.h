@@ -4,6 +4,7 @@
 #include <scheduler.h>
 #include <string.h>
 #include <library.h>
+#include <queue.h>
 
 int semOpen(char *semId, uint64_t initialValue);
 
