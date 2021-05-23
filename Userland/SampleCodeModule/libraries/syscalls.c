@@ -28,6 +28,8 @@
 #define SEM_CLOSE_SYSCALL 21
 #define SEM_POST_SYSCALL 22
 #define SEM_WAIT_SYSCALL 23
+#define PIPE_OPEN_SYSCALL 24
+#define PIPE_CLOSE_SYSCALL 25
 
 int read(unsigned int fd, char *buffer, int length) {
     Params aux = {READ_SYSCALL, fd, length, (uint64_t) buffer, 0, 0, 0, 0};
@@ -154,5 +156,15 @@ int semPost(char *semId) {
 
 int semWait(char *semId) {
     Params aux = {SEM_WAIT_SYSCALL, (uint64_t) semId, 0, 0, 0, 0, 0, 0};
+    return _syscall(&aux);
+}
+
+int pipeOpen(int fd[2]) {
+    Params aux = {PIPE_OPEN_SYSCALL, (uint64_t) fd, 0, 0, 0, 0, 0, 0};
+    return _syscall(&aux);
+}
+
+int pipeClose(int fd) {
+    Params aux = {PIPE_CLOSE_SYSCALL, (uint64_t) fd, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }

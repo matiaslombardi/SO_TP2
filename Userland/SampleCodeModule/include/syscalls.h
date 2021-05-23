@@ -55,4 +55,8 @@ int semPost(char * semId);
 
 int semWait(char * semId);
 
+int pipeOpen(int fd[2]);
+
+int pipeClose(int fd);
+
 #endif

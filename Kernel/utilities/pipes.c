@@ -55,6 +55,9 @@ int pipeOpen(int fd[2]) {
 
     pipes[i].isActive = 1;
     openedPipes++;
+
+    fd[0] = pipes[i].fdIn;
+    fd[1] = pipes[i].fdOut;
     return 0;
 }
 

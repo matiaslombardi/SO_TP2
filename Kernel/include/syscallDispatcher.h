@@ -85,3 +85,9 @@ uint64_t semPostHandler(uint64_t semId, uint64_t secondP, uint64_t thirdP,
 
 uint64_t semWaitHandler(uint64_t semId, uint64_t secondP, uint64_t thirdP,
                     uint64_t fourthP, uint64_t fifthP, uint64_t sixthP, uint64_t seventhP);
+
+uint64_t pipeOpenHandler(uint64_t fd, uint64_t secondP, uint64_t thirdP, uint64_t fourthP,
+                         uint64_t fifthP, uint64_t sixthP, uint64_t seventhP);
+
+uint64_t pipeCloseHandler(uint64_t fd, uint64_t secondP, uint64_t thirdP, uint64_t fourthP,
+                          uint64_t fifthP, uint64_t sixthP, uint64_t seventhP);
