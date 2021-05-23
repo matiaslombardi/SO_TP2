@@ -9,6 +9,7 @@
 #include <memoryManagement.h>
 #include <semaphore.h>
 #include <defs.h>
+#include <pipes.h>
 
 #define MEM_BYTES 32
 

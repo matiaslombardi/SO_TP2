@@ -24,26 +24,17 @@ uint64_t syscallDispatcher(Params* p) {
 }
 
 uint64_t readHandler(uint64_t fd, uint64_t length, uint64_t toRead, uint64_t fourthP, uint64_t fifthP, uint64_t sixthP, uint64_t seventhP) {
-    if(fd == STDIN){
-        if(getFdIn() == STDIN){ //read from keyboard
-            return readBuffer((int) length, (char *) toRead);
-        } else {
-
-        }
+    if(fd == STDIN && getFdIn() == STDIN){ //read from keyboard
+         return readBuffer(length, (char *) toRead);
     }
-    return readBuffer((int) length, (char *) toRead);
+    return pipeRead(fd, length, (char *) toRead);
 }
 
 uint64_t writeHandler(uint64_t fd, uint64_t length, uint64_t toWrite, uint64_t row, uint64_t col, uint64_t color, uint64_t seventhP) {
-    if(fd == STDOUT){
-        if(getFdOut() == STDOUT){ //write to screen
-            return printStringFrom((char *) toWrite, (int) length, (int) row, (int) col, (int) color);
-        } else {
-            println("//TODO");
-            //TODO
-        }
+    if(fd == STDOUT && getFdOut() == STDOUT){ //write to screen
+        return printStringFrom((char *) toWrite, (int) length, (int) row, (int) col, (int) color);
     }
-    return printStringFrom((char *) toWrite, (int) length, (int) row, (int) col, (int) color);
+    return pipeWrite(fd, length, (char *) toWrite);
 }
 
 uint64_t drawHandler(uint64_t matrix, uint64_t row, uint64_t col, uint64_t rows, uint64_t columns, uint64_t sixthP, uint64_t seventhP) {
