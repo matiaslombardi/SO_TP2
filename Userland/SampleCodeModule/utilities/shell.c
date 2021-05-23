@@ -46,7 +46,6 @@ void initShell() {
 //    test_no_sync();
 //    test_sync();
 
-
     char c;
     while (1) {
         printc(initGreet, 0x22ab00);

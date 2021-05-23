@@ -72,10 +72,14 @@ void printRegisters(uint64_t *rsp) {
     }
 }
 
-void printInt(uint64_t num) {
-    uint64_t len = numlen(num);
+void printInt(int64_t num) {
     char buff[64];
+    if(num < 0) {
+        num *= -1;
+        print("-");
+    }
     itoaTruncate(num, buff, 64);
+//    uint64_t len = numlen(num);
     print(buff);
 }
 

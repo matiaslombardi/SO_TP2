@@ -19,9 +19,9 @@ static Header *firstFree = NULL;
 static Header *heap;
 static uint64_t totalHeap;
 
-void printHeapDir() {
-    printInt(heap);
-}
+//void printHeapDir() {
+//    printInt(heap);
+//}
 
 void mmInit(void *initAddress) {
     heap = (Header *) initAddress;

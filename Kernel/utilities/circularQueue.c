@@ -55,7 +55,7 @@ void circularEnqueue(CircularQueueADT queue, PCB *pcb){
         //Handler_error
     }
 
-    if(isEmpty(queue)) {
+    if(isEmptyCircular(queue)) {
         queue->first = aux;
         queue->first->next = aux;
     }
@@ -101,7 +101,7 @@ PCB * findPCB(CircularQueueADT queue, unsigned int pid) {
 }
 
 PCB * deleteNode(CircularQueueADT queue, unsigned int pid) {
-    if(isEmpty(queue)) {
+    if(isEmptyCircular(queue)) {
         return NULL;
     }
     PCB * pcb = NULL;

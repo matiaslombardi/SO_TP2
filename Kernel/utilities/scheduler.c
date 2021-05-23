@@ -14,24 +14,28 @@ unsigned int pidCounter = 1;
 PCB *currentProcess = NULL;
 
 
-static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base); //Falta foregroun y priority;
+static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base, int foreground,
+                    uint64_t fdIn, uint64_t fdOut); //Falta foregroun y priority;
 
 
 void initScheduler() {
     processes = newCircularQueue();
 }
 
-unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t first, uint64_t second,
-                           uint64_t third) {
+unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t fdIn, uint64_t fdOut,
+                           uint64_t first, uint64_t second, uint64_t third) {
+//    while(1) {
+//        printInt(first); print(" ,"); printInt(second); print(" ,"); printInt(third); println("");
+//    }
     uint64_t *base;
     if ((base = mmMalloc(STACK_SIZE)) == NULL) {
         return 0;
     }
     base[STACK_SIZE - 1] = START_STACK_SEGMENT;
-    base[STACK_SIZE - 2] = base + STACK_SIZE; //rbp
+    base[STACK_SIZE - 2] = (uint64_t)(base + STACK_SIZE); //rbp
     base[STACK_SIZE - 3] = START_RFLAGS;
     base[STACK_SIZE - 4] = START_CODE_SEGMENT;
-    base[STACK_SIZE - 5] = entryPoint;      //rip
+    base[STACK_SIZE - 5] = (uint64_t) entryPoint;      //rip
     for (int i = 0; i < GENERAL_REGISTER_AMOUNT; i++) {
         base[STACK_SIZE - i - 6] = GENERAL_REGISTER_AMOUNT - i; //De esta manera rax tendra un 1, si no es al reves
     }
@@ -47,19 +51,22 @@ unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t first,
     if ((pcb = mmMalloc(sizeof(PCB))) == NULL) {
         return 0;
     }
-    fillPCB(pcb, pidCounter, base);
+    fillPCB(pcb, pidCounter, base, foreground, fdIn, fdOut);
     circularEnqueue(processes, pcb);
     return pidCounter++;
 }
 
-static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base) { //Falta foreground y priority;
+static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base, int foreground,
+                    uint64_t fdIn, uint64_t fdOut) { //Falta foreground y priority;
     pcb->pid = pid;
     pcb->state = READY;
     pcb->rsp = base + STACK_SIZE - REGISTER_AMOUNT;
     pcb->rbp = base + STACK_SIZE;
     pcb->priority = 1;
     pcb->tickets = 1;
-    pcb->foreground = 0;
+    pcb->foreground = foreground;
+    pcb->fdIn = fdIn;
+    pcb->fdOut = fdOut;
 }
 
 uint64_t *switchProcesses(uint64_t *rsp) {
@@ -128,13 +135,13 @@ void printProcesses() {
         printInt(aux->priority);
         print("        ");
         //RSP
-        turnToBaseN(aux->rsp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
+        turnToBaseN((uint64_t) aux->rsp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
         print("0x");
         print(toPrint);
         print("    ");
         //RBP
         print("0x");
-        turnToBaseN(aux->rbp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
+        turnToBaseN((uint64_t) aux->rbp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
         print(toPrint);
         print("    ");
         //FG
@@ -158,6 +165,14 @@ void changePriorities(unsigned int pid, unsigned int newPriority) {
 
 unsigned int getPid() {
     return currentProcess->pid;
+}
+
+unsigned int getFdIn() {
+    return currentProcess->fdIn;
+}
+
+unsigned int getFdOut() {
+    return currentProcess->fdOut;
 }
 
 void exit() {

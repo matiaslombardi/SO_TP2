@@ -13,7 +13,7 @@ typedef struct {
     char description[200];
 } programs;
 
-extern programs commands[PROGRAMS];
+extern programs commands[];
 
 void infoReg(int args, char argv[][25]);
 

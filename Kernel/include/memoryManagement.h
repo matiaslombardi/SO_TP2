@@ -10,7 +10,7 @@
 #define HEAPSIZE (1024 * 1024 * 128) /*8MB, debe ser multiplo de 8*/
 #define NULL ((void *)0)
 
-void printHeapDir();
+//void printHeapDir();
 void mmInit(void *initAddress);
 void * mmMalloc(uint64_t size); //Cambiar int por nuestro equivalente a size_t
 void mmFree(void * ptr);

@@ -4,7 +4,18 @@
 #include <types.h>
 #include <stdint.h>
 
-uint64_t _syscall(uint64_t syscall, ...);
+typedef struct Params{
+    uint64_t call;
+    uint64_t first;
+    uint64_t second;
+    uint64_t third;
+    uint64_t fourth;
+    uint64_t fifth;
+    uint64_t sixth;
+    uint64_t seventh;
+} Params;
+
+uint64_t _syscall(Params * p);
 
 void invalidOpCode();
 

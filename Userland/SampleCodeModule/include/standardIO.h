@@ -24,6 +24,6 @@ void putChar(char c);
 
 void putCharFrom(char c, int row, int col);
 
-void printInt(uint64_t num);
+void printInt(int64_t num);
 
 #endif

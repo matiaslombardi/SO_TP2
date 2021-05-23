@@ -13,7 +13,8 @@
 
 void initScheduler();
 
-unsigned int  createProcess(uint64_t * entryPoint, int foreground, uint64_t first, uint64_t second, uint64_t third); //antes retornaba void
+unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t fdIn, uint64_t fdOut ,uint64_t first, uint64_t second,
+                           uint64_t third); //antes retornaba void
 
 uint64_t * switchProcesses(uint64_t * rsp);
 
@@ -30,6 +31,10 @@ void printProcesses();
 void changePriorities(unsigned int pid, unsigned int newPriority);
 
 unsigned int getPid();
+
+unsigned int getFdIn();
+
+unsigned int getFdOut();
 
 void exit();
 

@@ -15,7 +15,8 @@ typedef struct PCB {
     unsigned int priority;
     unsigned int tickets;
     unsigned int foreground;
-
+    unsigned int fdIn;
+    unsigned int fdOut;
 }PCB;
 
 #endif

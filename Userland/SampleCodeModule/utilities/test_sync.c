@@ -6,9 +6,8 @@
 
 
 uint64_t my_create_process(uint64_t *entryPoint, uint64_t sem, uint64_t inc, uint64_t iter) {
-    return createProcess(entryPoint, 0, sem, inc, iter);
+    return createProcess(entryPoint, 0, 0, 1, sem, inc, iter);
 }
-
 
 uint64_t my_sem_open(char *sem_id, uint64_t initialValue) {
     return semOpen(sem_id, initialValue);
@@ -26,7 +25,7 @@ uint64_t my_sem_close(char *sem_id) {
     return semClose(sem_id);
 }
 
-#define TOTAL_PAIR_PROCESSES 10
+#define TOTAL_PAIR_PROCESSES 2
 #define SEM_ID "sem"
 
 int64_t global;  //shared memory
@@ -71,8 +70,8 @@ void test_sync() {
     print("CREATING PROCESSES...(WITH SEM)\n");
 
     for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-        my_create_process((uint64_t * ) & inc, 1, 10, 500);
-        my_create_process((uint64_t * ) & inc, 1, 10, 500);
+        my_create_process((uint64_t * ) & inc, 1, 1, 50);
+        my_create_process((uint64_t * ) & inc, 1, 1, 50);
     }
 }
 
@@ -84,8 +83,8 @@ void test_no_sync() {
     print("CREATING PROCESSES...(WITHOUT SEM)\n");
 
     for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-        my_create_process((uint64_t * ) & inc, 0, 1, 50);
-        my_create_process((uint64_t * ) & inc, 0, 1, 50);
+        my_create_process((uint64_t * ) & inc, 0, 1, 500);
+        my_create_process((uint64_t * ) & inc, 0, 1, 500);
     }
 }
 //

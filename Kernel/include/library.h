@@ -18,7 +18,7 @@ void printcln(char *string, int color);
 
 void printRegisters(uint64_t *rsp);
 
-void printInt(uint64_t num);
+void printInt(int64_t num);
 
 //int strlen(char *string);
 

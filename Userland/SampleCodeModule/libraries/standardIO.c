@@ -23,7 +23,7 @@ void printcln(char *toPrint, int color) {
 }
 
 void printcFrom(char *toPrint, int row, int col, int color) {
-    write(toPrint, row, col, color);
+    write(1, toPrint, row, col, color);
 }
 
 void printFrom(char *toPrint, int row, int col) {
@@ -32,7 +32,7 @@ void printFrom(char *toPrint, int row, int col) {
 
 char getChar() {
     char c;
-    read(&c, 1);
+    read(0, &c, 1);
     return c;
 }
 
@@ -52,9 +52,12 @@ void putCharFrom(char c, int row, int col) {
     printFrom(buffer, row, col);
 }
 
-void printInt(uint64_t num) {
-    uint64_t len = numlen(num);
+void printInt(int64_t num) {
     char buff[64];
+    if(num < 0) {
+        num *= -1;
+        print("-");
+    }
     itoaTruncate(num, buff, 64);
     print(buff);
 }

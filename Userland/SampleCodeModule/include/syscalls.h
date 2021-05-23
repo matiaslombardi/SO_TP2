@@ -3,10 +3,11 @@
 
 #include <types.h>
 #include <stdint.h>
+#include <lib64.h>
 
-int read(char *buffer, int length);
+int read(unsigned int fd, char *buffer, int length);
 
-int write(char *buffer, int row, int col, int color);
+int write(unsigned int fd, char *buffer, int row, int col, int color);
 
 void draw(int *matrix, int row, int col, int rows, int columns);
 
@@ -26,7 +27,7 @@ int getWidth();
 
 void getProcessesList();
 
-unsigned int createProcess(uint64_t * entryPoint, int foreground, uint64_t first, uint64_t second, uint64_t third);
+unsigned int createProcess(uint64_t * entryPoint, int foreground, uint64_t fdIn, uint64_t fdOut, uint64_t first, uint64_t second, uint64_t third);
 
 void killProcess(unsigned int pid);
 
