@@ -1,7 +1,7 @@
 #include <semaphore.h>
 
-#define TOTAL_SEMS 10
-#define SEM_ID_SIZE 10
+#define TOTAL_SEMS 25
+#define SEM_ID_SIZE 30
 
 typedef struct sem {
     char semId[SEM_ID_SIZE];
@@ -12,9 +12,11 @@ typedef struct sem {
 
 static sem semaphores[TOTAL_SEMS];
 
-static int searchSem(char * semId);
-static void acquire(int * lock);
-static void release(int * lock);
+static int searchSem(char *semId);
+
+static void acquire(int *lock);
+
+static void release(int *lock);
 
 int lock = 0;
 
@@ -35,7 +37,7 @@ int semOpen(char *semId, uint64_t initialValue) {
                 release(&lock);
                 return 1;
             }
-        } else if(firstFree == -1) {
+        } else if (firstFree == -1) {
             firstFree = i;
         }
     }
@@ -45,7 +47,6 @@ int semOpen(char *semId, uint64_t initialValue) {
         semaphores[firstFree].blockedProcesses = newQueue();
         semaphores[firstFree].value = initialValue;
         semaphores[firstFree].attached = 1;
-
         release(&lock);
         return 1;
     }
@@ -59,10 +60,10 @@ int semClose(char *semId) {
     acquire(&lock);
     for (int i = 0; i < TOTAL_SEMS; i++) {
         if (strcmp(semaphores[i].semId, semId) == 0) {
-            if(semaphores[i].attached == 1){
+            if (semaphores[i].attached == 1) {
                 freeQueue(semaphores[i].blockedProcesses);
                 semaphores[i].semId[0] = 0; //'\0'
-            } else{
+            } else {
                 semaphores[i].attached--;
             }
 
@@ -76,15 +77,17 @@ int semClose(char *semId) {
 
 int semPost(char *semId) {
     acquire(&lock);
-    int found = searchSem(semId);
 
-    if(found != -1) {
+    int found = searchSem(semId);
+    if (found != -1) {
         semaphores[found].value++;
-        if(!isEmpty(semaphores[found].blockedProcesses)){
+        if (!isEmpty(semaphores[found].blockedProcesses)) {
             int pid = dequeue(semaphores[found].blockedProcesses);
+            release(&lock);
             wakeup(pid);
+        } else {
+            release(&lock);
         }
-        release(&lock);
         return 1;
     }
 
@@ -92,12 +95,12 @@ int semPost(char *semId) {
     return 0;
 }
 
-int semWait(char * semId) {
+int semWait(char *semId) {
     acquire(&lock);
     int found = searchSem(semId);
 
-    if(found != -1) {
-        if(semaphores[found].value > 0) {
+    if (found != -1) {
+        if (semaphores[found].value > 0) {
             semaphores[found].value--;
             release(&lock);
         } else {
@@ -113,7 +116,7 @@ int semWait(char * semId) {
     return 0;
 }
 
-static int searchSem(char * semId) {
+static int searchSem(char *semId) {
     for (int i = 0; i < TOTAL_SEMS; i++) {
         if (strlen(semaphores[i].semId) > 0 && strcmp(semaphores[i].semId, semId) == 0) {
             return i;
@@ -122,10 +125,10 @@ static int searchSem(char * semId) {
     return -1;
 }
 
-static void acquire(int * lock) {
-    while(_xchg(lock, 1) != 0);
+static void acquire(int *lock) {
+    while (_xchg(lock, 1) != 0);
 }
 
-static void release(int * lock) {
+static void release(int *lock) {
     _xchg(lock, 0);
 }

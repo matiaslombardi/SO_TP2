@@ -19,9 +19,11 @@
 #define RELEASED_KEY 0x80
 #define MAX_PRESSED_KEY 0X7F
 
-#define IS_ALPHA(c) c >= 'a' && c <= 'z'
+#define IS_LETTER(c) c >= 'a' && c <= 'z'
 
 #define BUFFER_SIZE 10
+
+#define KEYBOARD_SEM "keyboardSem"
 
 char buffer[BUFFER_SIZE] = {0};
 int prev = 0;
@@ -98,6 +100,10 @@ void preserveRegisters();
 
 void takeSnapshot(uint64_t *rsp);
 
+void initKeyboardDriver() {
+    semOpen(KEYBOARD_SEM, 0);
+}
+
 int isSpecialKey(int scanCode) {
     return scanCode == ESC || scanCode == L_CTRL ||
            scanCode == L_SHIFT || scanCode == R_SHIFT || scanCode == L_ALT || scanCode == CAPS_LOCK;
@@ -131,7 +137,7 @@ void keyboard_management(uint64_t *rsp) {
 
     if (scan_code <= MAX_PRESSED_KEY && !isSpecialKey(scan_code)) {
         int secondChar = shiftPressed;
-        if (IS_ALPHA(pressCodes[scan_code][0])) {
+        if (IS_LETTER(pressCodes[scan_code][0])) {
             secondChar = blockMayus ? 1 - shiftPressed : shiftPressed;
         }
         if (ctrlPressed) {
@@ -139,7 +145,7 @@ void keyboard_management(uint64_t *rsp) {
                 takeSnapshot(rsp);
                 return;
             }
-            if (pressCodes[scan_code][secondChar] == 'c') {
+            if (pressCodes[scan_code][secondChar] == 'c') { //TODO implementar función que mate al fg
                 buffer[curr++] = -1;
                 curr %= BUFFER_SIZE;
             }
@@ -147,20 +153,24 @@ void keyboard_management(uint64_t *rsp) {
         }
         buffer[curr++] = pressCodes[scan_code][secondChar];
         curr %= BUFFER_SIZE;
+        semPost(KEYBOARD_SEM);
     }
 }
 
+//TODO preguntar que hacer  si pide mucho input seguido.
 
-int leer = 0;
+int readIndex = 0;
 
 int readBuffer(int length, char *toWrite) {
+    semWait(KEYBOARD_SEM);
+
     for (int i = 0; i < length; i++) {
-        if (buffer[leer] == 0) {
+        if (buffer[readIndex] == 0) {
             return i;
         }
-        toWrite[i] = buffer[leer];
-        buffer[leer] = 0;
-        leer = (leer + 1) % BUFFER_SIZE;
+        toWrite[i] = buffer[readIndex];
+        buffer[readIndex] = 0;
+        readIndex = (readIndex + 1) % BUFFER_SIZE;
     }
     return length;
 }

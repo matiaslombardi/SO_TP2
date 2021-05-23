@@ -16,6 +16,8 @@
 #include <memDump.h>
 #include <memoryManagement.h>
 
+#include <keyboardDriver.h>
+
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -91,6 +93,10 @@ void *initializeKernelBinary() {
     return getStackBase();
 }
 
+void iddle() {
+    while(1);
+}
+
 int main() {
     _cli();
     load_idt();
@@ -101,10 +107,16 @@ int main() {
 
 
     initScheduler();
+
+    initKeyboardDriver();
+
+
     createProcess(sampleCodeModuleAddress, 1, 0, 1, 6, 7, 0xFF00FF);
+    createProcess((uint64_t *)&iddle, 0, 0, 1, 6, 7, 0xFF00FF);
 
     _sti();
     _hlt();
+
 
     println("PROBLEMS");
 
@@ -113,3 +125,5 @@ int main() {
 
     return 0;
 }
+
+

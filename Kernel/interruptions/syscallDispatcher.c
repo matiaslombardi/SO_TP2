@@ -1,4 +1,5 @@
 #include <syscallDispatcher.h>
+#include <scheduler.h>
 
 typedef struct Params{
     uint64_t call;

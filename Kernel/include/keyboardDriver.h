@@ -2,6 +2,9 @@
 #define KEY_DRIVER_H
 
 #include <stdint.h>
+#include <semaphore.h>
+
+void initKeyboardDriver();
 
 void keyboard_management(uint64_t *rsp);
 
