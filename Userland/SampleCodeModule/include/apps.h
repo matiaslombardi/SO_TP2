@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define PROGRAMS 14
+#define PROGRAMS 17
 
 typedef struct {
     char name[12];
@@ -46,5 +46,11 @@ void nice(int args, char argv[][25]);
 void block(int args, char argv[][25]);
 
 void mem(int args, char argv[][25]);
+
+void cat(int args, char argv[][25]);
+
+void wc(int args, char argv[][25]);
+
+void filter(int args, char argv[][25]);
 
 #endif

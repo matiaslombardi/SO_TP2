@@ -25,6 +25,9 @@ programs commands[] = {{"about",       about,          "      Information about 
                        {"nice",        nice,           "       Changes the given process priority."},
                        {"block",       block,          "      Changes the process state given its ID."},
                        {"mem",         mem,            "        Displays the current state of the memory."},
+                       {"cat",         cat,            "        Prints from STDIN as received."},
+                       {"wc",          wc,             "         Retrieves the amount of lines from input."},
+                       {"filter",      filter,         "     Filters the vowels of the input."},
                        {"exceptionZ",  throwDivZero,   " Throws a divide by zero exception"},
                        {"exceptionOP", throwInvOpCode, "Throws an invalid Operation Code Exception"}
 };
@@ -195,3 +198,68 @@ void mem(int args, char argv[][25]) {
     println(buffer);
 }
 
+void cat(int args, char argv[][25]){
+    int i = 0;
+    char c, buffer[50] = {0};
+    while((c=getChar()) != -1) {
+        if (c != 0) {
+            switch (c) {
+                case '\b':
+                    if (i > 0) {
+                        buffer[--i] = 0;
+                        removeChar();
+                    }
+                    break;
+                case '\n':
+                    println("");
+                    buffer[i] = 0;
+                    println(buffer);
+                    i = 0;
+                    break;
+                default:
+                    buffer[i++] = c;
+                    putChar(c);
+            }
+        }
+    }
+}
+
+void wc(int args, char argv[][25]){
+    int lines = 0;
+    int c;
+    while((c=getChar())!= -1) {
+        putChar(c);
+        if (c == '\n'){
+            lines++;
+        }
+    }
+    print("Total lines: ");
+    printInt(lines); println("");
+}
+
+#define VOWEL(c) (((c) == 'a') || ((c) == 'e') || ((c) == 'i') || ((c) == 'o') || ((c) == 'u') || ((c) == 'A') || ((c) == 'E') || ((c) == 'I') || ((c) == 'O') || ((c) == 'U'))
+void filter(int args, char argv[][25]){
+    int i = 0;
+    char c, buffer[50] = {0};
+    while((c=getChar()) != -1) {
+        if (c != 0) {
+            switch (c) {
+                case '\b':
+                    if (i > 0) {
+                        buffer[--i] = 0;
+                        removeChar();
+                    }
+                    break;
+                case '\n':
+                    println("");
+                    buffer[i] = 0;
+                    println(buffer);
+                    i = 0;
+                    break;
+                default:
+                    if(!VOWEL(c)) buffer[i++] = c;
+                    putChar(c);
+            }
+        }
+    }
+}
