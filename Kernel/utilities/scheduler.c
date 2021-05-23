@@ -67,6 +67,7 @@ static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base, int foreground,
     pcb->foreground = foreground;
     pcb->fdIn = fdIn;
     pcb->fdOut = fdOut;
+    pcb->waitingPid = 0;
 }
 
 uint64_t *switchProcesses(uint64_t *rsp) {
@@ -175,8 +176,30 @@ unsigned int getFdOut() {
     return currentProcess->fdOut;
 }
 
+int addWaitingPid(unsigned int pid) {
+    PCB *aux;
+    if ((aux = findPCB(processes, pid)) != NULL) {
+        aux->waitingPid = currentProcess->pid;
+        sleep(currentProcess->pid);
+    }
+    return 0;
+}
+
 void exit() {
+    int waiting = currentProcess->waitingPid;
+    if (waiting != 0) {
+        wakeup(waiting);
+    }
+
+    if(getFdOut() != STDOUT) {
+        pipeClose(getFdOut());
+    }
+    if(getFdIn() != STDIN) {
+        pipeClose(getFdIn());
+    }
+
     endProcess(getPid());
     currentProcess = NULL;
+
     _forceInt();
 }

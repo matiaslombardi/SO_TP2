@@ -33,4 +33,6 @@ void toMayus(char *string);
 
 void strcat(char * dest, char * src);
 
+void removeSpaces(char * str);
+
 #endif

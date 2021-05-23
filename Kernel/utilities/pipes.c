@@ -69,6 +69,9 @@ int pipeClose(int fd) {
         }
         if (pipes[index].fdOut == fd) {
             pipes[index].outClosed = 1;
+            if(!isEmpty(pipes[index].blockedProcesses)) {
+                wakeup(dequeue(pipes[index].blockedProcesses));
+            }
         }
 
         if(pipes[index].inClosed){

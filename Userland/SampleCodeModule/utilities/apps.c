@@ -201,7 +201,7 @@ void mem(int args, char argv[][25]) {
 void cat(int args, char argv[][25]){
     int i = 0;
     char c, buffer[50] = {0};
-    while((c=getChar()) != -1) {
+    while((c=getChar())!= -1) {
         if (c != 0) {
             switch (c) {
                 case '\b':
@@ -213,7 +213,7 @@ void cat(int args, char argv[][25]){
                 case '\n':
                     println("");
                     buffer[i] = 0;
-                    println(buffer);
+                    //println(buffer);
                     i = 0;
                     break;
                 default:
@@ -222,6 +222,7 @@ void cat(int args, char argv[][25]){
             }
         }
     }
+    _exit(0);
 }
 
 void wc(int args, char argv[][25]){
@@ -235,9 +236,10 @@ void wc(int args, char argv[][25]){
     }
     print("Total lines: ");
     printInt(lines); println("");
+    _exit(0);
 }
 
-#define VOWEL(c) (((c) == 'a') || ((c) == 'e') || ((c) == 'i') || ((c) == 'o') || ((c) == 'u') || ((c) == 'A') || ((c) == 'E') || ((c) == 'I') || ((c) == 'O') || ((c) == 'U'))
+#define IS_VOWEL(c) (((c) == 'a') || ((c) == 'e') || ((c) == 'i') || ((c) == 'o') || ((c) == 'u') || ((c) == 'A') || ((c) == 'E') || ((c) == 'I') || ((c) == 'O') || ((c) == 'U'))
 void filter(int args, char argv[][25]){
     int i = 0;
     char c, buffer[50] = {0};
@@ -257,9 +259,10 @@ void filter(int args, char argv[][25]){
                     i = 0;
                     break;
                 default:
-                    if(!VOWEL(c)) buffer[i++] = c;
+                    if(!IS_VOWEL(c)) buffer[i++] = c;
                     putChar(c);
             }
         }
     }
+    _exit(0);
 }

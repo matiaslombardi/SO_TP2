@@ -10,6 +10,7 @@
 #include <string.h>
 #include <memDump.h>
 #include <interrupts.h>
+#include <pipes.h>
 
 void initScheduler();
 
@@ -35,6 +36,8 @@ unsigned int getPid();
 unsigned int getFdIn();
 
 unsigned int getFdOut();
+
+int addWaitingPid(unsigned int pid);
 
 void exit();
 

@@ -17,6 +17,7 @@ typedef struct PCB {
     unsigned int foreground;
     unsigned int fdIn;
     unsigned int fdOut;
+    unsigned int waitingPid;
 }PCB;
 
 #endif

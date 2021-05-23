@@ -145,9 +145,10 @@ void keyboard_management(uint64_t *rsp) {
                 takeSnapshot(rsp);
                 return;
             }
-            if (pressCodes[scan_code][secondChar] == 'c') { //TODO implementar función que mate al fg
+            if (pressCodes[scan_code][secondChar] == 'd') { //TODO implementar función que mate al fg
                 buffer[curr++] = -1;
                 curr %= BUFFER_SIZE;
+                semPost(KEYBOARD_SEM);
             }
             return;
         }

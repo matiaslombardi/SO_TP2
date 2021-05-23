@@ -31,9 +31,11 @@ void printFrom(char *toPrint, int row, int col) {
 }
 
 char getChar() {
-    char c;
-    read(0, &c, 1);
-    return c;
+    char c[2] = {0};
+    if(read(0, c, 1) != -1) {
+        return c[0];
+    }
+    return -1;
 }
 
 void removeChar() {

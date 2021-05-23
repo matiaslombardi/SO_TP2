@@ -59,4 +59,6 @@ int pipeOpen(int fd[2]);
 
 int pipeClose(int fd);
 
+int waitPid(int pid);
+
 #endif
