@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <memoryManagement.h>
 #include <apps.h>
+#include <phylo.h>
 
 #define CHUNK 200
 
@@ -50,6 +51,8 @@ void initShell() {
 //    pipeOpen(pipeFd);
 //    char buffer[5];
 //    read(pipeFd[0], buffer, 1);
+
+//    initPhylos();
 
     char c;
     int numPipes = 0;

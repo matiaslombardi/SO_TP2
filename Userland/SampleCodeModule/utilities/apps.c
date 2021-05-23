@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <lib64.h>
 #include <apps.h>
+#include <phylo.h>
 
 #define MEM_BYTES 32
 #define BUFFER64_BITS 20
@@ -28,6 +29,7 @@ programs commands[] = {{"about",       about,          "      Information about 
                        {"cat",         cat,            "        Prints from STDIN as received."},
                        {"wc",          wc,             "         Retrieves the amount of lines from input."},
                        {"filter",      filter,         "     Filters the vowels of the input."},
+                       {"phylos",      phylos,         "     Create a new philosophers table. Add with '+', delete with '-'. " },
                        {"exceptionZ",  throwDivZero,   " Throws a divide by zero exception"},
                        {"exceptionOP", throwInvOpCode, "Throws an invalid Operation Code Exception"}
 };
@@ -265,4 +267,8 @@ void filter(int args, char argv[][25]){
         }
     }
     _exit(0);
+}
+
+void phylos(){
+    initPhylos();
 }

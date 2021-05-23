@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define PROGRAMS 17
+#define PROGRAMS 18
 
 typedef struct {
     char name[12];
@@ -52,5 +52,7 @@ void cat(int args, char argv[][25]);
 void wc(int args, char argv[][25]);
 
 void filter(int args, char argv[][25]);
+
+void phylos();
 
 #endif
