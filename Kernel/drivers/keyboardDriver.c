@@ -135,8 +135,14 @@ void keyboard_management(uint64_t *rsp) {
             secondChar = blockMayus ? 1 - shiftPressed : shiftPressed;
         }
         if (ctrlPressed) {
-            if (pressCodes[scan_code][secondChar] == 's')
+            if (pressCodes[scan_code][secondChar] == 's') {
                 takeSnapshot(rsp);
+                return;
+            }
+            if (pressCodes[scan_code][secondChar] == 'c') {
+                buffer[curr++] = -1;
+                curr %= BUFFER_SIZE;
+            }
             return;
         }
         buffer[curr++] = pressCodes[scan_code][secondChar];
