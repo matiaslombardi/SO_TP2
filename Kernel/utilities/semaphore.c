@@ -82,6 +82,7 @@ int semPost(char *semId) {
     if (found != -1) {
         semaphores[found].value++;
         if (!isEmpty(semaphores[found].blockedProcesses)) {
+            semaphores[found].value--;
             int pid = dequeue(semaphores[found].blockedProcesses);
             release(&lock);
             wakeup(pid);
@@ -108,7 +109,7 @@ int semWait(char *semId) {
             enqueue(semaphores[found].blockedProcesses, pid);
             release(&lock);
             sleep(pid);
-            semaphores[found].value--;
+            //semaphores[found].value--;
         }
         return 1;
     }

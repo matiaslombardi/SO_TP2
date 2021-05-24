@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define PROGRAMS 25
+#define PROGRAMS 26
 
 typedef struct {
     char name[12];
@@ -71,9 +71,10 @@ int testMM();
 
 int testPRIO();
 
-int testSYNC();
-
 int testPROC();
 
+int testSYNC();
+
+int testNoSYNC();
 
 #endif

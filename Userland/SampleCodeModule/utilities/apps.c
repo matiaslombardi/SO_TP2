@@ -38,7 +38,8 @@ programs commands[] = {{"about",       about,          "      Information about 
                        {"testMM",      testMM,         "     Run Memory Manager tests.", 0},
                        {"testPRIO",      testPRIO,     "   Run Processes Priority tests.", 0},
                        {"testPROC",      testPROC,     "   Run Processes creation, deletion and blocking tests.", 0},
-                       {"testSYNC",      testSYNC,     "   Run semaphores sync tests.", 0}
+                       {"testSYNC",      testSYNC,     "   Run semaphores sync tests.", 0},
+                       {"testNoSYNC",      testNoSYNC,     "   Run without semaphores sync tests.", 0}
 };
 
 int checkArgs(int args, int expected);
@@ -418,6 +419,12 @@ int testPROC(){
 
 int testSYNC(){
     testSync();
+    println("");
+    return 0;
+}
+
+int testNoSYNC(){
+    testNoSync();
     println("");
     return 0;
 }
