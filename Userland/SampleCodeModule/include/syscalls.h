@@ -55,9 +55,13 @@ int semPost(char * semId);
 
 int semWait(char * semId);
 
+int semInfo(char *buffer);
+
 int pipeOpen(int fd[2]);
 
 int pipeClose(int fd);
+
+int pipeInfo(char *buffer);
 
 int waitPid(int pid);
 

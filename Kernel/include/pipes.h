@@ -9,4 +9,6 @@ int pipeRead(int fd, int length, char * buffer);
 
 int pipeWrite(int fd, int length, char * buffer);
 
+int fillPipeInfo(char * buffer);
+
 #endif //PIPES_H

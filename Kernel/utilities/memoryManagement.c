@@ -32,7 +32,6 @@ void mmInit(void *initAddress) {
 }
 
 void *mmMalloc(uint64_t numBytesToAlloc) {
-//    printcln("malloc", 0xFF0000);
     if (numBytesToAlloc == 0) {
         return NULL;
     }
@@ -61,8 +60,6 @@ void *mmMalloc(uint64_t numBytesToAlloc) {
 }
 
 void mmFree(void *ptr) {
-//    printcln("free", 0x00FF00);
-
     Header *toFree;
     Header *current = firstFree;
     Header *previous;
@@ -72,7 +69,6 @@ void mmFree(void *ptr) {
     if (toFree == NULL || toFree < heap || toFree >= heap + totalHeap) {
         return;
     }
-
     while (current != NULL && current < toFree) {
         previous = current;
         current = current->memNode.next;
@@ -130,10 +126,6 @@ void fillMemInfo(char *buffer) {
     itoaTruncate(freeBlocks, aux, 64);
     strcat(buffer, aux);
     strcat(buffer, " blocks\n");
-//    println("en kernel");
-//    println(buffer);
-//    println("-----");
-
 }
 
 /*

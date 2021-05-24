@@ -132,3 +132,35 @@ static void acquire(int *lock) {
 static void release(int *lock) {
     _xchg(lock, 0);
 }
+
+int fillSemInfo(char * buffer) {
+    char aux[64] = {0};
+
+
+    strcat(buffer, "Name                          ");
+    strcat(buffer, "Value    ");
+    strcat(buffer, "Blocked Processes\n");
+
+    for(int i = 0; i < TOTAL_SEMS; i++) {
+        if (strlen(semaphores[i].semId) > 0) {
+            strcat(buffer, semaphores[i].semId);
+            for(int j = 0; j < 30 - strlen(semaphores[i].semId); j++) {
+                strcat(buffer, " ");
+            }
+            itoaTruncate(semaphores[i].value, aux, 64);
+            strcat(buffer, aux);
+            for(int j = 0; j < 9 - numlen(semaphores[i].value); j++) {
+                strcat(buffer, " ");
+            }
+            toBegin(semaphores[i].blockedProcesses);
+            while(hasNext(semaphores[i].blockedProcesses)) {
+                itoaTruncate(next(semaphores[i].blockedProcesses), aux, 64);
+                strcat(buffer, aux);
+                strcat(buffer, ", ");
+            }
+            strcat(buffer, "\n");
+        }
+    }
+
+    return 0;
+}

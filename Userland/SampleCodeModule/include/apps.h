@@ -3,56 +3,77 @@
 
 #include <stdint.h>
 
-#define PROGRAMS 18
+#define PROGRAMS 25
 
 typedef struct {
     char name[12];
 
-    void (*f)(int, char [][25]);
+    int (*f)(int, char [][25]);
 
     char description[200];
+
+    int canBeBg;
 } programs;
 
 extern programs commands[];
 
-void infoReg(int args, char argv[][25]);
+int infoReg(int args, char argv[][25]);
 
-void printMem(int args, char argv[][25]);
+int printMem(int args, char argv[][25]);
 
-void time(int args, char argv[][25]);
+int time(int args, char argv[][25]);
 
-void showApps(int args, char argv[][25]);
+int showApps(int args, char argv[][25]);
 
-void chess(int args, char argv[][25]);
+int chess(int args, char argv[][25]);
 
-void clear(int args, char argv[][25]);
+int clear(int args, char argv[][25]);
 
-void throwDivZero();
+int throwDivZero();
 
-void throwInvOpCode();
+int throwInvOpCode();
 
-void about();
+int about();
 
-void ps();
+int ps();
 
-void greet();
+int greet();
 
-void loop();
+int loop();
 
-void kill(int args, char argv[][25]);
+int kill(int args, char argv[][25]);
 
-void nice(int args, char argv[][25]);
+int nice(int args, char argv[][25]);
 
-void block(int args, char argv[][25]);
+int block(int args, char argv[][25]);
 
-void mem(int args, char argv[][25]);
+int mem(int args, char argv[][25]);
 
-void cat(int args, char argv[][25]);
+int sem(int args, char argv[][25]);
 
-void wc(int args, char argv[][25]);
+int pipe(int args, char argv[][25]);
 
-void filter(int args, char argv[][25]);
+int catWrapper(int args, char argv[][25]);
 
-void phylos();
+int cat(int args, char argv[][25]);
+
+int wcWrapper(int args, char argv[][25]);
+
+int wc(int args, char argv[][25]);
+
+int filterWrapper(int args, char argv[][25]);
+
+int filter(int args, char argv[][25]);
+
+int phylos();
+
+int testMM();
+
+int testPRIO();
+
+int testSYNC();
+
+int testPROC();
+
 
 #endif

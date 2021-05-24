@@ -1,36 +1,36 @@
-/*
-//#include <stdio.h>
-#include "test_util.h"
+#include <testUtil.h>
 #include <stdint.h>
 #include <standardIO.h>
 #include <syscalls.h>
 #include <string.h>
+ #include <tests.h>
+
 
 //TO BE INCLUDED
-void endless() {
+void processesEndless() {
     while (1);
 }
 
-uint64_t my_create_process(uint64_t *entryPoint) {
-    return createProcess(entryPoint, 0, 0, 0, 0);
+uint64_t processesCreateProcess(uint64_t *entryPoint) {
+    return createProcess(entryPoint, 0, 0, 1, 0, 0, 0);
 }
 
-uint64_t my_kill(uint64_t pid) {
+uint64_t processesKill(uint64_t pid) {
     killProcess(pid);
     return 0;
 }
 
-uint64_t my_block(uint64_t pid) {
+uint64_t processesBlock(uint64_t pid) {
     changeProcessState(pid);
     return 0;
 }
 
-uint64_t my_unblock(uint64_t pid) {
+uint64_t processesUnblock(uint64_t pid) {
     changeProcessState(pid);
     return 0;
 }
 
-#define MAX_PROCESSES 10 //Should be around 80% of the the processes handled by the kernel
+#define MAX_PROCESSES 100 //Should be around 80% of the the processes handled by the kernel
 
 enum State {
     ERROR, RUNNING, BLOCKED, KILLED
@@ -41,17 +41,16 @@ typedef struct P_rq {
     enum State state;
 } p_rq;
 
-void test_processes() {
+void testProcesses() {
     p_rq p_rqs[MAX_PROCESSES];
     uint8_t rq;
     uint8_t alive = 0;
     uint8_t action;
 
     while (1) {
-
         // Create MAX_PROCESSES processes
         for (rq = 0; rq < MAX_PROCESSES; rq++) {
-            p_rqs[rq].pid = my_create_process((uint64_t * ) & endless);  // TODO: Port this call as required
+            p_rqs[rq].pid = processesCreateProcess((uint64_t * ) & processesEndless);  // TODO: Port this call as required
 
             //TODO si el malloc de crear procesos es null, devolver -1
             if (p_rqs[rq].pid == -1) {                           // TODO: Port this as required
@@ -72,7 +71,7 @@ void test_processes() {
                 switch (action) {
                     case 0:
                         if (p_rqs[rq].state == RUNNING || p_rqs[rq].state == BLOCKED) {
-                            if (my_kill(p_rqs[rq].pid) == -1) {          // TODO: Port this as required
+                            if (processesKill(p_rqs[rq].pid) == -1) {          // TODO: Port this as required
                                 print("Error killing process\n");        // TODO: Port this as required
                                 return;
                             }
@@ -83,7 +82,7 @@ void test_processes() {
 
                     case 1:
                         if (p_rqs[rq].state == RUNNING) {
-                            if (my_block(p_rqs[rq].pid) == -1) {          // TODO: Port this as required
+                            if (processesBlock(p_rqs[rq].pid) == -1) {          // TODO: Port this as required
                                 print("Error blocking process\n");       // TODO: Port this as required
                                 return;
                             }
@@ -96,7 +95,7 @@ void test_processes() {
             // Randomly unblocks processes
             for (rq = 0; rq < MAX_PROCESSES; rq++)
                 if (p_rqs[rq].state == BLOCKED && GetUniform(2) % 2) {
-                    if (my_unblock(p_rqs[rq].pid) == -1) {            // TODO: Port this as required
+                    if (processesUnblock(p_rqs[rq].pid) == -1) {            // TODO: Port this as required
                         print("Error unblocking process\n");         // TODO: Port this as required
                         return;
                     }
@@ -104,10 +103,10 @@ void test_processes() {
                 }
         }
     }
+    _exit(1);
 }
 
 //int main() {
 //    test_processes();
 //    return 0;
 //}
-*/

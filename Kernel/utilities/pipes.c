@@ -141,3 +141,36 @@ static int searchPipe(int fd) {
     }
     return -1;
 }
+
+int fillPipeInfo(char * buffer) {
+    char aux[64] = {0};
+
+
+    strcat(buffer, "FdIn     ");
+    strcat(buffer, "FdOut    ");
+    strcat(buffer, "Blocked Processes\n");
+
+    for(int i = 0; i < TOTAL_PIPES; i++) {
+        if (pipes[i].isActive) {
+            itoaTruncate(pipes[i].fdIn, aux, 64);
+            strcat(buffer, aux);
+            for(int j = 0; j < 9 - numlen(pipes[i].fdIn); j++) {
+                strcat(buffer, " ");
+            }
+            itoaTruncate(pipes[i].fdOut, aux, 64);
+            strcat(buffer, aux);
+            for(int j = 0; j < 9 - numlen(pipes[i].fdOut); j++) {
+                strcat(buffer, " ");
+            }
+            toBegin(pipes[i].blockedProcesses);
+            while(hasNext(pipes[i].blockedProcesses)) {
+                itoaTruncate(next(pipes[i].blockedProcesses), aux, 64);
+                strcat(buffer, aux);
+                strcat(buffer, ", ");
+            }
+            strcat(buffer, "\n");
+        }
+    }
+
+    return 0;
+}

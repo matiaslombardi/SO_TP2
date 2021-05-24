@@ -7,37 +7,46 @@
 #include <lib64.h>
 #include <apps.h>
 #include <phylo.h>
+#include <tests.h>
 
 #define MEM_BYTES 32
 #define BUFFER64_BITS 20
 
 char array[] = {121, 27, 3, 4, 5, 6, 7, 8, 9, 10};
 
-programs commands[] = {{"about",       about,          "      Information about the O.S and authors."},
-                       {"help",        showApps,       "       Menu of the differents apps."},
-                       {"time",        time,           "       Displays the systems current time."},
-                       {"inforeg",     infoReg,        "    Displays the registers current state."},
-                       {"printmem",    printMem,       "   Prints on screen the first 32 bytes from a given position."},
-                       {"chess",       chess,          "      Starts a PVP chess match. Try chess help for aditional info."},
-                       {"clear",       clear,          "      Clears the current screen."},
-                       {"ps",          ps,             "         Displays a list of all the running processes with relevant data."},
-                       {"loop",        loop,           "       Prints a process ID given a determined number of seconds."},
-                       {"kill",        kill,           "       Kills a process given its ID."},
-                       {"nice",        nice,           "       Changes the given process priority."},
-                       {"block",       block,          "      Changes the process state given its ID."},
-                       {"mem",         mem,            "        Displays the current state of the memory."},
-                       {"cat",         cat,            "        Prints from STDIN as received."},
-                       {"wc",          wc,             "         Retrieves the amount of lines from input."},
-                       {"filter",      filter,         "     Filters the vowels of the input."},
-                       {"phylos",      phylos,         "     Create a new philosophers table. Add with '+', delete with '-'. " },
-                       {"exceptionZ",  throwDivZero,   " Throws a divide by zero exception"},
-                       {"exceptionOP", throwInvOpCode, "Throws an invalid Operation Code Exception"}
+programs commands[] = {{"about",       about,          "      Information about the O.S and authors.", 0},
+                       {"help",        showApps,       "       Menu of the differents apps.", 0},
+                       {"time",        time,           "       Displays the systems current time.", 0},
+                       {"inforeg",     infoReg,        "    Displays the registers current state.", 0},
+                       {"printmem",    printMem,       "   Prints on screen the first 32 bytes from a given position.", 0},
+                       {"chess",       chess,          "      Starts a PVP chess match. Try chess help for aditional info.", 0},
+                       {"clear",       clear,          "      Clears the current screen.", 0},
+                       {"ps",          ps,             "         Displays a list of all the running processes with relevant data.", 0},
+                       {"loop",        loop,           "       Prints a process ID given a determined number of seconds.", 0},
+                       {"kill",        kill,           "       Kills a process given its ID.", 0},
+                       {"nice",        nice,           "       Changes the given process priority.", 0},
+                       {"block",       block,          "      Changes the process state given its ID.", 0},
+                       {"mem",         mem,            "        Displays the current state of the memory.", 0},
+                       {"sem",         sem,            "        Displays de current state of the semaphores", 0},
+                       {"pipe",        pipe,           "       Displays de current state of the semaphores", 0},
+                       {"cat",         catWrapper,     "        Prints from STDIN as received.", 1},
+                       {"wc",          wcWrapper,      "         Retrieves the amount of lines from input." ,1},
+                       {"filter",      filterWrapper,  "     Filters the vowels of the input.", 1},
+                       {"phylos",      phylos,         "     Create a new philosophers table. Add with '+', delete with '-'. ", 0},
+                       {"exceptionZ",  throwDivZero,   " Throws a divide by zero exception", 0},
+                       {"exceptionOP", throwInvOpCode, "Throws an invalid Operation Code Exception", 0},
+                       {"testMM",      testMM,         "     Run Memory Manager tests.", 0},
+                       {"testPRIO",      testPRIO,     "   Run Processes Priority tests.", 0},
+                       {"testPROC",      testPROC,     "   Run Processes creation, deletion and blocking tests.", 0},
+                       {"testSYNC",      testSYNC,     "   Run semaphores sync tests.", 0}
 };
 
 int checkArgs(int args, int expected);
 
-void infoReg(int args, char argv[][25]) {
-    if (!checkArgs(args, 0)) return;
+int infoReg(int args, char argv[][25]) {
+    if (!checkArgs(args, 0)){
+        return - 1;
+    }
 
     char regis[][4] = {"R15", "R14", "R13", "R12", "R11", "R10", "R9 ", "R8 ", "RSI", "RDI", "RBP", "RDX", "RCX", "RBX",
                        "RAX", "RIP", "CS ", "FLG", "RSP"};
@@ -52,11 +61,13 @@ void infoReg(int args, char argv[][25]) {
         print("0x");
         println(buffer);
     }
-
+    return 0;
 }
 
-void printMem(int args, char argv[][25]) {
-    if (!checkArgs(args, 1)) return;
+int printMem(int args, char argv[][25]) {
+    if (!checkArgs(args, 1)){
+        return - 1;
+    }
 
     char *dir = (char *) stringToInt(argv[1]);
     char dump[MEM_BYTES];
@@ -82,10 +93,14 @@ void printMem(int args, char argv[][25]) {
         print(valueBuffer);
         println(" ");
     }
+
+    return 0;
 }
 
-void time(int args, char argv[][25]) {
-    if (!checkArgs(args, 0)) return;
+int time(int args, char argv[][25]) {
+    if (!checkArgs(args, 0)){
+        return -1;
+    }
 
     dateInfo info;
     getTime(&info);
@@ -94,10 +109,14 @@ void time(int args, char argv[][25]) {
     dateToString(&info, fecha, '/', 18);
     print(fecha);
     println("");
+
+    return 0;
 }
 
-void showApps(int args, char argv[][25]) {
-    if (!checkArgs(args, 0)) return;
+int showApps(int args, char argv[][25]) {
+    if (!checkArgs(args, 0)){
+        return - 1;
+    }
 
     int color = 0xffd1dc;//0xf03fcd;
 
@@ -106,29 +125,39 @@ void showApps(int args, char argv[][25]) {
         printc(": ", color);
         printcln(commands[i].description, 0xcfd7e6);
     }
+
+    return 0;
 }
 
-void chess(int args, char argv[][25]) {
+int chess(int args, char argv[][25]) {
     chessHandler(args, argv);
+    return 0;
 }
 
-void clear(int args, char argv[][25]) {
-    if (!checkArgs(args, 0)) return;
+int clear(int args, char argv[][25]) {
+    if (!checkArgs(args, 0)){
+        return - 1;
+    }
     clearScreen();
+
+    return 0;
 }
 
-void throwDivZero() {
+int throwDivZero() {
     int a = 0;
     int b = 5;
     a = b / a;
+    return 0;
 }
 
-void throwInvOpCode() {
+int throwInvOpCode() {
     invalidOpCode();
+    return 0;
 }
 
-void about() {
+int about() {
     printcln("Shernell 2.0 by Arce Julian, Lombardi Matias & Domingues Paula.", 0xcfd7e6);
+    return 0;
 }
 
 int checkArgs(int args, int expected) {
@@ -139,11 +168,12 @@ int checkArgs(int args, int expected) {
     return 1;
 }
 
-void ps(){
+int ps(){
     getProcessesList();
+    return 0;
 }
 
-void greet(){
+int greet(){
     unsigned int pid = getPid();
     unsigned int start = getElapsedTicks();
     unsigned int seconds = 5;
@@ -168,39 +198,96 @@ void greet(){
             start = ticks;
         }
     }
+    return 0;
 }
 
-void loop(){
+int loop(){
     createProcess((uint64_t *)&greet, 0, 0, 1, 0, 0, 0);
+    return 0;
 }
 
-void kill(int args, char argv[][25]){
-    if (!checkArgs(args, 1)) return;
+int kill(int args, char argv[][25]){
+    if (!checkArgs(args, 1)) {
+        return -1;
+    }
+
     int pid = string10ToInt(argv[1]);
     killProcess(pid);
+    return 0;
 }
 
-void nice(int args, char argv[][25]){
-    if (!checkArgs(args, 2)) return;
+int nice(int args, char argv[][25]){
+    if (!checkArgs(args, 2)) {
+        return -1;
+    }
+
     int pid = string10ToInt(argv[1]);
     int priority = string10ToInt(argv[2]);
     changeProcessPriority(pid, priority);
+    return 0;
 }
 
-void block(int args, char argv[][25]){
-    if (!checkArgs(args, 1)) return;
+int block(int args, char argv[][25]){
+    if (!checkArgs(args, 1)) {
+        return -1;
+    }
+
     int pid = string10ToInt(argv[1]);
     changeProcessState(pid);
+    return 0;
 }
 
-void mem(int args, char argv[][25]) {
-    if (!checkArgs(args, 0)) return;
+int mem(int args, char argv[][25]) {
+    if (!checkArgs(args, 0)) {
+        return -1;
+    }
+
     char buffer[256] = {0};
     getMemInfo(buffer);
     println(buffer);
+    return 0;
 }
 
-void cat(int args, char argv[][25]){
+int sem(int args, char argv[][25]) {
+    if (!checkArgs(args, 0)) {
+        return -1;
+    }
+
+    char buffer[512] = {0};
+    semInfo(buffer);
+    println(buffer);
+    return 0;
+}
+
+int pipe(int args, char argv[][25]) {
+    if (!checkArgs(args, 0)) {
+        return -1;
+    }
+
+    char buffer[512] = {0};
+    pipeInfo(buffer);
+    println(buffer);
+    return 0;
+}
+
+int catWrapper(int args, char argv[][25]) { //recibe argv[0]fg,  argv[1]fdIN, argv[2]fdOut
+    int fg = 1;
+    int fdIn = 0;
+    int fdOut = 1;
+    if(args == 1) {
+        fg = string10ToInt(argv[1]);
+    }
+    if(args == 3) {
+        fg = string10ToInt(argv[1]);
+        fdIn = string10ToInt(argv[2]);
+        fdOut = string10ToInt(argv[3]);
+    }
+
+    int pid = createProcess((uint64_t *) &cat, fg, fdIn, fdOut, 0, 0, 0);
+    return pid;
+}
+
+int cat(int args, char argv[][25]){
     int i = 0;
     char c, buffer[50] = {0};
     while((c=getChar())!= -1) {
@@ -225,9 +312,27 @@ void cat(int args, char argv[][25]){
         }
     }
     _exit(0);
+    return 0;
 }
 
-void wc(int args, char argv[][25]){
+int wcWrapper(int args, char argv[][25]) { //recibe argv[0]fg,  argv[1]fdIN, argv[2]fdOut
+    int fg = 1;
+    int fdIn = 0;
+    int fdOut = 1;
+    if(args == 1) {
+        fg = string10ToInt(argv[1]);
+    }
+    if(args == 3) {
+        fg = string10ToInt(argv[1]);
+        fdIn = string10ToInt(argv[2]);
+        fdOut = string10ToInt(argv[3]);
+    }
+
+    int pid = createProcess((uint64_t *) &wc, fg, fdIn, fdOut, 0, 0, 0);
+    return pid;
+}
+
+int wc(int args, char argv[][25]){
     int lines = 0;
     int c;
     while((c=getChar())!= -1) {
@@ -239,10 +344,28 @@ void wc(int args, char argv[][25]){
     print("Total lines: ");
     printInt(lines); println("");
     _exit(0);
+    return 0;
+}
+
+int filterWrapper(int args, char argv[][25]) { //recibe argv[0]fg,  argv[1]fdIN, argv[2]fdOut
+    int fg = 1;
+    int fdIn = 0;
+    int fdOut = 1;
+    if(args == 1) {
+        fg = string10ToInt(argv[1]);
+    }
+    if(args == 3) {
+        fg = string10ToInt(argv[1]);
+        fdIn = string10ToInt(argv[2]);
+        fdOut = string10ToInt(argv[3]);
+    }
+
+    int pid = createProcess((uint64_t *) &filter, fg, fdIn, fdOut, 0, 0, 0);
+    return pid;
 }
 
 #define IS_VOWEL(c) (((c) == 'a') || ((c) == 'e') || ((c) == 'i') || ((c) == 'o') || ((c) == 'u') || ((c) == 'A') || ((c) == 'E') || ((c) == 'I') || ((c) == 'O') || ((c) == 'U'))
-void filter(int args, char argv[][25]){
+int filter(int args, char argv[][25]){
     int i = 0;
     char c, buffer[50] = {0};
     while((c=getChar()) != -1) {
@@ -267,8 +390,34 @@ void filter(int args, char argv[][25]){
         }
     }
     _exit(0);
+    return 0;
 }
 
-void phylos(){
+int phylos(){
     initPhylos();
+    return 0;
+}
+
+int testMM(){
+    createProcess((uint64_t *) &testMm, 0, 0, 1, 0, 0, 0);
+    println("");
+    return 0;
+}
+
+int testPRIO(){
+    testPrio();
+    println("");
+    return 0;
+}
+
+int testPROC(){
+    createProcess((uint64_t *)&testProcesses, 0, 0, 1, 0, 0, 0);
+    println("");
+    return 0;
+}
+
+int testSYNC(){
+    testSync();
+    println("");
+    return 0;
 }

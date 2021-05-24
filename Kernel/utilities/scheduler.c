@@ -74,7 +74,7 @@ uint64_t *switchProcesses(uint64_t *rsp) {
     if (currentProcess != NULL) {
         currentProcess->rsp = rsp;
 
-        if (currentProcess->tickets > 0) {
+        if (currentProcess->state == READY && currentProcess->tickets > 0) {
             currentProcess->tickets--;
             return currentProcess->rsp;
         }
@@ -122,13 +122,13 @@ void endProcess(unsigned int pid) {
 void printProcesses() {
     circularToBegin(processes);
     char toPrint[20] = {0};
-    println("PID    State    Prior    RSP                      RBP                      FG    Name");//Falta imprimir state
+    println("PID         State    Prior    RSP                      RBP                      FG    Name");//Falta imprimir state
     while (circularHasNext(processes)) {
         PCB *aux = circularNext(processes);
         //PID
         printInt(aux->pid);
         print("    ");
-        for (int i = 0; i < 3 - numlen(aux->pid); i++) print(" ");
+        for (int i = 0; i < 8 - numlen(aux->pid); i++) print(" ");
         //State
         print(aux->state == READY ? "Ready" : aux->state == BLOCKED ? "Block" : "Kill ");
         print("    ");
@@ -166,6 +166,10 @@ void changePriorities(unsigned int pid, unsigned int newPriority) {
 
 unsigned int getPid() {
     return currentProcess->pid;
+}
+
+unsigned int getFg() {
+    return currentProcess->foreground;
 }
 
 unsigned int getFdIn() {

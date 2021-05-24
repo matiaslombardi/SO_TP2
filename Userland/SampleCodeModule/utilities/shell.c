@@ -41,11 +41,11 @@ void initShell() {
 //    getMemInfo(buffer);
 //    println(buffer);
 
-//    test_mm();
-//    test_prio();
-//    test_processes();
-//    test_no_sync();
-//    test_sync();
+//    testMm();
+//    testPrio();
+//    testProcesses();
+//    testNoSync();
+//    testSync();
 
 //    int pipeFd[2];
 //    pipeOpen(pipeFd);
@@ -53,6 +53,12 @@ void initShell() {
 //    read(pipeFd[0], buffer, 1);
 
 //    initPhylos();
+
+    //int pipeFd[2];
+    //pipeOpen(pipeFd);
+    //pipeOpen(pipeFd);
+    //pipeOpen(pipeFd);
+    //pipeOpen(pipeFd);
 
     char c;
     int numPipes = 0;
@@ -96,14 +102,26 @@ void initShell() {
 
                 int pid1;
                 if (progAvail != -1) {
-                    pid1 = createProcess((uint64_t *) commands[progAvail].f, 1, 0, fd[1], 0, 0, 0);
+                    char params[4][25] = {{0}};
+                    strcpy(params[1], "1");
+                    strcpy(params[2], "0");
+                    char aux[4];
+                    itoaTruncate(fd[1], aux, 4);
+                    strcpy(params[3], aux);
+                    pid1 = commands[progAvail].f(3, params);
                 }
 
                 progAvail = hasProgram(tokens[1]);
 
                 int pid2;
                 if (progAvail != -1) {
-                    pid2 = createProcess((uint64_t *) commands[progAvail].f, 0, fd[0], 1, 0, 0, 0);
+                    char params[4][25] = {{0}};
+                    strcpy(params[1], "0");
+                    char aux[4];
+                    itoaTruncate(fd[0], aux, 4);
+                    strcpy(params[2], aux);
+                    strcpy(params[3], "1");
+                    pid2 = commands[progAvail].f(3, params);
                 }
 
                 waitPid(pid1);
@@ -113,10 +131,23 @@ void initShell() {
                 println("");
                 char tokens[10][25] = {{0}}; //time param1
                 int args = tokenizeArguments(content, tokens) - 1;// 1 es el nombre del programa
+
+                int bg = 0;
+                if(tokens[0][0] == '&'){
+                    bg = 1;
+                    args = 1;
+                    strcpy(tokens[0], tokens[0] + 1);
+                }
+
                 int progAvail = hasProgram(tokens[0]);
                 if (progAvail != -1) {
-                    commands[progAvail].f(args, tokens);
-
+                    if(bg == 1 && commands[progAvail].canBeBg ){
+                        strcpy(tokens[1], "0");
+                    }
+                    int ans = commands[progAvail].f(args, tokens);
+                    if(ans > 0){
+                        waitPid(ans);
+                    }
                 } else {
                     print(content);
                     println(": command not found, try 'help' for help.");

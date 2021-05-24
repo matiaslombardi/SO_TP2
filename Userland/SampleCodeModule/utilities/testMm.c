@@ -1,8 +1,9 @@
 #include <standardIO.h>
 #include <string.h>
 #include <memoryManagement.h>
-#include "test_util.h"
+#include <testUtil.h>
 #include <apps.h>
+#include <tests.h>
 
 #define MAX_BLOCKS 128
 #define MAX_MEMORY (1024 * 1024 * 128 * 0.7) //Should be around 80% of memory managed by the MM
@@ -24,7 +25,7 @@ void *memSet(void *destination, int32_t c, uint64_t length) {
     return destination;
 }
 
-void test_mm() {
+void testMm() {
     mm_rq mm_rqs[MAX_BLOCKS];
     uint8_t rq;
     uint32_t total;

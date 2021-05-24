@@ -18,7 +18,8 @@ static syscall_t syscallsArray[] = {readHandler, writeHandler, drawHandler, clea
                                     psHandler, createProcessHandler, changeStateHandler,
                                     changePriorityHandler, getPidHandler, getMemHandler, freeMemHandler,
                                     getMemInfoHandler, semOpenHandler, semCloseHandler, semPostHandler,
-                                    semWaitHandler, pipeOpenHandler, pipeCloseHandler, waitPidHandler};
+                                    semWaitHandler, fillSemInfoHandler, pipeOpenHandler, pipeCloseHandler,
+                                    fillPipeInfoHandler, waitPidHandler};
 
 uint64_t syscallDispatcher(Params* p) {
     return syscallsArray[p->call](p->first, p->second, p->third, p->fourth, p->fifth, p->sixth, p->seventh);
@@ -27,6 +28,9 @@ uint64_t syscallDispatcher(Params* p) {
 uint64_t readHandler(uint64_t fd, uint64_t length, uint64_t toRead, uint64_t fourthP, uint64_t fifthP, uint64_t sixthP, uint64_t seventhP) {
     if(fd == STDIN){ //read from keyboard
         if(getFdIn() == STDIN) {
+            if(!getFg()){
+                exit();
+            }
             return readBuffer(length, (char *) toRead);
         } else {
             return pipeRead(getFdIn(), length, (char *) toRead);
@@ -163,6 +167,11 @@ uint64_t semWaitHandler(uint64_t semId, uint64_t secondP, uint64_t thirdP, uint6
     return semWait((char *) semId);
 }
 
+uint64_t fillSemInfoHandler(uint64_t buffer, uint64_t secondP, uint64_t thirdP, uint64_t fourthP,
+                        uint64_t fifthP, uint64_t sixthP, uint64_t seventhP) {
+    return fillSemInfo((char *) buffer);
+}
+
 uint64_t pipeOpenHandler(uint64_t fd, uint64_t secondP, uint64_t thirdP, uint64_t fourthP,
                           uint64_t fifthP, uint64_t sixthP, uint64_t seventhP) {
     return pipeOpen((int *) fd);
@@ -172,6 +181,12 @@ uint64_t pipeCloseHandler(uint64_t fd, uint64_t secondP, uint64_t thirdP, uint64
                          uint64_t fifthP, uint64_t sixthP, uint64_t seventhP) {
     return pipeClose((int) fd);
 }
+
+uint64_t fillPipeInfoHandler(uint64_t buffer, uint64_t secondP, uint64_t thirdP, uint64_t fourthP,
+                             uint64_t fifthP, uint64_t sixthP, uint64_t seventhP){
+    return fillPipeInfo((char *) buffer);
+}
+
 
 uint64_t waitPidHandler(uint64_t pid, uint64_t secondP, uint64_t thirdP, uint64_t fourthP,
                           uint64_t fifthP, uint64_t sixthP, uint64_t seventhP) {

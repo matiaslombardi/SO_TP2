@@ -33,6 +33,8 @@ void changePriorities(unsigned int pid, unsigned int newPriority);
 
 unsigned int getPid();
 
+unsigned int getFg();
+
 unsigned int getFdIn();
 
 unsigned int getFdOut();
