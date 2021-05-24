@@ -7,7 +7,7 @@
 #include <library.h>
 #include <memDump.h>
 
-#define HEAPSIZE (1024 * 1024 * 128) /*8MB, debe ser multiplo de 8*/
+#define HEAPSIZE (1024 * 1024 * 128) /*128MB, debe ser multiplo de 8*/
 #define NULL ((void *)0)
 
 //void printHeapDir();

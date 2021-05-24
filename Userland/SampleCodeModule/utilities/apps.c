@@ -202,8 +202,14 @@ int greet(){
     return 0;
 }
 
-int loop(){
-    createProcess((uint64_t *)&greet, 0, 0, 1, 0, 0, 0);
+int loop(int args, char argv[][25]){
+    int fdIn = 0;
+    int fdOut = 1;
+    if(args == 3) {
+        fdIn = string10ToInt(argv[2]);
+        fdOut = string10ToInt(argv[3]);
+    }
+    createProcess((uint64_t *)&greet, 0, fdIn, fdOut, 0, 0, 0);
     return 0;
 }
 

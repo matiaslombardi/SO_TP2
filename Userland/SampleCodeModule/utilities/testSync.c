@@ -26,7 +26,7 @@ uint64_t syncSemClose(char *sem_id) {
     return semClose(sem_id);
 }
 
-#define TOTAL_PAIR_PROCESSES 10
+#define TOTAL_PAIR_PROCESSES 50
 #define SEM_ID "sem"
 
 int64_t global;  //shared memory
@@ -71,8 +71,8 @@ void testSync() {
     print("CREATING PROCESSES...(WITH SEM)\n");
 
     for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-        syncCreateProcess((uint64_t * ) & inc, 1, 1, 500);
-        syncCreateProcess((uint64_t * ) & inc, 1, 1, 500);
+        syncCreateProcess((uint64_t * ) & inc, 1, 5, 500);
+        syncCreateProcess((uint64_t * ) & inc, 1, -2, 500);
     }
 }
 

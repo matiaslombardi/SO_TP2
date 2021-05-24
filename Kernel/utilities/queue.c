@@ -86,6 +86,33 @@ int isEmpty(QueueADT queue) {
     return queue->first == NULL;
 }
 
+void deleteWaiting(QueueADT queue, int pid) {
+    if(isEmpty(queue)) {
+        return;
+    }
+
+    Elem * current = queue->first;
+    Elem * previous = NULL;
+
+    while(current != NULL) {
+        if(current->pid == pid) {
+            if(previous != NULL) {
+                previous->next = current->next;
+            }
+            if(current == queue->first) {
+                queue->first = queue->first->next;
+            }
+            if(current == queue->last) {
+                queue->last = previous;
+            }
+            mmFree(current);
+            return;
+        }
+        previous = current;
+        current = current->next;
+    }
+}
+
 void toBegin(QueueADT queue) {
     queue->iter = queue->first;
 }

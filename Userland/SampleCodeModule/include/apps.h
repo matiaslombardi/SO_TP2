@@ -39,7 +39,7 @@ int ps();
 
 int greet();
 
-int loop();
+int loop(int args, char argv[][25]);
 
 int kill(int args, char argv[][25]);
 

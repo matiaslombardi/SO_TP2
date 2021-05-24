@@ -14,6 +14,8 @@ int semPost(char *semId);
 
 int semWait(char * semId);
 
+void removeWaitingPid(unsigned int pid);
+
 int fillSemInfo(char * buffer);
 
 #endif //SO_TP2_SEMAPHORE_H

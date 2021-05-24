@@ -1,3 +1,5 @@
+#ifndef BUDDY_MM
+
 #include <memoryManagement.h>
 #include <string.h>
 #include <library.h>
@@ -110,6 +112,8 @@ void fillMemInfo(char *buffer) {
 
     char aux[64] = {0};
 
+    strcat(buffer, "Free List Memory Management\n");
+
     strcat(buffer, "Total memory: ");
     itoaTruncate(total, aux, 64);
     strcat(buffer, aux);
@@ -135,3 +139,5 @@ void fillMemInfo(char *buffer) {
  Used memory:  xxxxxxxxxxxxxxxx in xxxxxxxxxxxxxxxx blocks.
 
  * */
+
+#endif

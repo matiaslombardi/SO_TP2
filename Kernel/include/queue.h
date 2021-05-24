@@ -18,6 +18,8 @@ int dequeue(QueueADT queue);
 
 int isEmpty(QueueADT queue);
 
+void deleteWaiting(QueueADT queue, int pid);
+
 void toBegin(QueueADT queue);
 
 int hasNext(QueueADT queue);

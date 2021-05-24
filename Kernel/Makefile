@@ -15,6 +15,8 @@ OBJECTS_LIBRARIES=$(LIBRARIES:.c=.o)
 OBJECTS_ASM=$(SOURCES_ASM:.asm=.o)
 LOADERSRC=loader.asm
 
+MM=-D FREE_LIST_MM
+
 LOADEROBJECT=$(LOADERSRC:.asm=.o)
 STATICLIBS=
 all: $(KERNEL)
@@ -23,7 +25,7 @@ $(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM) $(OBJECTS_DRI
 	$(LD) $(LDFLAGS) -T kernel.ld -o $@ $^
 
 %.o: %.c
-	$(GCC) $(GCCFLAGS) -I./include -c $< -o $@
+	$(GCC) $(GCCFLAGS) -I./include $(MM) -c $< -o $@
 
 %.o : %.asm
 	$(ASM) $(ASMFLAGS) $< -o $@

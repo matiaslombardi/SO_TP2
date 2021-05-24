@@ -126,6 +126,14 @@ static int searchSem(char *semId) {
     return -1;
 }
 
+void removeWaitingPid(unsigned int pid){
+    for(int i = 0; i < TOTAL_SEMS; i++) {
+        if (strlen(semaphores[i].semId) > 0) {
+            deleteWaiting(semaphores[i].blockedProcesses, pid);
+        }
+    }
+}
+
 static void acquire(int *lock) {
     while (_xchg(lock, 1) != 0);
 }
@@ -153,12 +161,16 @@ int fillSemInfo(char * buffer) {
             for(int j = 0; j < 9 - numlen(semaphores[i].value); j++) {
                 strcat(buffer, " ");
             }
+//            TODO dejar el iterador y sacar lo de abajo
             toBegin(semaphores[i].blockedProcesses);
             while(hasNext(semaphores[i].blockedProcesses)) {
                 itoaTruncate(next(semaphores[i].blockedProcesses), aux, 64);
                 strcat(buffer, aux);
                 strcat(buffer, ", ");
             }
+            strcat(buffer, " | ");
+            itoaTruncate(semaphores[i].attached, aux, 64);
+            strcat(buffer, aux);
             strcat(buffer, "\n");
         }
     }

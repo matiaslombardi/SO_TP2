@@ -1,3 +1,4 @@
+MM=FREE_LIST_MM
 
 all:  bootloader kernel userland image
 

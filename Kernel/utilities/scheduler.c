@@ -1,5 +1,7 @@
 #include <scheduler.h>
 
+#include <semaphore.h>
+
 #define STACK_SIZE 0x8000
 #define REGISTER_AMOUNT 20
 #define GENERAL_REGISTER_AMOUNT 15
@@ -84,6 +86,13 @@ uint64_t *switchProcesses(uint64_t *rsp) {
 
     currentProcess = circularDequeue(processes);
     currentProcess->tickets--;
+//    print("scheduler: "); printInt(currentProcess->pid); println("");
+    if(currentProcess->pid == 2) {
+//        char buffer[512] = {0};
+//        fillSemInfo(buffer);
+//        print(buffer);
+//        printProcesses();
+    }
     return currentProcess->rsp;
 }
 
@@ -114,6 +123,8 @@ void endProcess(unsigned int pid) {
     PCB *deleted;
 
     if ((deleted = deleteNode(processes, pid)) != NULL) {
+        removeWaitingPid(deleted->pid);
+
         mmFree(deleted->rbp - STACK_SIZE);
         mmFree(deleted);
     }
