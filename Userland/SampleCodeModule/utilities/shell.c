@@ -52,7 +52,7 @@ void initShell() {
 //    char buffer[5];
 //    read(pipeFd[0], buffer, 1);
 
-//    initPhylos();
+    initPhylos();
 
     //int pipeFd[2];
     //pipeOpen(pipeFd);
