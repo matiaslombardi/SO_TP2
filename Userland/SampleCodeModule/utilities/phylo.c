@@ -10,6 +10,7 @@
 #define CREATING_SEM "createPhylo"
 #define FORK_SEM "forkSem"
 #define STATE_CHANGING_SEM "stateSem"
+#define CAN_CHANGE_SEM "canChangeSem"
 
 #define ALERT_COLOR 0xfc3d03
 #define SUCCESS_COLOR 0x19a600
@@ -36,6 +37,7 @@ static void removePhylo();
 void initPhylos() {
     semOpen(CREATING_SEM, 1);
     semOpen(STATE_CHANGING_SEM, total);
+    semOpen(CAN_CHANGE_SEM, 1);
 
     semWait(CREATING_SEM);
     print("");
@@ -59,14 +61,18 @@ void initPhylos() {
             switch (c) {
                 case 'a':
                     if (total < MAX_PHYLOS) {
+                        semWait(CAN_CHANGE_SEM);
                         addPhylo();
+                        semPost(CAN_CHANGE_SEM);
                     } else {
                         printcln("No more seats.", ALERT_COLOR);
                     }
                     break;
                 case 'r':
                     if (total > MIN_PHYLOS) {
+                        semWait(CAN_CHANGE_SEM);
                         removePhylo();
+                        semPost(CAN_CHANGE_SEM);
                     } else {
                         printcln("Minimun seats.", ALERT_COLOR);
                     }
@@ -82,6 +88,7 @@ void initPhylos() {
 
     semClose(CREATING_SEM);
     semClose(STATE_CHANGING_SEM);
+    semClose(CAN_CHANGE_SEM);
 
     total = MIN_PHYLOS;
     phyloIdCount = 0;
