@@ -2,8 +2,6 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <scheduler.h>
 
-#include <semaphore.h>
-
 #define STACK_SIZE 0x8000
 #define REGISTER_AMOUNT 20
 #define GENERAL_REGISTER_AMOUNT 15
@@ -19,7 +17,7 @@ PCB *currentProcess = NULL;
 
 
 static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base, int foreground,
-                    uint64_t fdIn, uint64_t fdOut); //Falta foregroun y priority;
+                    uint64_t fdIn, uint64_t fdOut, char *name);
 
 
 void initScheduler() {
@@ -27,10 +25,7 @@ void initScheduler() {
 }
 
 unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t fdIn, uint64_t fdOut,
-                           uint64_t first, uint64_t second, uint64_t third) {
-//    while(1) {
-//        printInt(first); print(" ,"); printInt(second); print(" ,"); printInt(third); println("");
-//    }
+                           uint64_t first, uint64_t second, uint64_t third, char *name) {
     uint64_t *base;
     if ((base = mmMalloc(STACK_SIZE)) == NULL) {
         return 0;
@@ -41,27 +36,24 @@ unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t fdIn, 
     base[STACK_SIZE - 4] = START_CODE_SEGMENT;
     base[STACK_SIZE - 5] = (uint64_t) entryPoint;      //rip
     for (int i = 0; i < GENERAL_REGISTER_AMOUNT; i++) {
-        base[STACK_SIZE - i - 6] = GENERAL_REGISTER_AMOUNT - i; //De esta manera rax tendra un 1, si no es al reves
+        base[STACK_SIZE - i - 6] = GENERAL_REGISTER_AMOUNT - i;
     }
-
 
     base[STACK_SIZE - 11] = first; //rdi;
     base[STACK_SIZE - 12] = second; //rsi;
     base[STACK_SIZE - 9] = third; //rdx;
 
-//    printInt(*(base + STACK_SIZE - 17)); println("");
-
     PCB *pcb;
     if ((pcb = mmMalloc(sizeof(PCB))) == NULL) {
         return 0;
     }
-    fillPCB(pcb, pidCounter, base, foreground, fdIn, fdOut);
+    fillPCB(pcb, pidCounter, base, foreground, fdIn, fdOut, name);
     circularEnqueue(processes, pcb);
     return pidCounter++;
 }
 
 static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base, int foreground,
-                    uint64_t fdIn, uint64_t fdOut) { //Falta foreground y priority;
+                    uint64_t fdIn, uint64_t fdOut, char *name) {
     pcb->pid = pid;
     pcb->state = READY;
     pcb->rsp = base + STACK_SIZE - REGISTER_AMOUNT;
@@ -72,6 +64,8 @@ static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base, int foreground,
     pcb->fdIn = fdIn;
     pcb->fdOut = fdOut;
     pcb->waitingPid = 0;
+    pcb->name[0] = 0;
+    strcpy(pcb->name, name);
 }
 
 uint64_t *switchProcesses(uint64_t *rsp) {
@@ -88,13 +82,6 @@ uint64_t *switchProcesses(uint64_t *rsp) {
 
     currentProcess = circularDequeue(processes);
     currentProcess->tickets--;
-//    print("scheduler: "); printInt(currentProcess->pid); println("");
-    if(currentProcess->pid == 2) {
-//        char buffer[512] = {0};
-//        fillSemInfo(buffer);
-//        print(buffer);
-//        printProcesses();
-    }
     return currentProcess->rsp;
 }
 
@@ -136,7 +123,7 @@ void endProcess(unsigned int pid) {
 void printProcesses() {
     circularToBegin(processes);
     char toPrint[20] = {0};
-    println("PID         State    Prior    RSP                      RBP                      FG    Name");//Falta imprimir state
+    println("PID         State    Prior    RSP                      RBP                      FG    Name");
     while (circularHasNext(processes)) {
         PCB *aux = circularNext(processes);
         //PID
@@ -150,20 +137,20 @@ void printProcesses() {
         printInt(aux->priority);
         print("        ");
         //RSP
-        turnToBaseN((uint64_t) aux->rsp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
+        turnToBaseN((uint64_t) aux->rsp, 16, toPrint, 20);
         print("0x");
         print(toPrint);
         print("    ");
         //RBP
         print("0x");
-        turnToBaseN((uint64_t) aux->rbp, 16, toPrint, 20);//uint64_t value, int base, char *buffer, int bufferLength
+        turnToBaseN((uint64_t) aux->rbp, 16, toPrint, 20);
         print(toPrint);
         print("    ");
         //FG
         print(aux->foreground == 0 ? "BG" : "FG");
         print("    ");
         //Name
-        println(""); //Este es para el nombre del programa.
+        println(aux->name);
     }
 }
 
@@ -209,10 +196,10 @@ void exit() {
         wakeup(waiting);
     }
 
-    if(getFdOut() != STDOUT) {
+    if (getFdOut() != STDOUT) {
         pipeClose(getFdOut());
     }
-    if(getFdIn() != STDIN) {
+    if (getFdIn() != STDIN) {
         pipeClose(getFdIn());
     }
 

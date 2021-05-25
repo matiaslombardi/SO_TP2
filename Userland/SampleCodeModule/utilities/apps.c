@@ -14,41 +14,43 @@
 #define MEM_BYTES 32
 #define BUFFER64_BITS 20
 
+#define IS_VOWEL(c) (((c) == 'a') || ((c) == 'e') || ((c) == 'i') || ((c) == 'o') || ((c) == 'u') || ((c) == 'A') || ((c) == 'E') || ((c) == 'I') || ((c) == 'O') || ((c) == 'U'))
+
 char array[] = {121, 27, 3, 4, 5, 6, 7, 8, 9, 10};
 
-programs commands[] = {{"about",       about,          "      Information about the O.S and authors.", 0},
-                       {"help",        showApps,       "       Menu of the differents apps.", 0},
-                       {"time",        time,           "       Displays the systems current time.", 0},
-                       {"inforeg",     infoReg,        "    Displays the registers current state.", 0},
-                       {"printmem",    printMem,       "   Prints on screen the first 32 bytes from a given position.", 0},
-                       {"chess",       chess,          "      Starts a PVP chess match. Try chess help for aditional info.", 0},
-                       {"clear",       clear,          "      Clears the current screen.", 0},
+programs commands[] = {{"about",       about,          "      Information about the O.S and authors.",                              0},
+                       {"help",        showApps,       "       Menu of the differents apps.",                                       0},
+                       {"time",        time,           "       Displays the systems current time.",                                 0},
+                       {"inforeg",     infoReg,        "    Displays the registers current state.",                                 0},
+                       {"printmem",    printMem,       "   Prints on screen the first 32 bytes from a given position.",             0},
+                       {"chess",       chess,          "      Starts a PVP chess match. Try chess help for aditional info.",        0},
+                       {"clear",       clear,          "      Clears the current screen.",                                          0},
                        {"ps",          ps,             "         Displays a list of all the running processes with relevant data.", 0},
-                       {"loop",        loop,           "       Prints a process ID given a determined number of seconds.", 0},
-                       {"kill",        kill,           "       Kills a process given its ID.", 0},
-                       {"nice",        nice,           "       Changes the given process priority.", 0},
-                       {"block",       block,          "      Changes the process state given its ID.", 0},
-                       {"mem",         mem,            "        Displays the current state of the memory.", 0},
-                       {"sem",         sem,            "        Displays de current state of the semaphores", 0},
-                       {"pipe",        pipe,           "       Displays de current state of the semaphores", 0},
-                       {"cat",         catWrapper,     "        Prints from STDIN as received.", 1},
-                       {"wc",          wcWrapper,      "         Retrieves the amount of lines from input." ,1},
-                       {"filter",      filterWrapper,  "     Filters the vowels of the input.", 1},
-                       {"phylos",      phylos,         "     Create a new philosophers table. Add with '+', delete with '-'. ", 0},
-                       {"exceptionZ",  throwDivZero,   " Throws a divide by zero exception", 0},
-                       {"exceptionOP", throwInvOpCode, "Throws an invalid Operation Code Exception", 0},
-                       {"testMM",      testMM,         "     Run Memory Manager tests.", 0},
-                       {"testPRIO",    testPRIO,       "   Run Processes Priority tests.", 0},
-                       {"testPROC",    testPROC,       "   Run Processes creation, deletion and blocking tests.", 0},
-                       {"testSYNC",    testSYNC,       "   Run semaphores sync tests.", 0},
-                       {"testNoSYNC",  testNoSYNC,     "   Run without semaphores sync tests.", 0}
+                       {"loop",        loop,           "       Prints a process ID given a determined number of seconds.",          0},
+                       {"kill",        kill,           "       Kills a process given its ID.",                                      0},
+                       {"nice",        nice,           "       Changes the given process priority.",                                0},
+                       {"block",       block,          "      Changes the process state given its ID.",                             0},
+                       {"mem",         mem,            "        Displays the current state of the memory.",                         0},
+                       {"sem",         sem,            "        Displays de current state of the semaphores",                       0},
+                       {"pipe",        pipe,           "       Displays de current state of the semaphores",                        0},
+                       {"cat",         catWrapper,     "        Prints from STDIN as received.",                                    1},
+                       {"wc",          wcWrapper,      "         Retrieves the amount of lines from input.",                        1},
+                       {"filter",      filterWrapper,  "     Filters the vowels of the input.",                                     1},
+                       {"phylos",      phylos,         "     Create a new philosophers table. Add with '+', delete with '-'. ",     0},
+                       {"exceptionZ",  throwDivZero,   " Throws a divide by zero exception",                                        0},
+                       {"exceptionOP", throwInvOpCode, "Throws an invalid Operation Code Exception",                                0},
+                       {"testMM",      testMM,         "     Run Memory Manager tests.",                                            0},
+                       {"testPRIO",    testPRIO,       "   Run Processes Priority tests.",                                          0},
+                       {"testPROC",    testPROC,       "   Run Processes creation, deletion and blocking tests.",                   0},
+                       {"testSYNC",    testSYNC,       "   Run semaphores sync tests.",                                             0},
+                       {"testNoSYNC",  testNoSYNC,     "   Run without semaphores sync tests.",                                     0}
 };
 
 int checkArgs(int args, int expected);
 
 int infoReg(int args, char argv[][25]) {
-    if (!checkArgs(args, 0)){
-        return - 1;
+    if (!checkArgs(args, 0)) {
+        return -1;
     }
 
     char regis[][4] = {"R15", "R14", "R13", "R12", "R11", "R10", "R9 ", "R8 ", "RSI", "RDI", "RBP", "RDX", "RCX", "RBX",
@@ -68,8 +70,8 @@ int infoReg(int args, char argv[][25]) {
 }
 
 int printMem(int args, char argv[][25]) {
-    if (!checkArgs(args, 1)){
-        return - 1;
+    if (!checkArgs(args, 1)) {
+        return -1;
     }
 
     char *dir = (char *) stringToInt(argv[1]);
@@ -101,7 +103,7 @@ int printMem(int args, char argv[][25]) {
 }
 
 int time(int args, char argv[][25]) {
-    if (!checkArgs(args, 0)){
+    if (!checkArgs(args, 0)) {
         return -1;
     }
 
@@ -117,8 +119,8 @@ int time(int args, char argv[][25]) {
 }
 
 int showApps(int args, char argv[][25]) {
-    if (!checkArgs(args, 0)){
-        return - 1;
+    if (!checkArgs(args, 0)) {
+        return -1;
     }
 
     int color = 0xffd1dc;//0xf03fcd;
@@ -138,8 +140,8 @@ int chess(int args, char argv[][25]) {
 }
 
 int clear(int args, char argv[][25]) {
-    if (!checkArgs(args, 0)){
-        return - 1;
+    if (!checkArgs(args, 0)) {
+        return -1;
     }
     clearScreen();
 
@@ -171,31 +173,20 @@ int checkArgs(int args, int expected) {
     return 1;
 }
 
-int ps(){
+int ps() {
     getProcessesList();
     return 0;
 }
 
-int greet(){
+int greet() {
     unsigned int pid = getPid();
     unsigned int start = getElapsedTicks();
-    unsigned int seconds = 5;
+    unsigned int totalTicks = 1;
     char pidString[20] = {0};
     itoaTruncate(pid, pidString, 20);
-//    while(1) {
-//        unsigned int ticks = getElapsedTicks();
-//        if((ticks - start) / 18 >= seconds) {
-//            print(pidString);
-//            print(" says hello - Seconds: ");
-//            char buff[20] = {0}; //Cuando printInt funcione, cambiarlo (para eso tienen que estar las syscalls del mm
-//            itoaTruncate((ticks - start) / 18, buff, 20);
-//            println(buff);
-//            start = ticks;
-//        }
-//    }
-    while(1) {
+    while (1) {
         unsigned int ticks = getElapsedTicks();
-        if((ticks - start) >= 1) {
+        if ((ticks - start) >= totalTicks) {
             print(pidString);
             print(" ");
             start = ticks;
@@ -204,18 +195,18 @@ int greet(){
     return 0;
 }
 
-int loop(int args, char argv[][25]){
+int loop(int args, char argv[][25]) {
     int fdIn = 0;
     int fdOut = 1;
-    if(args == 3) {
+    if (args == 3) {
         fdIn = string10ToInt(argv[2]);
         fdOut = string10ToInt(argv[3]);
     }
-    createProcess((uint64_t *)&greet, 0, fdIn, fdOut, 0, 0, 0);
+    createProcess((uint64_t * ) & greet, 0, fdIn, fdOut, 0, 0, 0, "loop");
     return 0;
 }
 
-int kill(int args, char argv[][25]){
+int kill(int args, char argv[][25]) {
     if (!checkArgs(args, 1)) {
         return -1;
     }
@@ -225,7 +216,7 @@ int kill(int args, char argv[][25]){
     return 0;
 }
 
-int nice(int args, char argv[][25]){
+int nice(int args, char argv[][25]) {
     if (!checkArgs(args, 2)) {
         return -1;
     }
@@ -236,7 +227,7 @@ int nice(int args, char argv[][25]){
     return 0;
 }
 
-int block(int args, char argv[][25]){
+int block(int args, char argv[][25]) {
     if (!checkArgs(args, 1)) {
         return -1;
     }
@@ -283,39 +274,35 @@ int catWrapper(int args, char argv[][25]) { //recibe argv[0]fg,  argv[1]fdIN, ar
     int fg = 1;
     int fdIn = 0;
     int fdOut = 1;
-    if(args == 1) {
+    if (args == 1) {
         fg = string10ToInt(argv[1]);
     }
-    if(args == 3) {
+    if (args == 3) {
         fg = string10ToInt(argv[1]);
         fdIn = string10ToInt(argv[2]);
         fdOut = string10ToInt(argv[3]);
     }
 
-    int pid = createProcess((uint64_t *) &cat, fg, fdIn, fdOut, 0, 0, 0);
+    int pid = createProcess((uint64_t * ) & cat, fg, fdIn, fdOut, 0, 0, 0, "cat");
     return pid;
 }
 
-int cat(int args, char argv[][25]){
+int cat(int args, char argv[][25]) {
     int i = 0;
-    char c, buffer[50] = {0};
-    while((c=getChar())!= -1) {
+    char c;
+    while ((c = getChar()) != -1) {
         if (c != 0) {
             switch (c) {
                 case '\b':
                     if (i > 0) {
-                        buffer[--i] = 0;
                         removeChar();
                     }
                     break;
                 case '\n':
                     println("");
-                    buffer[i] = 0;
-                    //println(buffer);
                     i = 0;
                     break;
                 default:
-                    buffer[i++] = c;
                     putChar(c);
             }
         }
@@ -328,30 +315,31 @@ int wcWrapper(int args, char argv[][25]) { //recibe argv[0]fg,  argv[1]fdIN, arg
     int fg = 1;
     int fdIn = 0;
     int fdOut = 1;
-    if(args == 1) {
+    if (args == 1) {
         fg = string10ToInt(argv[1]);
     }
-    if(args == 3) {
+    if (args == 3) {
         fg = string10ToInt(argv[1]);
         fdIn = string10ToInt(argv[2]);
         fdOut = string10ToInt(argv[3]);
     }
 
-    int pid = createProcess((uint64_t *) &wc, fg, fdIn, fdOut, 0, 0, 0);
+    int pid = createProcess((uint64_t * ) & wc, fg, fdIn, fdOut, 0, 0, 0, "wc");
     return pid;
 }
 
-int wc(int args, char argv[][25]){
+int wc(int args, char argv[][25]) {
     int lines = 0;
     int c;
-    while((c=getChar())!= -1) {
+    while ((c = getChar()) != -1) {
         putChar(c);
-        if (c == '\n'){
+        if (c == '\n') {
             lines++;
         }
     }
     print("Total lines: ");
-    printInt(lines); println("");
+    printInt(lines);
+    println("");
     _exit(0);
     return 0;
 }
@@ -360,24 +348,23 @@ int filterWrapper(int args, char argv[][25]) { //recibe argv[0]fg,  argv[1]fdIN,
     int fg = 1;
     int fdIn = 0;
     int fdOut = 1;
-    if(args == 1) {
+    if (args == 1) {
         fg = string10ToInt(argv[1]);
     }
-    if(args == 3) {
+    if (args == 3) {
         fg = string10ToInt(argv[1]);
         fdIn = string10ToInt(argv[2]);
         fdOut = string10ToInt(argv[3]);
     }
 
-    int pid = createProcess((uint64_t *) &filter, fg, fdIn, fdOut, 0, 0, 0);
+    int pid = createProcess((uint64_t * ) & filter, fg, fdIn, fdOut, 0, 0, 0, "filter");
     return pid;
 }
 
-#define IS_VOWEL(c) (((c) == 'a') || ((c) == 'e') || ((c) == 'i') || ((c) == 'o') || ((c) == 'u') || ((c) == 'A') || ((c) == 'E') || ((c) == 'I') || ((c) == 'O') || ((c) == 'U'))
-int filter(int args, char argv[][25]){
+int filter(int args, char argv[][25]) {
     int i = 0;
     char c, buffer[50] = {0};
-    while((c=getChar()) != -1) {
+    while ((c = getChar()) != -1) {
         if (c != 0) {
             switch (c) {
                 case '\b':
@@ -393,7 +380,7 @@ int filter(int args, char argv[][25]){
                     i = 0;
                     break;
                 default:
-                    if(!IS_VOWEL(c)) buffer[i++] = c;
+                    if (!IS_VOWEL(c)) buffer[i++] = c;
                     putChar(c);
             }
         }
@@ -402,47 +389,47 @@ int filter(int args, char argv[][25]){
     return 0;
 }
 
-int phylos(int args, char argv[][25]){
+int phylos(int args, char argv[][25]) {
     int fg = 1;
     int fdIn = 0;
     int fdOut = 1;
-    if(args == 1) {
+    if (args == 1) {
         fg = string10ToInt(argv[1]);
     }
-    if(args == 3) {
+    if (args == 3) {
         fg = string10ToInt(argv[1]);
         fdIn = string10ToInt(argv[2]);
         fdOut = string10ToInt(argv[3]);
     }
-    int pid = createProcess((uint64_t *) &initPhylos, fg, fdIn, fdOut, 0, 0, 0);
+    int pid = createProcess((uint64_t * ) & initPhylos, fg, fdIn, fdOut, 0, 0, 0, "phylos");
     return pid;
 }
 
-int testMM(){
-    createProcess((uint64_t *) &testMm, 0, 0, 1, 0, 0, 0);
+int testMM() {
+    createProcess((uint64_t * ) & testMm, 0, 0, 1, 0, 0, 0, "testMM");
     println("");
     return 0;
 }
 
-int testPRIO(){
+int testPRIO() {
     testPrio();
     println("");
     return 0;
 }
 
-int testPROC(){
-    createProcess((uint64_t *)&testProcesses, 0, 0, 1, 0, 0, 0);
+int testPROC() {
+    createProcess((uint64_t * ) & testProcesses, 0, 0, 1, 0, 0, 0, "testProcesses");
     println("");
     return 0;
 }
 
-int testSYNC(){
+int testSYNC() {
     testSync();
     println("");
     return 0;
 }
 
-int testNoSYNC(){
+int testNoSYNC() {
     testNoSync();
     println("");
     return 0;

@@ -2,46 +2,37 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <queue.h>
 
-/**
- * Definición de estructuras
- */
 typedef struct Elem {
     int pid;
-    struct Elem * next;
+    struct Elem *next;
 } Elem;
 
 typedef struct Queue {
-    Elem * first;
-    Elem * last;
-    Elem * iter;
+    Elem *first;
+    Elem *last;
+    Elem *iter;
 } Queue;
 
-/**
- * Prototipo de Funciones auxiliares
- */
-static void freeQueueRec(Elem * first);
+static void freeQueueRec(Elem *first);
 
-/**
- * Funciones principales
- */
-QueueADT newQueue(){
+QueueADT newQueue() {
     QueueADT queue;
-    if((queue = mmMalloc(sizeof(Queue))) == NULL) {
-        //Handler error
+    if ((queue = mmMalloc(sizeof(Queue))) == NULL) {
+        return NULL;
     }
     return queue;
 }
 
 void freeQueue(QueueADT queue) {
-    if(queue == NULL) {
+    if (queue == NULL) {
         return;
     }
     freeQueueRec(queue->first);
     mmFree(queue);
 }
 
-void freeQueueRec(Elem * first) {
-    if(first == NULL) {
+void freeQueueRec(Elem *first) {
+    if (first == NULL) {
         return;
     }
     freeQueueRec(first->next);
@@ -49,32 +40,31 @@ void freeQueueRec(Elem * first) {
 }
 
 void enqueue(QueueADT queue, int pid) {
-    Elem* aux;
-    if( (aux = mmMalloc(sizeof(Elem))) == NULL) {
+    Elem *aux;
+    if ((aux = mmMalloc(sizeof(Elem))) == NULL) {
         return;
-        //Handler_error
     }
     aux->pid = pid;
     aux->next = NULL;
 
-    if(isEmpty(queue)) {
+    if (isEmpty(queue)) {
         queue->first = aux;
     }
 
-    if(queue->last != NULL) {
+    if (queue->last != NULL) {
         queue->last->next = aux;
     }
     queue->last = aux;
 }
 
 int dequeue(QueueADT queue) {
-    if(isEmpty(queue)) {
+    if (isEmpty(queue)) {
         return 0;
     }
     int toReturn = queue->first->pid;
 
-    Elem * aux = queue->first;
-    if(queue->first == queue->last){
+    Elem *aux = queue->first;
+    if (queue->first == queue->last) {
         queue->first = NULL;
         queue->last = NULL;
     } else {
@@ -89,22 +79,22 @@ int isEmpty(QueueADT queue) {
 }
 
 void deleteWaiting(QueueADT queue, int pid) {
-    if(isEmpty(queue)) {
+    if (isEmpty(queue)) {
         return;
     }
 
-    Elem * current = queue->first;
-    Elem * previous = NULL;
+    Elem *current = queue->first;
+    Elem *previous = NULL;
 
-    while(current != NULL) {
-        if(current->pid == pid) {
-            if(previous != NULL) {
+    while (current != NULL) {
+        if (current->pid == pid) {
+            if (previous != NULL) {
                 previous->next = current->next;
             }
-            if(current == queue->first) {
+            if (current == queue->first) {
                 queue->first = queue->first->next;
             }
-            if(current == queue->last) {
+            if (current == queue->last) {
                 queue->last = previous;
             }
             mmFree(current);
@@ -127,8 +117,4 @@ int next(QueueADT queue) {
     int pid = queue->iter->pid;
     queue->iter = queue->iter->next;
     return pid;
-}
-
-void printQueue(QueueADT queue) {
-
 }

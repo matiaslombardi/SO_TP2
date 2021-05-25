@@ -45,15 +45,25 @@ static uint64_t totalUsed;
 #define HEAPSIZE (1024 * 1024 * 128)
 
 static void initList(buddyList *list);
+
 static void pushToList(buddyList *list, buddyList *entry);
+
 static void removeFromList(buddyList *entry);
+
 static buddyList *popFromList(buddyList *list);
+
 static uint64_t *getPointerForNode(uint64_t idx, uint64_t bucket);
+
 static uint64_t getNodeForPointer(uint64_t *ptr, uint64_t bucket);
+
 static uint64_t bucketForRequest(uint64_t requested);
+
 static void flipParentIsSplit(uint64_t index);
+
 static int isParentSplit(uint64_t index);
+
 static int lowerBucketLimit(uint64_t list);
+
 static int checkMaxPointer(uint64_t *value);
 
 void mmInit(void *initAddress) {
@@ -109,7 +119,7 @@ void *mmMalloc(uint64_t requested) {
             pushToList(&buckets[bucket], (buddyList *) getPointerForNode(i + 1, bucket));
         }
         *(uint64_t *) ptr = requested;
-        totalUsed += (POW(MAX_ALLOC_LOG2-bucket));
+        totalUsed += (POW(MAX_ALLOC_LOG2 - bucket));
         return ptr + HEADER_SIZE;
     }
     return NULL;
@@ -123,7 +133,7 @@ void mmFree(void *ptr) {
     }
     ptr = (uint64_t *) ptr - HEADER_SIZE;
     bucket = bucketForRequest(*(uint64_t *) ptr + HEADER_SIZE);
-    totalUsed -= (POW(MAX_ALLOC_LOG2-bucket));
+    totalUsed -= (POW(MAX_ALLOC_LOG2 - bucket));
     i = getNodeForPointer((uint64_t *) ptr, bucket);
     while (i != 0) {
         flipParentIsSplit(i);

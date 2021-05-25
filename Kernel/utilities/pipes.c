@@ -1,9 +1,6 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <pipes.h>
-#include <memoryManagement.h>
-#include <queue.h>
-#include <scheduler.h>
 
 #define TOTAL_PIPES 10
 #define MAX_BUFFER 256
@@ -44,7 +41,7 @@ int pipeOpen(int fd[2]) {
             break;
         }
     }
-    if(i == TOTAL_PIPES) {
+    if (i == TOTAL_PIPES) {
         return -1;
     }
 
@@ -69,18 +66,18 @@ int pipeOpen(int fd[2]) {
 
 int pipeClose(int fd) {
     int index = searchPipe(fd);
-    if(index != -1){
+    if (index != -1) {
         if (pipes[index].fdIn == fd) {
             pipes[index].inClosed = 1;
         }
         if (pipes[index].fdOut == fd) {
             pipes[index].outClosed = 1;
-            if(!isEmpty(pipes[index].blockedProcesses)) {
+            if (!isEmpty(pipes[index].blockedProcesses)) {
                 wakeup(dequeue(pipes[index].blockedProcesses));
             }
         }
 
-        if(pipes[index].inClosed){
+        if (pipes[index].inClosed) {
             freeQueue(pipes[index].blockedProcesses);
             openedPipes--;
             pipes[index].isActive = 0;
@@ -90,24 +87,24 @@ int pipeClose(int fd) {
     return -1;
 }
 
-int pipeRead(int fd, int length, char * buffer) {
+int pipeRead(int fd, int length, char *buffer) {
     int index = searchPipe(fd);
-    if(index == -1 || pipes[index].fdOut == fd || pipes[index].inClosed) {
+    if (index == -1 || pipes[index].fdOut == fd || pipes[index].inClosed) {
         return 0;
     }
 
-    Pipe* aux = &pipes[index];
-    if(aux->readPos == aux->writePos){
-        if(aux->outClosed){
+    Pipe *aux = &pipes[index];
+    if (aux->readPos == aux->writePos) {
+        if (aux->outClosed) {
             return -1; //EOF
         }
         int pid = getPid();
-        enqueue(aux->blockedProcesses ,pid);
+        enqueue(aux->blockedProcesses, pid);
         sleep(pid);
     }
 
     int i;
-    for (i = 0; aux->readPos != aux->writePos &&  i < length; i++) {
+    for (i = 0; aux->readPos != aux->writePos && i < length; i++) {
         buffer[i] = aux->buffer[aux->readPos];
         aux->buffer[aux->readPos] = 0;
         aux->readPos = (aux->readPos + 1) % MAX_BUFFER;
@@ -117,22 +114,21 @@ int pipeRead(int fd, int length, char * buffer) {
     return i;
 }
 
-int pipeWrite(int fd, int length, char * buffer) {
+int pipeWrite(int fd, int length, char *buffer) {
     int index = searchPipe(fd);
-    if(index == -1 || pipes[index].fdIn == fd || pipes[index].outClosed) {
+    if (index == -1 || pipes[index].fdIn == fd || pipes[index].outClosed) {
         return 0;
     }
 
-    Pipe* aux = &pipes[index];
+    Pipe *aux = &pipes[index];
 
     int i;
-    for(i = 0; i < length; i++) {
+    for (i = 0; i < length; i++) {
         aux->buffer[aux->writePos] = buffer[i];
         aux->writePos = (aux->writePos + 1) % MAX_BUFFER;
     }
 
-    //TODO preguntar caso donde una lee, quedan cosas para leer que quiere leer otro. Los dos quedaron en la cola al hacer su read
-    if(!isEmpty(aux->blockedProcesses)) {
+    if (!isEmpty(aux->blockedProcesses)) {
         wakeup(dequeue(aux->blockedProcesses));
     }
     return i;
@@ -148,7 +144,7 @@ static int searchPipe(int fd) {
     return -1;
 }
 
-int fillPipeInfo(char * buffer) {
+int fillPipeInfo(char *buffer) {
     char aux[64] = {0};
 
 
@@ -156,20 +152,20 @@ int fillPipeInfo(char * buffer) {
     strcat(buffer, "FdOut    ");
     strcat(buffer, "Blocked Processes\n");
 
-    for(int i = 0; i < TOTAL_PIPES; i++) {
+    for (int i = 0; i < TOTAL_PIPES; i++) {
         if (pipes[i].isActive) {
             itoaTruncate(pipes[i].fdIn, aux, 64);
             strcat(buffer, aux);
-            for(int j = 0; j < 9 - numlen(pipes[i].fdIn); j++) {
+            for (int j = 0; j < 9 - numlen(pipes[i].fdIn); j++) {
                 strcat(buffer, " ");
             }
             itoaTruncate(pipes[i].fdOut, aux, 64);
             strcat(buffer, aux);
-            for(int j = 0; j < 9 - numlen(pipes[i].fdOut); j++) {
+            for (int j = 0; j < 9 - numlen(pipes[i].fdOut); j++) {
                 strcat(buffer, " ");
             }
             toBegin(pipes[i].blockedProcesses);
-            while(hasNext(pipes[i].blockedProcesses)) {
+            while (hasNext(pipes[i].blockedProcesses)) {
                 itoaTruncate(next(pipes[i].blockedProcesses), aux, 64);
                 strcat(buffer, aux);
                 strcat(buffer, ", ");

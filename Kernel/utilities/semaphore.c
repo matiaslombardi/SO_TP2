@@ -111,7 +111,6 @@ int semWait(char *semId) {
             enqueue(semaphores[found].blockedProcesses, pid);
             release(&lock);
             sleep(pid);
-            //semaphores[found].value--;
         }
         return 1;
     }
@@ -128,8 +127,8 @@ static int searchSem(char *semId) {
     return -1;
 }
 
-void removeWaitingPid(unsigned int pid){
-    for(int i = 0; i < TOTAL_SEMS; i++) {
+void removeWaitingPid(unsigned int pid) {
+    for (int i = 0; i < TOTAL_SEMS; i++) {
         if (strlen(semaphores[i].semId) > 0) {
             deleteWaiting(semaphores[i].blockedProcesses, pid);
         }
@@ -144,36 +143,30 @@ static void release(int *lock) {
     _xchg(lock, 0);
 }
 
-int fillSemInfo(char * buffer) {
+int fillSemInfo(char *buffer) {
     char aux[64] = {0};
-
 
     strcat(buffer, "Name                          ");
     strcat(buffer, "Value    ");
     strcat(buffer, "Blocked Processes\n");
 
-    for(int i = 0; i < TOTAL_SEMS; i++) {
+    for (int i = 0; i < TOTAL_SEMS; i++) {
         if (strlen(semaphores[i].semId) > 0) {
             strcat(buffer, semaphores[i].semId);
-            for(int j = 0; j < 30 - strlen(semaphores[i].semId); j++) {
+            for (int j = 0; j < 30 - strlen(semaphores[i].semId); j++) {
                 strcat(buffer, " ");
             }
             itoaTruncate(semaphores[i].value, aux, 64);
             strcat(buffer, aux);
-            for(int j = 0; j < 9 - numlen(semaphores[i].value); j++) {
+            for (int j = 0; j < 9 - numlen(semaphores[i].value); j++) {
                 strcat(buffer, " ");
             }
-//            TODO dejar el iterador y sacar lo de abajo
             toBegin(semaphores[i].blockedProcesses);
-            while(hasNext(semaphores[i].blockedProcesses)) {
+            while (hasNext(semaphores[i].blockedProcesses)) {
                 itoaTruncate(next(semaphores[i].blockedProcesses), aux, 64);
                 strcat(buffer, aux);
                 strcat(buffer, ", ");
             }
-            strcat(buffer, " | ");
-            itoaTruncate(semaphores[i].attached, aux, 64);
-            strcat(buffer, aux);
-            strcat(buffer, "\n");
         }
     }
 

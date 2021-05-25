@@ -36,155 +36,157 @@
 #define WAIT_PID_SYSCALL 28
 
 int read(unsigned int fd, char *buffer, int length) {
-    Params aux = {READ_SYSCALL, fd, length, (uint64_t) buffer, 0, 0, 0, 0};
+    Params aux = {READ_SYSCALL, fd, length, (uint64_t) buffer, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 int write(unsigned int fd, char *buffer, int row, int col, int color) {
     uint64_t length = strlen(buffer);
-    Params aux = {WRITE_SYSCALL, fd, length, (uint64_t) buffer, row, col, color, 0};
+    Params aux = {WRITE_SYSCALL, fd, length, (uint64_t) buffer, row, col, color, 0, 0};
     return _syscall(&aux);
 }
 
 void draw(int *matrix, int row, int col, int rows, int columns) {
-    Params aux = {DRAW_SYSCALL, (uint64_t) matrix, row, col, rows, columns, 0, 0};
+    Params aux = {DRAW_SYSCALL, (uint64_t) matrix, row, col, rows, columns, 0, 0, 0};
     _syscall(&aux);
 }
 
 void clearScreen() {
-    Params aux = {CLEAR_SYSCALL, 0, 0, 0, 0, 0, 0, 0};
+    Params aux = {CLEAR_SYSCALL, 0, 0, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 unsigned int getElapsedTicks() {
-    Params aux = {ELAPSED_TICKS_SYSCALL, 0, 0, 0, 0, 0, 0, 0};
+    Params aux = {ELAPSED_TICKS_SYSCALL, 0, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 void _exit(uint64_t value) {
-    Params aux = {EXIT_SYSCALL, 0, 0, 0, 0, 0, 0, 0};
+    Params aux = {EXIT_SYSCALL, 0, 0, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 void getRegisters(uint64_t *registers) {
-    Params aux = {INFO_REG_SYSCALL, (uint64_t) registers, 0, 0, 0, 0, 0, 0};
+    Params aux = {INFO_REG_SYSCALL, (uint64_t) registers, 0, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 void memoryDump(char *dir, char *dump) {
-    Params aux = {MEM_DUMP, (uint64_t) dir, (uint64_t) dump, 0, 0, 0, 0, 0};
+    Params aux = {MEM_DUMP, (uint64_t) dir, (uint64_t) dump, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 void getTime(date myDate) {
-    Params aux = {TIME_SYSCALL, (uint64_t) myDate, 0, 0, 0, 0, 0, 0};
+    Params aux = {TIME_SYSCALL, (uint64_t) myDate, 0, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 void setAlarm(void (*func)(void), int flag) {
-    Params aux = {SET_ALARM, (uint64_t) func, flag, 0, 0, 0, 0, 0};
+    Params aux = {SET_ALARM, (uint64_t) func, flag, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 int getHeight() {
-    Params aux = {SCREEN_HEIGHT, 0, 0, 0, 0, 0, 0, 0};
+    Params aux = {SCREEN_HEIGHT, 0, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 int getWidth() {
-    Params aux = {SCREEN_WIDTH, 0, 0, 0, 0, 0, 0, 0};
+    Params aux = {SCREEN_WIDTH, 0, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 void getProcessesList() {
-    Params aux = {PS_SYSCALL, 0, 0, 0, 0, 0, 0, 0};
+    Params aux = {PS_SYSCALL, 0, 0, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
-unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t fdIn, uint64_t fdOut, uint64_t first, uint64_t second, uint64_t third) {
-    Params aux = {CREATE_PROCESS_SYSCALL, (uint64_t) entryPoint, foreground, fdIn, fdOut, first, second, third};
+unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t fdIn, uint64_t fdOut,
+                           uint64_t first, uint64_t second, uint64_t third, char * name) {
+    Params aux = {CREATE_PROCESS_SYSCALL, (uint64_t) entryPoint, foreground, fdIn,
+                  fdOut, first, second, third, (uint64_t) name};
 
     return _syscall(&aux);
 }
 
 void killProcess(unsigned int pid) {
-    Params aux = {CHANGE_STATE_SYSCALL, pid, 0, 0, 0, 0, 0, 0};
+    Params aux = {CHANGE_STATE_SYSCALL, pid, 0, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 void changeProcessPriority(unsigned int pid, int priority) {
-    Params aux = {CHANGE_PRIORITY_SYSCALL, pid, priority, 0, 0, 0, 0, 0};
+    Params aux = {CHANGE_PRIORITY_SYSCALL, pid, priority, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 void changeProcessState(unsigned int pid) {
-    Params aux = {CHANGE_STATE_SYSCALL, pid, 1, 0, 0, 0, 0, 0};
+    Params aux = {CHANGE_STATE_SYSCALL, pid, 1, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 unsigned int getPid() {
-    Params aux = {GET_PID_SYSCALL, 0, 0, 0, 0, 0, 0, 0};
+    Params aux = {GET_PID_SYSCALL, 0, 0, 0, 0, 0, 0, 0, 0};
 
     return _syscall(&aux);
 }
 
 void *getMem(uint64_t size) {
-    Params aux = {GET_MEM_SYSCALL, size, 0, 0, 0, 0, 0, 0};
+    Params aux = {GET_MEM_SYSCALL, size, 0, 0, 0, 0, 0, 0, 0};
     return (void *) _syscall(&aux);
 }
 
 void freeMem(void *ptr) {
-    Params aux = {FREE_SYSCALL, (uint64_t) ptr, 0, 0, 0, 0, 0, 0};
+    Params aux = {FREE_SYSCALL, (uint64_t) ptr, 0, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 void getMemInfo(char *info) {
-    Params aux = {GET_MEM_INFO_SYSCALL, (uint64_t) info, 0, 0, 0, 0, 0, 0};
+    Params aux = {GET_MEM_INFO_SYSCALL, (uint64_t) info, 0, 0, 0, 0, 0, 0, 0};
     _syscall(&aux);
 }
 
 int semOpen(char *semId, uint64_t initialValue) {
-    Params aux = {SEM_OPEN_SYSCALL, (uint64_t) semId, initialValue, 0, 0, 0, 0, 0};
+    Params aux = {SEM_OPEN_SYSCALL, (uint64_t) semId, initialValue, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 int semClose(char *semId) {
-    Params aux = {SEM_CLOSE_SYSCALL, (uint64_t) semId, 0, 0, 0, 0, 0, 0};
+    Params aux = {SEM_CLOSE_SYSCALL, (uint64_t) semId, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 int semPost(char *semId) {
-    Params aux = {SEM_POST_SYSCALL, (uint64_t) semId, 0, 0, 0, 0, 0, 0};
+    Params aux = {SEM_POST_SYSCALL, (uint64_t) semId, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 int semWait(char *semId) {
-    Params aux = {SEM_WAIT_SYSCALL, (uint64_t) semId, 0, 0, 0, 0, 0, 0};
+    Params aux = {SEM_WAIT_SYSCALL, (uint64_t) semId, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 int semInfo(char *buffer) {
-    Params aux = {GET_SEM_INFO_SYSCALL, (uint64_t) buffer, 0, 0, 0, 0, 0, 0};
+    Params aux = {GET_SEM_INFO_SYSCALL, (uint64_t) buffer, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 
 int pipeOpen(int fd[2]) {
-    Params aux = {PIPE_OPEN_SYSCALL, (uint64_t) fd, 0, 0, 0, 0, 0, 0};
+    Params aux = {PIPE_OPEN_SYSCALL, (uint64_t) fd, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 int pipeClose(int fd) {
-    Params aux = {PIPE_CLOSE_SYSCALL, (uint64_t) fd, 0, 0, 0, 0, 0, 0};
+    Params aux = {PIPE_CLOSE_SYSCALL, (uint64_t) fd, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 int pipeInfo(char *buffer) {
-    Params aux = {GET_PIPE_INFO_SYSCALL, (uint64_t) buffer, 0, 0, 0, 0, 0, 0};
+    Params aux = {GET_PIPE_INFO_SYSCALL, (uint64_t) buffer, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }
 
 int waitPid(int pid){
-    Params aux = {WAIT_PID_SYSCALL, (uint64_t) pid, 0, 0, 0, 0, 0, 0};
+    Params aux = {WAIT_PID_SYSCALL, (uint64_t) pid, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }

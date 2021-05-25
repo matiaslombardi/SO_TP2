@@ -42,7 +42,7 @@ void testMm() {
         while (rq < MAX_BLOCKS && total < MAX_MEMORY) {
 //        print(" disponible ");
             mm_rqs[rq].size = GetUniform(MAX_MEMORY - total - 1) + 1;
-            mm_rqs[rq].address = mmMalloc(mm_rqs[rq].size); // TODO: Port this call as required
+            mm_rqs[rq].address = mmMalloc(mm_rqs[rq].size);
             if (mm_rqs[rq].address == NULL) {
                 print("hasta ahora pedi: ");
                 printInt(total);

@@ -147,7 +147,7 @@ void keyboard_management(uint64_t *rsp) {
                 takeSnapshot(rsp);
                 return;
             }
-            if (pressCodes[scan_code][secondChar] == 'd') { //TODO implementar función que mate al fg
+            if (pressCodes[scan_code][secondChar] == 'd') {
                 buffer[curr++] = -1;
                 curr %= BUFFER_SIZE;
                 semPost(KEYBOARD_SEM);
@@ -159,8 +159,6 @@ void keyboard_management(uint64_t *rsp) {
         semPost(KEYBOARD_SEM);
     }
 }
-
-//TODO preguntar que hacer  si pide mucho input seguido.
 
 int readIndex = 0;
 

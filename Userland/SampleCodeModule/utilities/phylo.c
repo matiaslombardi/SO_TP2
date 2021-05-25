@@ -23,8 +23,6 @@ static int phylosPid[MAX_PHYLOS] = {0};
 static uint64_t state[MAX_PHYLOS] = {0};
 static char sems[MAX_PHYLOS][10] = {{0}};
 
-//int phyloAdded = 0;
-
 void phylo(int id);
 
 void printPhylos();
@@ -73,8 +71,7 @@ void initPhylos() {
         }
     }
 
-    //TODO manejar memoria
-    for(int i = 0; i < total; i++) {
+    for (int i = 0; i < total; i++) {
         semClose(sems[i]);
         killProcess(phylosPid[i]);
     }
@@ -85,7 +82,7 @@ void initPhylos() {
     total = MIN_PHYLOS;
     phyloIdCount = 0;
 
-    for(int i = 0; i < MAX_PHYLOS; i++) {
+    for (int i = 0; i < MAX_PHYLOS; i++) {
         phylos[i] = 0;
         phylosPid[i] = 0;
         state[i] = 0;
@@ -107,7 +104,7 @@ static void createPhylo() {
     strcpy(sems[phyloIdCount], semName);
 
     phylos[phyloIdCount] = phyloIdCount;
-    phylosPid[phyloIdCount] = createProcess((uint64_t * ) & phylo, 0, 0, 1, phyloIdCount, 0, 0);
+    phylosPid[phyloIdCount] = createProcess((uint64_t * ) & phylo, 0, 0, 1, phyloIdCount, 0, 0, "phylo");
     phyloIdCount++;
 }
 
@@ -146,11 +143,6 @@ static void removePhylo() {
 }
 
 void phylo(int id) {
-//    semOpen(CREATING_SEM, 1);
-//    semOpen(PRINTER_SEM, 1);
-//
-//    semOpen(STATE_CHANGING_SEM, total);
-
     semWait(CREATING_SEM);
 
     char *first;
@@ -190,20 +182,3 @@ void phylo(int id) {
         semPost(STATE_CHANGING_SEM);
     }
 }
-
-//void printPhylos() {
-//    semOpen(CREATING_SEM, 1);
-//    semOpen(PRINTER_SEM, 1);
-//    semWait(CREATING_SEM);
-//
-//    while(1) {
-//        semWait(PRINTER_SEM);
-//        for(int i = 0 ; i < total; i++){
-//            if(state[i] == 1) print(" E ");
-//            else print(" . ");
-//        }
-//        println("");
-//        semPost(PRINTER_SEM);
-////        for (uint64_t i = 0; i < 300000; i++);
-//    }
-//}

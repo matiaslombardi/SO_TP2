@@ -9,7 +9,7 @@
 
 void itoa(int value, char *buffer, int length);
 
-void itoaTruncate(int value, char * buffer, int length);
+void itoaTruncate(int value, char *buffer, int length);
 
 void dateToString(date myDate, char *buffer, char separator, int length);
 
@@ -31,8 +31,8 @@ uint64_t string10ToInt(char *num);
 
 void toMayus(char *string);
 
-void strcat(char * dest, char * src);
+void strcat(char *dest, char *src);
 
-void removeSpaces(char * str);
+void removeSpaces(char *str);
 
 #endif

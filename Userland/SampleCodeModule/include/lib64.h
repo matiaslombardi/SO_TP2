@@ -13,6 +13,7 @@ typedef struct Params{
     uint64_t fifth;
     uint64_t sixth;
     uint64_t seventh;
+    uint64_t eighth;
 } Params;
 
 uint64_t _syscall(Params * p);

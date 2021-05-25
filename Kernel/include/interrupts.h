@@ -1,10 +1,3 @@
-/*
-*   interrupts.h
-*
-*  Created on: Apr 18, 2010
-*      Author: anizzomc
-*/
-
 #ifndef INTERRUPS_H_
 #define INTERRUPS_H_
 
@@ -36,9 +29,9 @@ void _hlt(void);
 
 void _forceInt(void);
 
-int _xchg(int * lock, int value);
+int _xchg(int *lock, int value);
 
-int _xadd(int * lock, int value);
+int _xadd(int *lock, int value);
 
 void picMasterMask(uint8_t mask);
 

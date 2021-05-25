@@ -76,20 +76,10 @@ void printRegisters(uint64_t *rsp) {
 
 void printInt(int64_t num) {
     char buff[64];
-    if(num < 0) {
+    if (num < 0) {
         num *= -1;
         print("-");
     }
     itoaTruncate(num, buff, 64);
-//    uint64_t len = numlen(num);
     print(buff);
 }
-
-/*int strlen(char *string) {
-    int length = 0;
-    while (*string != 0) {
-        length++;
-        string++;
-    }
-    return length;
-}*/

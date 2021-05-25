@@ -6,7 +6,6 @@
 
 void memDump(char *dir, char *dump);
 
-void printMem(int args, char * dir);
-
+void printMem(int args, char *dir);
 
 #endif //SO_TP2_MEMDUMP_H

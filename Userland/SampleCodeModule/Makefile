@@ -5,11 +5,13 @@ SOURCES=$(wildcard [^_]*.c)
 LIBRARIES=$(wildcard libraries/*.c)
 UTILITIES=$(wildcard utilities/*.c)
 CHESS=$(wildcard chess/*.c)
+TESTS=$(wildcard tests/*.c)
 SOURCES_ASM=$(wildcard asm/*.asm) 
 OBJECTS=$(SOURCES:.c=.o)
 LIBRARIES_OBJECTS=$(LIBRARIES:.c=.o)
 UTILITIES_OBJECTS=$(UTILITIES:.c=.o)
 CHESS_OBJECTS=$(CHESS:.c=.o)
+TESTS_OBJECTS=$(TESTS:.c=.o)
 OBJECTS_ASM=$(SOURCES_ASM:.asm=.o)
 LOADERSRC=_loader.c
 
@@ -18,8 +20,8 @@ STATICLIBS=
 
 all: $(MODULE)
 
-$(MODULE): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM) $(LIBRARIES_OBJECTS) $(UTILITIES_OBJECTS) $(CHESS_OBJECTS)
-	$(LD) $(LDFLAGS) -T sampleCodeModule.ld -o ../$(MODULE) $(LOADEROBJECT) $(OBJECTS) $(OBJECTS_ASM) $(STATICLIBS) $(LIBRARIES_OBJECTS) $(UTILITIES_OBJECTS) $(CHESS_OBJECTS)
+$(MODULE): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM) $(LIBRARIES_OBJECTS) $(UTILITIES_OBJECTS) $(CHESS_OBJECTS) $(TESTS_OBJECTS)
+	$(LD) $(LDFLAGS) -T sampleCodeModule.ld -o ../$(MODULE) $(LOADEROBJECT) $(OBJECTS) $(OBJECTS_ASM) $(STATICLIBS) $(LIBRARIES_OBJECTS) $(UTILITIES_OBJECTS) $(CHESS_OBJECTS) $(TESTS_OBJECTS)
 	
 %.o: %.c
 	$(GCC) $(GCCFLAGS) -I./include -c $< -o $@
@@ -31,6 +33,6 @@ $(LOADEROBJECT):
 	$(GCC) $(GCCFLAGS) $(LOADERSRC) -c -o $(LOADEROBJECT)
 
 clean:
-	rm -rf asm/*.o *.o *.bin libraries/*.o utilities/*.o chess/*.o
+	rm -rf asm/*.o *.o *.bin libraries/*.o utilities/*.o chess/*.o tests/*.o
 
 .PHONY: all clean

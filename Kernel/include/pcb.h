@@ -10,14 +10,15 @@
 typedef struct PCB {
     unsigned int pid;
     unsigned int state;
-    uint64_t * rsp;
-    uint64_t * rbp;
+    uint64_t *rsp;
+    uint64_t *rbp;
     unsigned int priority;
     unsigned int tickets;
     unsigned int foreground;
     unsigned int fdIn;
     unsigned int fdOut;
     unsigned int waitingPid;
-}PCB;
+    char name[20];
+} PCB;
 
 #endif

@@ -49,54 +49,20 @@ void *getStackBase() {
 }
 
 void *initializeKernelBinary() {
-
-    char buffer[10];
-
-    ncPrint("[x64BareBones]");
-    ncNewline();
-
-    ncPrint("CPU Vendor:");
-    ncPrint(cpuVendor(buffer));
-    ncNewline();
-
-    ncPrint("[Loading modules]");
-    ncNewline();
     void *moduleAddresses[] = {
             sampleCodeModuleAddress,
             sampleDataModuleAddress
     };
 
     loadModules(&endOfKernelBinary, moduleAddresses);
-    ncPrint("[Done]");
-    ncNewline();
-    ncNewline();
-
-    ncPrint("[Initializing kernel's binary]");
-    ncNewline();
 
     clearBSS(&bss, &endOfKernel - &bss);
 
-    ncPrint("  text: 0x");
-    ncPrintHex((uint64_t) & text);
-    ncNewline();
-    ncPrint("  rodata: 0x");
-    ncPrintHex((uint64_t) & rodata);
-    ncNewline();
-    ncPrint("  data: 0x");
-    ncPrintHex((uint64_t) & data);
-    ncNewline();
-    ncPrint("  bss: 0x");
-    ncPrintHex((uint64_t) & bss);
-    ncNewline();
-
-    ncPrint("[Done]");
-    ncNewline();
-    ncNewline();
     return getStackBase();
 }
 
 void iddle() {
-    while(1);
+    while (1);
 }
 
 int main() {
@@ -107,23 +73,17 @@ int main() {
 
     saveInitRegs((uint64_t) sampleCodeModuleAddress);
 
-
     initScheduler();
 
     initKeyboardDriver();
 
-
-    createProcess(sampleCodeModuleAddress, 1, 0, 1, 6, 7, 0xFF00FF);
-    createProcess((uint64_t *)&iddle, 0, 0, 1, 6, 7, 0xFF00FF);
+    createProcess(sampleCodeModuleAddress, 1, 0, 1, 6, 7, 8, "shell");
+    createProcess((uint64_t * ) & iddle, 0, 0, 1, 6, 7, 8, "idle");
 
     _sti();
     _hlt();
 
-
     println("PROBLEMS");
-
-    //ncPrint("Calling the sample code module returned: ");
-    //ncPrintHex(((EntryPoint) sampleCodeModuleAddress)());
 
     return 0;
 }

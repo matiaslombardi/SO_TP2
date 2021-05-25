@@ -1,7 +1,3 @@
-//
-// Created by matias on 25/4/21.
-//
-
 #ifndef SO_TP2_STRING_H
 #define SO_TP2_STRING_H
 
@@ -13,9 +9,7 @@
 
 void itoa(int value, char *buffer, int length);
 
-void itoaTruncate(int value, char * buffer, int length);
-
-//void dateToString(date myDate, char *buffer, char separator, int length); PAra poner esta funcion definir date
+void itoaTruncate(int value, char *buffer, int length);
 
 char *strcpy(char *destination, char *source);
 
@@ -27,7 +21,7 @@ int strcmp(char *stringA, char *stringB);
 
 int strtoks(char *string, char delimiter, char buffer[][25]);
 
-//uint64_t turnToBaseN(uint64_t value, int base, char *buffer, int bufferLength); //Esta en naiveConsole
+uint64_t turnToBaseN(uint64_t value, int base, char *buffer, int bufferLength);
 
 uint64_t stringToInt(char *num);
 
@@ -35,7 +29,7 @@ uint64_t string10ToInt(char *num);
 
 void toMayus(char *string);
 
-void strcat(char * dest, char * src);
+void strcat(char *dest, char *src);
 
 
 #endif //SO_TP2_STRING_H

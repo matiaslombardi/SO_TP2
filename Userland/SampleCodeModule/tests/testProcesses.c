@@ -14,7 +14,7 @@ void processesEndless() {
 }
 
 uint64_t processesCreateProcess(uint64_t *entryPoint) {
-    return createProcess(entryPoint, 0, 0, 1, 0, 0, 0);
+    return createProcess(entryPoint, 0, 0, 1, 0, 0, 0, "processTester");
 }
 
 uint64_t processesKill(uint64_t pid) {

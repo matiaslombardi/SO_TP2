@@ -7,14 +7,12 @@
 
 void memDump(char *dir, char *dump) {
     for (int i = 0;
-         i < MEM_BYTES; i++ ) {
+         i < MEM_BYTES; i++) {
         dump[i] = dir[i];
     }
 }
 
-void printMem(int args, char * dir) {
-
-    //char *dir = (char *) stringToInt(argv[1]);
+void printMem(int args, char *dir) {
     char dump[MEM_BYTES];
     memDump(dir, dump);
     char buffer[BUFFER64_BITS] = {0};

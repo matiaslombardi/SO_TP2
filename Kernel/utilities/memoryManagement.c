@@ -19,13 +19,8 @@ union header {
 typedef union header Header;
 
 static Header *firstFree = NULL;
-//static Header heap[HEAPSIZE / sizeof(Header)];
 static Header *heap;
 static uint64_t totalHeap;
-
-//void printHeapDir() {
-//    printInt(heap);
-//}
 
 void mmInit(void *initAddress) {
     heap = (Header *) initAddress;
@@ -41,7 +36,8 @@ void *mmMalloc(uint64_t numBytesToAlloc) {
     }
     Header *current = firstFree;
     Header *previous = current;
-    uint64_t unitsToAlloc = (numBytesToAlloc + sizeof(Header) - 1) / sizeof(Header) + 1; //equivalente a N unidades tamaño del Header
+    uint64_t unitsToAlloc =
+            (numBytesToAlloc + sizeof(Header) - 1) / sizeof(Header) + 1; //equivalente a N unidades tamaño del Header
 
     for (current = firstFree; current != NULL; current = current->memNode.next) {
         if (current->memNode.size >= unitsToAlloc) { //si es lo suficientemente grande
@@ -102,7 +98,7 @@ void fillMemInfo(char *buffer) {
     int freeBlocks = 0;
     Header *current = firstFree;
 
-    while(current != NULL) {
+    while (current != NULL) {
         freeMemory += current->memNode.size;
         current = current->memNode.next;
         freeBlocks++;

@@ -14,7 +14,7 @@ uint64_t prioGetpid() {
 }
 
 uint64_t prioCreateProcess(uint64_t *entryPoint) {
-    return createProcess(entryPoint, 0, 0, 1, 0, 0, 0);
+    return createProcess(entryPoint, 0, 0, 1, 0, 0, 0, "prioProcess");
 }
 
 uint64_t prioNice(uint64_t pid, uint64_t newPrio) {

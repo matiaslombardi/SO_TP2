@@ -2,9 +2,6 @@
 #define TYPES_H
 
 #define REGISTERS_AMOUNT 19
-/**
- * Definición de tipos que comparten userland y kernel.
-**/
 
 typedef struct dateInfo {
     int year;

@@ -9,7 +9,7 @@
 
 
 uint64_t syncCreateProcess(uint64_t *entryPoint, uint64_t sem, uint64_t inc, uint64_t iter) {
-    return createProcess(entryPoint, 0, 0, 1, sem, inc, iter);
+    return createProcess(entryPoint, 0, 0, 1, sem, inc, iter, "iterator");
 }
 
 uint64_t syncSemOpen(char *sem_id, uint64_t initialValue) {

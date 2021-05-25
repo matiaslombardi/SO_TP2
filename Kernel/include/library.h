@@ -20,6 +20,4 @@ void printRegisters(uint64_t *rsp);
 
 void printInt(int64_t num);
 
-//int strlen(char *string);
-
 #endif

@@ -31,7 +31,7 @@ void load_idt() {
     setup_IDT_entry(0x06, (uint64_t) & _exception6Handler);
     picMasterMask(0xFC);
     picSlaveMask(0xFF);
-    //_sti();
+    //_sti(); esta comentado ya que todavia no hay procesos, para que el timer tick no interrumpa, se habilita en kernel.c
 }
 
 static void setup_IDT_entry(int index, uint64_t offset) {

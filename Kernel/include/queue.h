@@ -6,7 +6,7 @@
 #include <library.h>
 #include <memDump.h>
 
-typedef struct Queue * QueueADT;
+typedef struct Queue *QueueADT;
 
 QueueADT newQueue();
 

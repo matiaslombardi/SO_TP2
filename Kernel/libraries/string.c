@@ -10,30 +10,13 @@ void itoa(int value, char *buffer, int length) {
     buffer[length - 1] = 0;
 }
 
-void itoaTruncate(int value, char * buffer, int length) {
+void itoaTruncate(int value, char *buffer, int length) {
     uint64_t len = numlen(value);
-    if(len > length - 1) {
+    if (len > length - 1) {
         return;
     }
     itoa(value, buffer, len + 1);
 }
-
-/*
-void dateToString(date myDate, char *buffer, char separator, int length) {
-
-    itoa(myDate->day, buffer, 3);
-    buffer[2] = separator;
-    itoa(myDate->month, buffer + 3, 3);
-    buffer[5] = separator;
-    itoa(myDate->year, buffer + 6, 3);
-    buffer[8] = ' ';
-    itoa(myDate->hour, buffer + 9, 3);
-    buffer[11] = ':';
-    itoa(myDate->minutes, buffer + 12, 3);
-    buffer[14] = ':';
-    itoa(myDate->seconds, buffer + 15, 3);
-    buffer[18] = 0;
-}*/
 
 char *strcpy(char *destination, char *source) {
     char *start = destination;
@@ -58,10 +41,10 @@ int strlen(char *string) {
 
 uint64_t numlen(uint64_t num) {
     uint64_t len = 0;
-    if(num == 0) {
+    if (num == 0) {
         return 1;
     } else {
-        while(num != 0) {
+        while (num != 0) {
             len++;
             num /= 10;
         }
@@ -93,7 +76,7 @@ int strtoks(char *string, char delimiter, char buffer[][25]) {
     return j; //Cantidad de tokens
 }
 
-/*uint64_t turnToBaseN(uint64_t value, int base, char *buffer, int bufferLength) {
+uint64_t turnToBaseN(uint64_t value, int base, char *buffer, int bufferLength) {
     if (base < 2 || base > 26) return -1;
 
     uint64_t digits = 0;
@@ -116,7 +99,7 @@ int strtoks(char *string, char delimiter, char buffer[][25]) {
     }
     buffer[bufferLength - 1] = 0;
     return digits;
-}*/
+}
 
 //Convierte un string en hexa a un int.
 uint64_t stringToInt(char *num) {
@@ -150,14 +133,14 @@ void toMayus(char *num) {
     }
 }
 
-void strcat(char * dest, char * src) {
+void strcat(char *dest, char *src) {
     int i = 0;
     int j = 0;
-    while(dest[i]) {
+    while (dest[i]) {
         i++;
     }
 
-    while(src[j]){
+    while (src[j]) {
         dest[i++] = src[j++];
     }
     dest[i] = 0;

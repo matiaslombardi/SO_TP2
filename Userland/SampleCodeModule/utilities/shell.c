@@ -22,46 +22,6 @@ int tokenizeArguments(char *toToken, char tokens[10][25]);
 char *initGreet = "user@TP2_SO:~$ ";
 
 void initShell() {
-//    char buffer[100] = {0};
-//    getMemInfo(buffer);
-//    println(buffer);
-//
-//    loop();
-//
-//    getMemInfo(buffer);
-//    println(buffer);
-//
-//    char * s = mmMalloc(1);
-//    getMemInfo(buffer);
-//    println(buffer);
-//
-//    mmFree(s);
-
-//
-//    char * g = mmMalloc(256);
-//    *buffer = 0;
-//    getMemInfo(buffer);
-//    println(buffer);
-
-//    testMm();
-//    testPrio();
-//    testProcesses();
-//    testNoSync();
-//    testSync();
-
-//    int pipeFd[2];
-//    pipeOpen(pipeFd);
-//    char buffer[5];
-//    read(pipeFd[0], buffer, 1);
-
-//    initPhylos();
-//    phylo(0, 0);
-    //int pipeFd[2];
-    //pipeOpen(pipeFd);
-    //pipeOpen(pipeFd);
-    //pipeOpen(pipeFd);
-    //pipeOpen(pipeFd);
-
     char c;
     int numPipes = 0;
     while (1) {
@@ -73,7 +33,7 @@ void initShell() {
                 switch (c) {
                     case '\b':
                         if (contentLength > 0) {
-                            if(content[contentLength - 1] == '|'){
+                            if (content[contentLength - 1] == '|') {
                                 numPipes--;
                             }
                             content[--contentLength] = 0;
@@ -81,7 +41,7 @@ void initShell() {
                         }
                         break;
                     default:
-                        if(c == '|'){
+                        if (c == '|') {
                             numPipes++;
                         }
                         content[contentLength++] = c;
@@ -91,11 +51,11 @@ void initShell() {
         }
         content[contentLength] = 0;
         if (contentLength > 0) {
-            if(numPipes > 0) {
+            if (numPipes > 0) {
                 println("");
                 char tokens[2][25] = {{0}};
                 strtoks(content, '|', tokens);
-                for(int i = 0; i < 2; i++) {
+                for (int i = 0; i < 2; i++) {
                     removeSpaces(tokens[i]);
                 }
                 int fd[2];
@@ -126,10 +86,10 @@ void initShell() {
                     pid2 = commands[progAvail].f(3, params);
                 }
 
-                if(pid1 != 0) {
+                if (pid1 != 0) {
                     waitPid(pid1);
                 }
-                if(pid2 != 0) {
+                if (pid2 != 0) {
                     waitPid(pid2);
                 }
 
@@ -139,7 +99,7 @@ void initShell() {
                 int args = tokenizeArguments(content, tokens) - 1;// 1 es el nombre del programa
 
                 int bg = 0;
-                if(tokens[0][0] == '&'){
+                if (tokens[0][0] == '&') {
                     bg = 1;
                     args = 1;
                     strcpy(tokens[0], tokens[0] + 1);
@@ -147,11 +107,11 @@ void initShell() {
 
                 int progAvail = hasProgram(tokens[0]);
                 if (progAvail != -1) {
-                    if(bg == 1 && commands[progAvail].canBeBg ){
+                    if (bg == 1 && commands[progAvail].canBeBg) {
                         strcpy(tokens[1], "0");
                     }
                     int ans = commands[progAvail].f(args, tokens);
-                    if(ans > 0){
+                    if (ans > 0) {
                         waitPid(ans);
                     }
                 } else {
