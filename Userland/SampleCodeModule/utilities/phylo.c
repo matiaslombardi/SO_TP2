@@ -58,7 +58,7 @@ void initPhylos() {
         if (c != 0) {
             switch (c) {
                 case 'a':
-                    if (total <= MAX_PHYLOS) {
+                    if (total < MAX_PHYLOS) {
                         addPhylo();
                     } else {
                         printcln("No more seats.", ALERT_COLOR);

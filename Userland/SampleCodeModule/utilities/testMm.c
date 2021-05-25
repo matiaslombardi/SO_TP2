@@ -8,7 +8,7 @@
 #include <tests.h>
 
 #define MAX_BLOCKS 128
-#define MAX_MEMORY (1024 * 1024 * 16) //Should be around 80% of memory managed by the MM
+#define MAX_MEMORY (1024 * 1024 * 128 * 0.7) //FREE LIST MM
 #define NULL (void *) 0
 
 typedef struct MM_rq {
@@ -60,9 +60,9 @@ void testMm() {
 //            itoaTruncate(mm_rqs[rq].size, b, 10);
 //            println(b);
         }
-        print("asig: ");
-        printInt(total);
-        println("");
+//        print("asig: ");
+//        printInt(total);
+//        println("");
 //        mem(0, NULL);
 
         // Set
@@ -90,9 +90,9 @@ void testMm() {
             }
         }
 
-        print("lib: ");
-        printInt(t);
-        println("");
+//        print("lib: ");
+//        printInt(t);
+//        println("");
 //        mem(0, NULL);
     }
 }
