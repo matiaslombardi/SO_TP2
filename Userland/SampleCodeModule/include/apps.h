@@ -65,7 +65,7 @@ int filterWrapper(int args, char argv[][25]);
 
 int filter(int args, char argv[][25]);
 
-int phylos();
+int phylos(int args, char argv[][25]);
 
 int testMM();
 

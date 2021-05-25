@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <shell.h>
 #include <string.h>
 #include <standardIO.h>
@@ -100,7 +102,7 @@ void initShell() {
                 pipeOpen(fd);
                 int progAvail = hasProgram(tokens[0]);
 
-                int pid1;
+                int pid1 = 0;
                 if (progAvail != -1) {
                     char params[4][25] = {{0}};
                     strcpy(params[1], "1");
@@ -113,7 +115,7 @@ void initShell() {
 
                 progAvail = hasProgram(tokens[1]);
 
-                int pid2;
+                int pid2 = 0;
                 if (progAvail != -1) {
                     char params[4][25] = {{0}};
                     strcpy(params[1], "0");
@@ -124,8 +126,12 @@ void initShell() {
                     pid2 = commands[progAvail].f(3, params);
                 }
 
-                waitPid(pid1);
-                waitPid(pid2);
+                if(pid1 != 0) {
+                    waitPid(pid1);
+                }
+                if(pid2 != 0) {
+                    waitPid(pid2);
+                }
 
             } else {
                 println("");

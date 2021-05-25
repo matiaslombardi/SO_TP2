@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #ifndef FREE_LIST_MM
 
 /*
@@ -12,7 +14,7 @@
 #define MAX_ALLOC_LOG2 25 // 2^23/2^18 = 32
 #define MIN_ALLOC_LOG2 4 // 2^5 = 32
 #define BUCKET_COUNT (MAX_ALLOC_LOG2-MIN_ALLOC_LOG2 + 1)
-#define POW(x) (1<<x)
+#define POW(x) (1<<(x))
 #define TRUE 1
 #define FALSE 0
 #define HEADER_SIZE 8
@@ -116,7 +118,7 @@ void *mmMalloc(uint64_t requested) {
 void mmFree(void *ptr) {
     uint64_t bucket;
     uint64_t i;
-    if (ptr == NULL || checkMaxPointer(ptr) || (uint64_t *) ptr < base) {
+    if (ptr == NULL || checkMaxPointer(ptr) || (uint64_t *) ptr < base/* || (uint64_t) ptr % HEADER_SIZE*/) {
         return;
     }
     ptr = (uint64_t *) ptr - HEADER_SIZE;
@@ -228,8 +230,8 @@ static buddyList *popFromList(buddyList *list) {
 void fillMemInfo(char *buffer) {
     uint64_t usedMemory = totalUsed;
 
-    uint64_t total = totalHeap;
-    uint64_t freeMemory = totalHeap - usedMemory;
+    uint64_t total = MAX_ALLOC;
+    uint64_t freeMemory = total - usedMemory;
 
     char aux[64] = {0};
 

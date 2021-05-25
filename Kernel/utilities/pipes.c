@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <pipes.h>
 #include <memoryManagement.h>
 #include <queue.h>
@@ -42,6 +44,10 @@ int pipeOpen(int fd[2]) {
             break;
         }
     }
+    if(i == TOTAL_PIPES) {
+        return -1;
+    }
+
     pipes[i].fdIn = nextFd++;
     pipes[i].fdOut = nextFd++;
 

@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <syscalls.h>
 #include <types.h>
 #include <lib64.h>
@@ -32,10 +34,7 @@
 #define PIPE_CLOSE_SYSCALL 26
 #define GET_PIPE_INFO_SYSCALL 27
 #define WAIT_PID_SYSCALL 28
-//enum syscall {READ_SYSCALL, WRITE_SYSCALL, DRAW_SYSCALL, CLEAR_SYSCALL, ELAPSED_TICKS_SYSCALL, EXIT_SYSCALL, INFO_REG_SYSCALL, MEM_DUMP,
-// TIME_SYSCALL, SET_ALARM, SCREEN_HEIGHT, SCREEN_WIDTH, PS_SYSCALL, CREATE_PROCESS_SYSCALL, CHANGE_STATE_SYSCALL, CHANGE_PRIORITY_SYSCALL,
-// GET_PID_SYSCALL, GET_MEM_SYSCALL, FREE_SYSCALL, GET_MEM_INFO_SYSCALL, SEM_OPEN_SYSCALL, SEM_CLOSE_SYSCALL, SEM_POST_SYSCALL, SEM_WAIT_SYSCALL,
-// GET_SEM_INFO_SYSCALL, PIPE_OPEN_SYSCALL, PIPE_CLOSE_SYSCALL, GET_PIPE_INFO_SYSCALL, WAIT_PID_SYSCALL};
+
 int read(unsigned int fd, char *buffer, int length) {
     Params aux = {READ_SYSCALL, fd, length, (uint64_t) buffer, 0, 0, 0, 0};
     return _syscall(&aux);

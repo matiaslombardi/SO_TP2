@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <phylo.h>
 #include <syscalls.h>
 #include <string.h>
@@ -7,8 +9,11 @@
 #define MIN_PHYLOS 2
 #define CREATING_SEM "createPhylo"
 #define FORK_SEM "forkSem"
-#define PRINTER_SEM "printerSem"
 #define STATE_CHANGING_SEM "stateSem"
+
+#define ALERT_COLOR 0xfc3d03
+#define SUCCESS_COLOR 0x19a600
+#define PHYLO_COLOR 0xf2f2f2
 
 static int total = MIN_PHYLOS;
 static int phyloIdCount = 0;
@@ -53,11 +58,15 @@ void initPhylos() {
                 case 'a':
                     if (total <= MAX_PHYLOS) {
                         addPhylo();
+                    } else {
+                        printcln("No more seats.", ALERT_COLOR);
                     }
                     break;
                 case 'r':
                     if (total > MIN_PHYLOS) {
                         removePhylo();
+                    } else {
+                        printcln("Minimun seats.", ALERT_COLOR);
                     }
                     break;
             }
@@ -65,6 +74,24 @@ void initPhylos() {
     }
 
     //TODO manejar memoria
+    for(int i = 0; i < total; i++) {
+        semClose(sems[i]);
+        killProcess(phylosPid[i]);
+    }
+
+    semClose(CREATING_SEM);
+    semClose(STATE_CHANGING_SEM);
+
+    total = MIN_PHYLOS;
+    phyloIdCount = 0;
+
+    for(int i = 0; i < MAX_PHYLOS; i++) {
+        phylos[i] = 0;
+        phylosPid[i] = 0;
+        state[i] = 0;
+        sems[i][0] = 0;
+    }
+
     _exit(0);
 }
 
@@ -91,7 +118,7 @@ static void addPhylo() {
 
     createPhylo();
 
-    printc("Phylo added\n", 0xff0000);
+    printc("Phylo added\n", SUCCESS_COLOR);
 
 
     total++;
@@ -111,7 +138,7 @@ static void removePhylo() {
     total--;
     semClose(sems[total]);
     killProcess(phylosPid[--phyloIdCount]);
-    printc("Phylo removed\n", 0x0022ff);
+    printc("Phylo removed\n", SUCCESS_COLOR);
 
     for (int i = 0; i < total; i++) {
         semPost(STATE_CHANGING_SEM);
@@ -148,8 +175,8 @@ void phylo(int id) {
         state[id] = 1;
 
         for (int i = 0; i < total; i++) {
-            if (state[i] == 1) printc("E", 0x00ff08);
-            else printc(".", 0x00ff08);
+            if (state[i] == 1) printc("E", PHYLO_COLOR);
+            else printc(".", PHYLO_COLOR);
         }
         println("");
 

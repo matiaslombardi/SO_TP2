@@ -8,8 +8,8 @@
 #include <stdint.h>
 #include <naiveConsole.h>
 
-#define IS_ALPHA(c) ( (c <= '9' && c >= '0') || (c <= 'Z' && c >= 'A') || (c <= 'z' && c >= 'a') )
-#define IS_DIGIT(c) (c >= '0' && c <= '9')
+#define IS_ALPHA(c) ( ((c) <= '9' && (c) >= '0') || ((c) <= 'Z' && (c) >= 'A') || ((c) <= 'z' && (c) >= 'a') )
+#define IS_DIGIT(c) ((c) >= '0' && (c) <= '9')
 
 void itoa(int value, char *buffer, int length);
 

@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <scheduler.h>
 
 #include <semaphore.h>
@@ -124,7 +126,8 @@ void endProcess(unsigned int pid) {
 
     if ((deleted = deleteNode(processes, pid)) != NULL) {
         removeWaitingPid(deleted->pid);
-
+        pipeClose(deleted->fdIn);
+        pipeClose(deleted->fdOut);
         mmFree(deleted->rbp - STACK_SIZE);
         mmFree(deleted);
     }

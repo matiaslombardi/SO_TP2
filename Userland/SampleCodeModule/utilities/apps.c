@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <chessHandler.h>
 #include <syscalls.h>
 #include <standardIO.h>
@@ -36,10 +38,10 @@ programs commands[] = {{"about",       about,          "      Information about 
                        {"exceptionZ",  throwDivZero,   " Throws a divide by zero exception", 0},
                        {"exceptionOP", throwInvOpCode, "Throws an invalid Operation Code Exception", 0},
                        {"testMM",      testMM,         "     Run Memory Manager tests.", 0},
-                       {"testPRIO",      testPRIO,     "   Run Processes Priority tests.", 0},
-                       {"testPROC",      testPROC,     "   Run Processes creation, deletion and blocking tests.", 0},
-                       {"testSYNC",      testSYNC,     "   Run semaphores sync tests.", 0},
-                       {"testNoSYNC",      testNoSYNC,     "   Run without semaphores sync tests.", 0}
+                       {"testPRIO",    testPRIO,       "   Run Processes Priority tests.", 0},
+                       {"testPROC",    testPROC,       "   Run Processes creation, deletion and blocking tests.", 0},
+                       {"testSYNC",    testSYNC,       "   Run semaphores sync tests.", 0},
+                       {"testNoSYNC",  testNoSYNC,     "   Run without semaphores sync tests.", 0}
 };
 
 int checkArgs(int args, int expected);
@@ -400,9 +402,20 @@ int filter(int args, char argv[][25]){
     return 0;
 }
 
-int phylos(){
-    initPhylos();
-    return 0;
+int phylos(int args, char argv[][25]){
+    int fg = 1;
+    int fdIn = 0;
+    int fdOut = 1;
+    if(args == 1) {
+        fg = string10ToInt(argv[1]);
+    }
+    if(args == 3) {
+        fg = string10ToInt(argv[1]);
+        fdIn = string10ToInt(argv[2]);
+        fdOut = string10ToInt(argv[3]);
+    }
+    int pid = createProcess((uint64_t *) &initPhylos, fg, fdIn, fdOut, 0, 0, 0);
+    return pid;
 }
 
 int testMM(){

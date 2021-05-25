@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <keyboardDriver.h>
 #include <lib.h>
 #include <registers.h>
@@ -19,7 +21,7 @@
 #define RELEASED_KEY 0x80
 #define MAX_PRESSED_KEY 0X7F
 
-#define IS_LETTER(c) c >= 'a' && c <= 'z'
+#define IS_LETTER(c) (c) >= 'a' && (c) <= 'z'
 
 #define BUFFER_SIZE 10
 
@@ -135,7 +137,7 @@ void keyboard_management(uint64_t *rsp) {
     }
 
 
-    if (scan_code <= MAX_PRESSED_KEY && !isSpecialKey(scan_code)) {
+    if (scan_code < MAX_SCAN && !isSpecialKey(scan_code)) {
         int secondChar = shiftPressed;
         if (IS_LETTER(pressCodes[scan_code][0])) {
             secondChar = blockMayus ? 1 - shiftPressed : shiftPressed;

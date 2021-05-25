@@ -1,9 +1,8 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <string.h>
 #include <types.h>
 #include <syscalls.h>
-
-#define IS_DIGIT(c) (c >= '0' && c <= '9')
-
 
 void itoa(int value, char *buffer, int length) {
     for (int i = 0; i < length; i++) {
