@@ -7,8 +7,10 @@ Trabajo Práctico Nr.2: Construcción del Núcleo de un Sistema Operativo y estr
 -Lombardi, Matias Federico 60527
 
 ##Atencion
+Recuerde que para switchear entre el Memory Manager y el Buddy es necesario especificarlo desde los MakeFile tanto de Kernel como el general del proyecto.
+Atencion
 Recuerde que para switchear entre el Memory Manager y el Buddy es necesario especificarlo desde los MakeFile tanto de Kernel como el general del proyecto. 
-
+Por favor, tenga en cuenta que el testMm se debe correr con MAX_MEMORY (1024 * 1024 * 128 * 0.7), mientras que el buddy requiere de MAX_MEMORY (1024 * 1024 * 16)
 ## Introducción
 Este documento contiene un manual básico respecto de los comandos ofrecidos al usuario para desenvolverse en la terminal.
 

@@ -3,7 +3,7 @@
 #include <naiveConsole.h>
 #include <string.h>
 
-static char buffer[64] = {0};
+static char buffer[64] = {'0'};
 static uint8_t *const video = (uint8_t *) 0xB8000;
 static uint8_t *currentVideo = (uint8_t *) 0xB8000;
 static const uint32_t width = 80;
