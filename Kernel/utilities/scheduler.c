@@ -76,7 +76,9 @@ uint64_t *switchProcesses(uint64_t *rsp) {
             currentProcess->tickets--;
             return currentProcess->rsp;
         }
-
+        if (currentProcess->state == RESIGN) {
+            currentProcess->state = READY;
+        }
         currentProcess->tickets = currentProcess->priority;
     }
 
@@ -118,6 +120,11 @@ void endProcess(unsigned int pid) {
         mmFree(deleted->rbp - STACK_SIZE);
         mmFree(deleted);
     }
+}
+
+void resignCpu() {
+    currentProcess->state = RESIGN;
+    _forceInt();
 }
 
 void printProcesses() {

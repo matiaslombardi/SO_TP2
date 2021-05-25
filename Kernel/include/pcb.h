@@ -6,6 +6,7 @@
 #define READY 0
 #define BLOCKED 1
 #define KILLED 2
+#define RESIGN 3
 
 typedef struct PCB {
     unsigned int pid;

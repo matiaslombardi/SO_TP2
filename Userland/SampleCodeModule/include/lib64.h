@@ -20,6 +20,4 @@ uint64_t _syscall(Params * p);
 
 void invalidOpCode();
 
-void yield();
-
 #endif

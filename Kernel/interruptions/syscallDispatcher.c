@@ -22,7 +22,7 @@ static syscall_t syscallsArray[] = {readHandler, writeHandler, drawHandler, clea
                                     changePriorityHandler, getPidHandler, getMemHandler, freeMemHandler,
                                     getMemInfoHandler, semOpenHandler, semCloseHandler, semPostHandler,
                                     semWaitHandler, fillSemInfoHandler, pipeOpenHandler, pipeCloseHandler,
-                                    fillPipeInfoHandler, waitPidHandler};
+                                    fillPipeInfoHandler, waitPidHandler, resignCpuHandler};
 
 uint64_t syscallDispatcher(Params *p) {
     return syscallsArray[p->call](p->first, p->second, p->third, p->fourth, p->fifth, p->sixth, p->seventh, p->eighth);
@@ -213,4 +213,10 @@ uint64_t fillPipeInfoHandler(uint64_t buffer, uint64_t secondP, uint64_t thirdP,
 uint64_t waitPidHandler(uint64_t pid, uint64_t secondP, uint64_t thirdP, uint64_t fourthP,
                         uint64_t fifthP, uint64_t sixthP, uint64_t seventhP, uint64_t eighthP) {
     return addWaitingPid(pid);
+}
+
+uint64_t resignCpuHandler(uint64_t firstP, uint64_t secondP, uint64_t thirdP, uint64_t fourthP, uint64_t fifthP, uint64_t sixthP,
+              uint64_t seventhP, uint64_t eighthP) {
+    resignCpu();
+    return 0;
 }

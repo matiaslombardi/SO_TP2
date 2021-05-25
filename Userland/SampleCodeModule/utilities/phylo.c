@@ -38,16 +38,20 @@ void initPhylos() {
     semOpen(STATE_CHANGING_SEM, total);
 
     semWait(CREATING_SEM);
+    print("");
 
     for (int i = 0; i < total; i++) {
         createPhylo();
     }
+    print("");
 
-    print("Welcome to Dining Philosophers. Press 'a' for add, press 'r' for remove, press 'q' for quit.\n");
+    println("Welcome to Dining Philosophers. Press 'a' for add, press 'r' for remove, press 'q' for quit.");
 
     for (int i = 0; i < total; i++) {
         semPost(CREATING_SEM);
+        print("");
     }
+    print("");
 
     char c;
     while ((c = getChar()) != 'q') {

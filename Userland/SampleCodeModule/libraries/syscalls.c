@@ -5,6 +5,7 @@
 #include <lib64.h>
 #include <string.h>
 #include <stdint.h>
+
 #define READ_SYSCALL 0
 #define WRITE_SYSCALL 1
 #define DRAW_SYSCALL 2
@@ -34,6 +35,7 @@
 #define PIPE_CLOSE_SYSCALL 26
 #define GET_PIPE_INFO_SYSCALL 27
 #define WAIT_PID_SYSCALL 28
+#define RESIGN_CPU_SYSCALL 29
 
 int read(unsigned int fd, char *buffer, int length) {
     Params aux = {READ_SYSCALL, fd, length, (uint64_t) buffer, 0, 0, 0, 0, 0};
@@ -102,7 +104,7 @@ void getProcessesList() {
 }
 
 unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t fdIn, uint64_t fdOut,
-                           uint64_t first, uint64_t second, uint64_t third, char * name) {
+                           uint64_t first, uint64_t second, uint64_t third, char *name) {
     Params aux = {CREATE_PROCESS_SYSCALL, (uint64_t) entryPoint, foreground, fdIn,
                   fdOut, first, second, third, (uint64_t) name};
 
@@ -186,7 +188,12 @@ int pipeInfo(char *buffer) {
     return _syscall(&aux);
 }
 
-int waitPid(int pid){
+int waitPid(int pid) {
     Params aux = {WAIT_PID_SYSCALL, (uint64_t) pid, 0, 0, 0, 0, 0, 0, 0};
+    return _syscall(&aux);
+}
+
+int yield() {
+    Params aux = {RESIGN_CPU_SYSCALL, 0, 0, 0, 0, 0, 0, 0, 0};
     return _syscall(&aux);
 }

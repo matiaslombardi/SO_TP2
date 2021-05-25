@@ -67,4 +67,6 @@ int pipeInfo(char *buffer);
 
 int waitPid(int pid);
 
+int yield();
+
 #endif

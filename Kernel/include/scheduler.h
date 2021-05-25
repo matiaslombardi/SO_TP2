@@ -29,6 +29,8 @@ void wakeup(unsigned int pid);
 
 void endProcess(unsigned int pid);
 
+void resignCpu();
+
 void printProcesses();
 
 void changePriorities(unsigned int pid, unsigned int newPriority);

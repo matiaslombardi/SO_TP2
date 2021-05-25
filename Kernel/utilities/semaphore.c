@@ -167,6 +167,7 @@ int fillSemInfo(char *buffer) {
                 strcat(buffer, aux);
                 strcat(buffer, ", ");
             }
+            strcat(buffer, "\n");
         }
     }
 
