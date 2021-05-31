@@ -1,7 +1,6 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <scheduler.h>
-
 #define STACK_SIZE 0x8000
 #define REGISTER_AMOUNT 20
 #define GENERAL_REGISTER_AMOUNT 15
@@ -10,11 +9,12 @@
 #define START_CODE_SEGMENT 0x8
 #define MAX_PRIORITY 5
 #define MIN_PRIORITY 1
+#define TOTAL_MALLOC 5
 
 CircularQueueADT processes;
 unsigned int pidCounter = 1;
 PCB *currentProcess = NULL;
-
+uint64_t mallocDirections[TOTAL_MALLOC];
 
 static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base, int foreground,
                     uint64_t fdIn, uint64_t fdOut, char *name);
@@ -52,6 +52,30 @@ unsigned int createProcess(uint64_t *entryPoint, int foreground, uint64_t fdIn, 
     return pidCounter++;
 }
 
+void addDirec(uint64_t direction) {
+    for(int i = 0; i < TOTAL_MALLOC; i++) {
+        if(currentProcess->mallocDirections[i] == NULL) {
+            currentProcess->mallocDirections[i] = direction;
+        }
+    }
+}
+
+void removeDirec(PCB * pcb, uint64_t direction) {
+    if(pcb == NULL || direction == NULL){
+        return;
+    }
+
+    for(int i = 0; i < TOTAL_MALLOC; i++) {
+        if(pcb->mallocDirections[i] == direction) {
+            pcb->mallocDirections[i] = NULL;
+        }
+    }
+}
+
+PCB * getCurrentPCB(){
+    return currentProcess;
+}
+
 static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base, int foreground,
                     uint64_t fdIn, uint64_t fdOut, char *name) {
     pcb->pid = pid;
@@ -66,6 +90,9 @@ static void fillPCB(PCB *pcb, unsigned int pid, uint64_t *base, int foreground,
     pcb->waitingPid = 0;
     pcb->name[0] = 0;
     strcpy(pcb->name, name);
+    for(int i = 0; i < TOTAL_MALLOCS; i++) {
+        pcb->mallocDirections[i] = 0;
+    }
 }
 
 uint64_t *switchProcesses(uint64_t *rsp) {
@@ -112,8 +139,13 @@ void wakeup(unsigned int pid) {
 
 void endProcess(unsigned int pid) {
     PCB *deleted;
-
     if ((deleted = deleteNode(processes, pid)) != NULL) {
+        for (int i = 0; i <  TOTAL_MALLOC; i ++){
+            if(deleted->mallocDirections[i]!=0){
+                mmFree(deleted->mallocDirections[i]);
+                removeDirec(deleted, deleted->mallocDirections[i]);
+            }
+        }
         removeWaitingPid(deleted->pid);
         pipeClose(deleted->fdIn);
         pipeClose(deleted->fdOut);

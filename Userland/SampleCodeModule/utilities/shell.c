@@ -21,7 +21,13 @@ int tokenizeArguments(char *toToken, char tokens[10][25]);
 
 char *initGreet = "user@TP2_SO:~$ ";
 
+void func(void){
+    void * ptr = mmMalloc(10);
+    while(1);
+}
+
 void initShell() {
+    createProcess(&func, 0, 0, 1, 0, 0, 0, "testDefensa");
     char c;
     int numPipes = 0;
     while (1) {

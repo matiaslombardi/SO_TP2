@@ -31,6 +31,12 @@ void endProcess(unsigned int pid);
 
 void resignCpu();
 
+void addDirec(uint64_t direction);
+
+void removeDirec(PCB * pcb, uint64_t direction);
+
+PCB * getCurrentPCB();
+
 void printProcesses();
 
 void changePriorities(unsigned int pid, unsigned int newPriority);

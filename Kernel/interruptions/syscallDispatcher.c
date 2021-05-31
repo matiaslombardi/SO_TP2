@@ -153,12 +153,22 @@ getPidHandler(uint64_t firstP, uint64_t secondP, uint64_t thirdP, uint64_t fourt
 uint64_t
 getMemHandler(uint64_t size, uint64_t secondP, uint64_t thirdP, uint64_t fourthP, uint64_t fifthP, uint64_t sixthP,
               uint64_t seventhP, uint64_t eighthP) {
-    return (uint64_t) mmMalloc(size);
+
+    void * toReturn =  mmMalloc(size);
+
+    if(toReturn != NULL){
+        addDirec(toReturn);
+    }
+
+    return (uint64_t) toReturn;
 }
 
 uint64_t
 freeMemHandler(uint64_t ptr, uint64_t secondP, uint64_t thirdP, uint64_t fourthP, uint64_t fifthP, uint64_t sixthP,
                uint64_t seventhP, uint64_t eighthP) {
+
+    removeDirec(getCurrentPCB(), (void *) ptr);
+
     mmFree((void *) ptr);
     return 0;
 }
