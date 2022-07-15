@@ -2,11 +2,11 @@
 Trabajo Práctico Nr.2: Construcción del Núcleo de un Sistema Operativo y estructuras de administraciónde recursos de la materia 72.11 - Sistemas Operativos - Primer Cuatrimestre 2021
 
 ## Autores:
--Arce Doncella , Julian Francisco 60509                         
--Domingues, Paula Andrea 60148                                
--Lombardi, Matias Federico 60527
+- Arce Doncella , Julian Francisco 60509                         
+- Domingues, Paula Andrea 60148                                
+- Lombardi, Matias Federico 60527
 
-##Atencion
+## Atencion
 Recuerde que para switchear entre el Memory Manager y el Buddy es necesario especificarlo desde los MakeFile tanto de Kernel como el general del proyecto.
 Atencion
 Recuerde que para switchear entre el Memory Manager y el Buddy es necesario especificarlo desde los MakeFile tanto de Kernel como el general del proyecto. 
